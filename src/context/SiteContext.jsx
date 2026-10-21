@@ -139,7 +139,7 @@ export const defaultSettings = {
   faqs: [
     {
       q: 'How can outstation customers and retailers place orders?',
-      a: 'You can visit our heritage shop at 221, M.T. Cloth Market, Indore, or connect with us directly on WhatsApp (+91 78280 72394 / 0731 245 9280). We gladly share live photographs, shade cards, and product details. Once you select your items, we safely pack and dispatch them to your destination.',
+      a: 'You can visit our heritage shop at 221, M.T. Cloth Market, Indore, or connect with us directly on WhatsApp (+91 7869849449 / 0731 245 9280). We gladly share live photographs, shade cards, and product details. Once you select your items, we safely pack and dispatch them to your destination.',
     },
     {
       q: 'Do you deliver across India?',
@@ -196,7 +196,7 @@ export const defaultSettings = {
     address: '221, M.T. Cloth Market, Indore, MP',
     addressShort: '221, M.T. Cloth Market, Indore',
     phone1: '0731 245 9280',
-    phone2: '78280 72394',
+    phone2: '+91 7869849449',
     email: 'info@baldevjijitmal.com',
     hours: 'Mon – Sat · 12:00 PM – 8:00 PM',
     instagramHandle: '@baldevji.jitmal',
@@ -412,6 +412,12 @@ export function SiteProvider({ children }) {
       contact: {
         ...defaultSettings.contact,
         ...dbSettings.contact,
+        phone2:
+          !dbSettings.contact?.phone2 ||
+          dbSettings.contact?.phone2.includes('78280') ||
+          dbSettings.contact?.phone2.includes('72394')
+            ? '+91 7869849449'
+            : dbSettings.contact.phone2,
       },
       whatsappFloating: {
         ...defaultSettings.whatsappFloating,

@@ -33,7 +33,7 @@ export default function Header() {
     { to: '/contact', label: settings.nav?.contact || 'Contact' },
   ];
 
-  const phone = (settings.contact.phone2 || '78280 72394').replace(/\D/g, '');
+  const phone = (settings.contact.phone2 || '78698 49449').replace(/\D/g, '');
   const waNumber = phone.length === 10 ? `91${phone}` : phone;
   const whatsappUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(
     settings.hero.whatsappMessage ||

@@ -256,7 +256,7 @@ export default function Contact() {
                   name="phone"
                   type="tel"
                   maxLength={32}
-                  placeholder="e.g. +91 78280 72394"
+                  placeholder="e.g. +91 7869849449"
                   value={formData.phone}
                   onChange={handleChange}
                   className="mt-1 w-full bg-background border border-input px-3.5 py-3 outline-none focus:border-primary transition text-base md:text-sm rounded-sm"

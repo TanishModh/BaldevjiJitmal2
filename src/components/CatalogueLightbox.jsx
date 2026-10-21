@@ -94,7 +94,7 @@ export default function CatalogueLightbox({
   };
 
   const settings = useSiteSettings();
-  const rawPhone = settings?.contact?.phone2 || settings?.hero?.whatsappPhone || '917828072394';
+  const rawPhone = settings?.contact?.phone2 || settings?.hero?.whatsappPhone || '917869849449';
   const cleanPhone = rawPhone.replace(/[^\d]/g, '');
   const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
