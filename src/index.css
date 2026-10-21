@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f4efe5;
+  --foreground: #221d19;
+  --primary: #5a1f1c;
+  --primary-foreground: #fcf9f2;
+  --accent: #b28342;
+  --accent-foreground: #221d19;
+  --gold: #b28342;
+  --muted-foreground: #6a6054;
+  --card: #faf5ec;
+  --card-foreground: #221d19;
+  --border: rgba(178, 131, 66, 0.22);
+  --input: rgba(178, 131, 66, 0.28);
+  --ring: #5a1f1c;
+  --sand-100: #f4efe5;
+  --sand-200: #ebe1d0;
+  --maroon: #5a1f1c;
+
+  --shadow-soft: 0 4px 20px -2px rgba(34, 29, 25, 0.05);
+  --shadow-lift: 0 14px 34px -4px rgba(34, 29, 25, 0.09), 0 4px 12px -2px rgba(34, 29, 25, 0.04);
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Work Sans', sans-serif;
+    position: relative;
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(178, 131, 66, 0.07), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(90, 31, 28, 0.035), transparent 70%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+
+  /* Fine luxury woven cloth grain - disabled on small screens to save battery & maintain 120fps */
+  @media (min-width: 768px) {
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.016;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+  }
+}
+
+/* Deep Rich Maroon Hero Overlay with mobile-first seamless gradients */
+.hero-maroon-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(90, 31, 28, 0.96) 0%,
+    rgba(90, 31, 28, 0.91) 45%,
+    rgba(90, 31, 28, 0.84) 100%
+  );
+}
+
+@media (min-width: 769px) {
+  .hero-maroon-overlay {
+    background: linear-gradient(
+      to right,
+      rgba(90, 31, 28, 0.96) 0%,
+      rgba(90, 31, 28, 0.88) 40%,
+      rgba(90, 31, 28, 0.65) 75%,
+      rgba(90, 31, 28, 0.18) 100%
+    );
+  }
+}
+
+/* Elegant gold hairline divider */
+.gold-divider {
+  background: linear-gradient(90deg, transparent, rgba(178, 131, 66, 0.6), transparent);
+  height: 1px;
+}
+
+/* Smooth GPU-accelerated cinematic camera drift */
+@keyframes cinematic-drift {
+  0% {
+    transform: scale(1.0) translateZ(0);
+  }
+  100% {
+    transform: scale(1.06) translateZ(0);
+  }
+}
+
+.animate-cinematic {
+  animation: cinematic-drift 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Hide scrollbar for mobile swipe carousels & tabs */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* === HANSON WU INSPIRED ANIMATIONS === */
+
+/* 1. Continuous slow rotation for circular seal badge */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 24s linear infinite;
+  will-change: transform;
+}
+
+/* 2. Hanson Wu scroll capsule sliding dot */
+@keyframes mouse-slide-down {
+  0% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+
+.animate-scroll-dot {
+  animation: mouse-slide-down 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  will-change: transform, opacity;
+}
+
+/* 3. Hanson Wu style smooth continuous running marquee ribbon */
+@keyframes marquee-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-drift 38s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* 4. Hanson Wu line draw on scroll */
+@keyframes line-expand-smooth {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.animate-line-expand {
+  transform-origin: center left;
+  animation: line-expand-smooth 1.2s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
