@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, MessageCircle, Share2, Loader2, ImageOff } from 'lucide-react';
 import { toast } from 'sonner';
+import { useSiteSettings } from '../context/SiteContext';
 
 export default function CatalogueLightbox({
   item,
@@ -92,13 +93,24 @@ export default function CatalogueLightbox({
     }
   };
 
-  const handleWhatsAppInquiry = () => {
-    const phone = '917828072394';
-    const message = encodeURIComponent(
-      `Namaste Baldevji Jitmal, I would like to inquire about this piece from your catalogue:\n\n*Category:* ${item.category || 'Traditional Textile'}\n*Details:* ${item.description || item.title || 'Catalogue piece'}\n*Image Link:* ${mediaSrc}\n\nPlease share current price and availability.`
-    );
-    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-  };
+  const settings = useSiteSettings();
+  const rawPhone = settings?.contact?.phone2 || settings?.hero?.whatsappPhone || '917828072394';
+  const cleanPhone = rawPhone.replace(/[^\d]/g, '');
+  const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+
+  const fullImageLink = mediaSrc
+    ? mediaSrc.startsWith('http')
+      ? mediaSrc
+      : typeof window !== 'undefined'
+      ? `${window.location.origin}${mediaSrc}`
+      : mediaSrc
+    : '';
+
+  const inquiryMessage = encodeURIComponent(
+    `Namaste Baldevji Jitmal, I would like to inquire about this piece from your catalogue:\n\n*Category:* ${item?.category || 'Traditional Textile'}\n*Details:* ${item?.description || item?.title || 'Catalogue piece'}${fullImageLink ? `\n*Image Link:* ${fullImageLink}` : ''}\n\nPlease share current price and availability.`
+  );
+
+  const whatsappInquiryUrl = `https://wa.me/${finalPhone}?text=${inquiryMessage}`;
 
   const handleShare = () => {
     if (navigator.share) {
@@ -193,12 +205,15 @@ export default function CatalogueLightbox({
                   {item.title || item.category || 'Traditional Textile Piece'}
                 </p>
               </div>
-              <button
-                onClick={handleWhatsAppInquiry}
+              <a
+                href={whatsappInquiryUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="mt-2 text-xs text-accent underline underline-offset-4 hover:text-white transition"
               >
                 Inquire on WhatsApp to see photo
-              </button>
+              </a>
             </div>
           ) : isVideo ? (
             <video
@@ -278,13 +293,16 @@ export default function CatalogueLightbox({
           </div>
 
           <div className="mt-5 sm:mt-6 pt-3.5 border-t border-border/60">
-            <button
-              onClick={handleWhatsAppInquiry}
+            <a
+              href={whatsappInquiryUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] text-white px-4 py-3 sm:py-3.5 rounded-md text-xs uppercase tracking-wider font-semibold shadow-soft hover:bg-[#20ba59] active:scale-[0.98] transition-all"
             >
               <MessageCircle size={16} className="fill-current" />
               <span>Inquire on WhatsApp</span>
-            </button>
+            </a>
             <p className="text-[9px] sm:text-[10px] text-center text-muted-foreground mt-2">
               Instant reply with photos, rates & availability
             </p>

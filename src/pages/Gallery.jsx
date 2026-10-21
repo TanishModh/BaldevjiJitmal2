@@ -50,6 +50,7 @@ function useIsAdmin() {
 
 function GalleryCard({ item, isAdmin, onOpenLightbox }) {
   const queryClient = useQueryClient();
+  const settings = useSiteSettings();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [title, setTitle] = useState(item.title || '');
@@ -58,6 +59,22 @@ function GalleryCard({ item, isAdmin, onOpenLightbox }) {
 
   const isRealItem = !item.id.startsWith('hl-') && !item.id.startsWith('p');
   const canEdit = isAdmin && isRealItem;
+
+  const rawPhone = settings?.contact?.phone2 || settings?.hero?.whatsappPhone || '917828072394';
+  const cleanPhone = rawPhone.replace(/[^\d]/g, '');
+  const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+
+  const itemImg = item.media_url || item.imageUrl || item.thumbnail_url || item.image_url || item.url || '';
+  const fullImg = itemImg.startsWith('http')
+    ? itemImg
+    : itemImg && typeof window !== 'undefined'
+    ? `${window.location.origin}${itemImg}`
+    : '';
+
+  const inquiryMessage = encodeURIComponent(
+    `Namaste Baldevji Jitmal, I would like to inquire about this piece from your catalogue:\n\n*Category:* ${item.category || 'Traditional Textile'}\n*Details:* ${item.description || item.title || 'Catalogue piece'}${fullImg ? `\n*Image Link:* ${fullImg}` : ''}\n\nPlease share current price and availability.`
+  );
+  const whatsappUrl = `https://wa.me/${finalPhone}?text=${inquiryMessage}`;
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -97,15 +114,6 @@ function GalleryCard({ item, isAdmin, onOpenLightbox }) {
     }
   };
 
-  const handleWhatsAppInquiry = (e) => {
-    e.stopPropagation();
-    const phone = '917828072394';
-    const message = encodeURIComponent(
-      `Namaste Baldevji Jitmal, I am interested in this item:\n*Category:* ${item.category}\n*Details:* ${item.description || item.title || 'Catalogue piece'}\n*Image:* ${item.media_url}\n\nPlease share price & availability.`
-    );
-    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-  };
-
   return (
     <figure
       onClick={onOpenLightbox}
@@ -141,13 +149,16 @@ function GalleryCard({ item, isAdmin, onOpenLightbox }) {
             <Maximize2 size={12} /> View Full
           </span>
 
-          <button
-            onClick={handleWhatsAppInquiry}
-            className="pointer-events-auto inline-flex items-center gap-1 text-[11px] bg-[#25D366] text-white px-2.5 py-1 rounded-sm shadow hover:bg-[#20ba59] transition-transform hover:scale-105"
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] bg-[#25D366] text-white px-2.5 py-1.5 rounded-sm shadow hover:bg-[#20ba59] transition-transform hover:scale-105 active:scale-95 font-medium"
             title="Inquire on WhatsApp"
           >
             <MessageCircle size={13} className="fill-current" /> Inquire
-          </button>
+          </a>
         </div>
       </div>
 
@@ -193,39 +204,59 @@ function GalleryCard({ item, isAdmin, onOpenLightbox }) {
             </div>
           </div>
         ) : (
-          <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-accent-foreground font-semibold">
-                {item.category}
-              </p>
-              {item.description && (
-                <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line line-clamp-3">
-                  {item.description}
+          <div>
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-accent-foreground font-semibold">
+                  {item.category}
                 </p>
+                {item.description && (
+                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line line-clamp-3">
+                    {item.description}
+                  </p>
+                )}
+              </div>
+
+              {canEdit && (
+                <div
+                  className="flex flex-col gap-1 shrink-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className="text-primary hover:bg-primary/10 p-2 rounded"
+                    aria-label="Edit"
+                  >
+                    <Pencil size={14} />
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="text-destructive hover:bg-destructive/10 p-2 rounded"
+                    aria-label="Delete"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
               )}
             </div>
 
-            {canEdit && (
-              <div
-                className="flex flex-col gap-1 shrink-0"
+            {/* Direct Inquire action row for mobile & quick desktop access */}
+            <div className="mt-3 pt-2.5 border-t border-border/40 flex items-center justify-between">
+              <span className="text-[9px] uppercase tracking-[0.16em] text-muted-foreground font-medium">
+                Wholesale · Retail
+              </span>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#128C7E] hover:text-[#075E54] bg-[#25D366]/10 hover:bg-[#25D366]/20 px-2.5 py-1 rounded transition-all active:scale-95"
+                title="Inquire on WhatsApp"
               >
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="text-primary hover:bg-primary/10 p-2 rounded"
-                  aria-label="Edit"
-                >
-                  <Pencil size={14} />
-                </button>
-                <button
-                  onClick={handleDelete}
-                  className="text-destructive hover:bg-destructive/10 p-2 rounded"
-                  aria-label="Delete"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            )}
+                <MessageCircle size={13} className="fill-current text-[#25D366]" />
+                <span>Inquire</span>
+              </a>
+            </div>
           </div>
         )}
       </figcaption>
