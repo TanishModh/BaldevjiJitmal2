@@ -265,8 +265,9 @@ function GalleryCard({ item, isAdmin, onOpenLightbox }) {
 }
 
 export default function Gallery() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const rawCategoryParam = searchParams.get('category');
+  const itemIdParam = searchParams.get('item');
   const isAdmin = useIsAdmin();
   const canonicalize = useCategoryCanonicalizer();
   const { cards, dbCats } = useProductCards();
@@ -363,6 +364,54 @@ export default function Gallery() {
     }
     return copy;
   }, [filteredItems, sortMode]);
+
+  // Deep-link: automatically open lightbox if URL has ?item=
+  useEffect(() => {
+    if (itemIdParam && allItems.length > 0) {
+      const found = allItems.find((i) => String(i.id) === String(itemIdParam));
+      if (found) {
+        setSelectedLightboxItem(found);
+      }
+    } else if (!itemIdParam) {
+      setSelectedLightboxItem(null);
+    }
+  }, [itemIdParam, allItems]);
+
+  const handleOpenLightbox = (item) => {
+    setSelectedLightboxItem(item);
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.set('item', item.id);
+        return next;
+      },
+      { replace: true }
+    );
+  };
+
+  const handleCloseLightbox = () => {
+    setSelectedLightboxItem(null);
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete('item');
+        return next;
+      },
+      { replace: true }
+    );
+  };
+
+  const handleSelectLightboxItem = (item) => {
+    setSelectedLightboxItem(item);
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.set('item', item.id);
+        return next;
+      },
+      { replace: true }
+    );
+  };
 
   const categoryFilters = useMemo(() => {
     const set = new Set();
@@ -504,7 +553,7 @@ export default function Gallery() {
                 key={item.id}
                 item={item}
                 isAdmin={isAdmin}
-                onOpenLightbox={() => setSelectedLightboxItem(item)}
+                onOpenLightbox={() => handleOpenLightbox(item)}
               />
             ))}
           </div>
@@ -515,8 +564,8 @@ export default function Gallery() {
       <CatalogueLightbox
         item={selectedLightboxItem}
         items={sortedItems}
-        onClose={() => setSelectedLightboxItem(null)}
-        onSelect={(item) => setSelectedLightboxItem(item)}
+        onClose={handleCloseLightbox}
+        onSelect={handleSelectLightboxItem}
       />
     </>
   );
