@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { X, ChevronLeft, ChevronRight, MessageCircle, Share2, Loader2, ImageOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSiteSettings } from '../context/SiteContext';
@@ -10,6 +10,7 @@ export default function CatalogueLightbox({
   onClose,
   onSelect,
 }) {
+  const settings = useSiteSettings();
   const touchStartXRef = useRef(0);
   const touchStartYRef = useRef(0);
   const [loaded, setLoaded] = useState(false);
@@ -29,6 +30,13 @@ export default function CatalogueLightbox({
     item?.media_type === 'video' ||
     (typeof mediaSrc === 'string' && /\.(mp4|webm|mov|ogg)(\?|$)/i.test(mediaSrc));
 
+  const safeItems = useMemo(
+    () => (Array.isArray(items) && items.length > 0 ? items : item ? [item] : []),
+    [items, item]
+  );
+  const currentIndex = item ? safeItems.findIndex((i) => i && String(i.id) === String(item.id)) : -1;
+  const total = safeItems.length;
+
   // Reset loading, source and error states whenever the active item changes
   useEffect(() => {
     setActiveImgSrc(getLightboxImageUrl(mediaSrc));
@@ -43,30 +51,6 @@ export default function CatalogueLightbox({
       setImgError(true);
     }
   };
-
-  useEffect(() => {
-    if (!item) return;
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') handlePrev();
-      if (e.key === 'ArrowRight') handleNext();
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [item, items]);
-
-  if (!item) return null;
-
-  const safeItems = Array.isArray(items) && items.length > 0 ? items : [item];
-  const currentIndex = safeItems.findIndex((i) => i && String(i.id) === String(item.id));
-  const total = safeItems.length;
 
   const handlePrev = (e) => {
     e?.stopPropagation();
@@ -88,25 +72,24 @@ export default function CatalogueLightbox({
     }
   };
 
-  // Mobile Touch Swipe Handlers
-  const handleTouchStart = (e) => {
-    touchStartXRef.current = e.touches[0].clientX;
-    touchStartYRef.current = e.touches[0].clientY;
-  };
+  // Keyboard controls
+  useEffect(() => {
+    if (!item) return;
 
-  const handleTouchEnd = (e) => {
-    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
-    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') handlePrev();
+      if (e.key === 'ArrowRight') handleNext();
+    };
 
-    // Detect horizontal swipe if deltaX > 40px and dominant over vertical scroll
-    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
-      if (deltaX < 0) {
-        handleNext(); // swiped left -> next
-      } else {
-        handlePrev(); // swiped right -> prev
-      }
-    }
-  };
+    window.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [item, currentIndex, total, safeItems, onClose, onSelect]);
 
   // Background prefetch for adjacent images to make navigation instantaneous
   useEffect(() => {
@@ -132,7 +115,28 @@ export default function CatalogueLightbox({
     preload(safeItems[prevIdx]);
   }, [currentIndex, total, safeItems, item]);
 
-  const settings = useSiteSettings();
+  // Mobile Touch Swipe Handlers
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
+
+    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+  };
+
+  // Early return ONLY after all hooks have been unconditionally registered
+  if (!item) return null;
+
   const rawPhone = settings?.contact?.phone2 || settings?.hero?.whatsappPhone || '917869849449';
   const cleanPhone = rawPhone.replace(/[^\d]/g, '');
   const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
