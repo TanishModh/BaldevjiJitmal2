@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, MessageCircle, MapPin, ChevronRight } from 'lucide-react';
 import { useSiteSettings } from '../context/SiteContext';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const headerRef = useRef(null);
   const settings = useSiteSettings();
   const location = useLocation();
 
@@ -53,8 +54,11 @@ export default function Header() {
           )}
         </div>
       )}
-      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border/70 shadow-[0_1px_0_rgba(178,131,66,0.12)]">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 h-18 sm:h-20 md:h-24 flex items-center justify-between">
+      <header
+        ref={headerRef}
+        className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border/70 shadow-[0_1px_0_rgba(178,131,66,0.12)]"
+      >
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 h-[72px] sm:h-20 md:h-24 flex items-center justify-between">
           {/* Brand Emblem & Text */}
           <Link to="/" className="flex items-center gap-2.5 sm:gap-3 leading-tight group">
             <img
@@ -107,11 +111,14 @@ export default function Header() {
       {/* Mobile Drawer Overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 top-[72px] sm:top-[80px] z-50 bg-black/50 backdrop-blur-sm md:hidden animate-fade-in"
+          className="fixed inset-x-0 bottom-0 z-50 bg-black/60 backdrop-blur-sm md:hidden animate-fade-in"
+          style={{
+            top: headerRef.current ? `${headerRef.current.getBoundingClientRect().bottom}px` : '72px',
+          }}
           onClick={() => setMobileMenuOpen(false)}
         >
           <div
-            className="bg-card border-b border-border shadow-2xl p-5 sm:p-6 max-h-[calc(100svh-5rem)] overflow-y-auto animate-rise"
+            className="bg-card border-b border-border shadow-2xl p-5 sm:p-6 max-h-[calc(100svh-4.5rem)] overflow-y-auto animate-rise"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Primary Nav Links */}

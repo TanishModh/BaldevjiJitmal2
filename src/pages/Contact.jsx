@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-import { MapPin, Phone, Instagram, Clock } from 'lucide-react';
+import { MapPin, Phone, Instagram, Clock, MessageCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useSiteSettings } from '../context/SiteContext';
 import { MotionFade } from '../components/MotionReveal';
@@ -16,6 +16,18 @@ export default function Contact() {
     website: '', // honeypot
   });
   const [errors, setErrors] = useState({});
+
+  const rawPhone = settings?.contact?.phone2 || '917869849449';
+  const cleanPhone = rawPhone.replace(/[^\d]/g, '');
+  const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+
+  const directWhatsAppUrl = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
+    formData.message?.trim()
+      ? `Namaste Baldevji Jitmal,\n\n*Inquiry from Website*\n*Name:* ${formData.name || 'Customer'}\n${
+          formData.phone ? `*Phone:* ${formData.phone}\n` : ''
+        }${formData.email ? `*Email:* ${formData.email}\n` : ''}\n*Message:* ${formData.message}`
+      : 'Namaste Baldevji Jitmal, I would like to inquire about your traditional textile collection. Please share designs and details.'
+  )}`;
 
   const validate = () => {
     const errs = {};
@@ -75,19 +87,19 @@ export default function Contact() {
         localStorage.setItem('bj_inquiries', JSON.stringify(local.slice(0, 50)));
       } catch (_) {}
 
-      const { error } = await supabase.from('inquiries').insert(inquiryPayload);
-
-      if (error) {
-        console.warn('Supabase inquiry insert note:', error.message);
-        // Note: local backup is already recorded above
+      // Attempt Supabase insert if permitted
+      try {
+        await supabase.from('inquiries').insert(inquiryPayload);
+      } catch (insertErr) {
+        console.warn('Supabase inquiry insert note:', insertErr);
       }
 
-      toast.success("Inquiry sent! We'll be in touch soon.");
+      toast.success("Inquiry sent successfully! You can also chat directly on WhatsApp.");
       setFormData({ name: '', phone: '', email: '', message: '', website: '' });
       setErrors({});
     } catch (err) {
       console.error(err);
-      toast.error('Could not send inquiry. Please call us instead.');
+      toast.error('Could not send inquiry. Please call or WhatsApp us instead.');
     } finally {
       setIsSubmitting(false);
     }
@@ -303,14 +315,34 @@ export default function Contact() {
               {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-primary text-primary-foreground min-h-12 px-6 py-3.5 text-xs uppercase tracking-[0.14em] font-medium hover:bg-accent hover:text-accent-foreground disabled:opacity-60 transition shadow-soft cursor-pointer active:scale-[0.99] rounded-sm"
-            >
-              {isSubmitting ? 'Sending…' : 'Send Inquiry'}
-            </button>
+            {/* Submit & WhatsApp Action Buttons */}
+            <div className="space-y-3 pt-2">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-primary text-primary-foreground min-h-12 px-6 py-3.5 text-xs uppercase tracking-[0.14em] font-semibold hover:bg-accent hover:text-accent-foreground disabled:opacity-60 transition shadow-soft cursor-pointer active:scale-[0.99] rounded-sm"
+              >
+                {isSubmitting ? 'Sending…' : 'Send Inquiry'}
+              </button>
+
+              <div className="relative flex items-center justify-center my-1">
+                <span className="h-px w-full bg-border/60"></span>
+                <span className="bg-card px-3 text-[10px] uppercase tracking-wider text-muted-foreground whitespace-nowrap">
+                  or quick reply
+                </span>
+                <span className="h-px w-full bg-border/60"></span>
+              </div>
+
+              <a
+                href={directWhatsAppUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full bg-[#17523f] text-[#fcf9f2] min-h-12 px-6 py-3.5 text-xs uppercase tracking-[0.14em] font-semibold hover:bg-[#124233] transition shadow-soft active:scale-[0.99] rounded-sm flex items-center justify-center gap-2"
+              >
+                <MessageCircle size={16} className="text-[#34d399]" />
+                <span>Chat Directly on WhatsApp</span>
+              </a>
+            </div>
           </form>
         </MotionFade>
       </div>

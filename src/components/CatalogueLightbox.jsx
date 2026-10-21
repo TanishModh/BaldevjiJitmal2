@@ -52,24 +52,27 @@ export default function CatalogueLightbox({
 
   if (!item) return null;
 
-  const currentIndex = items.findIndex((i) => i.id === item.id);
-  const total = items.length;
+  const safeItems = Array.isArray(items) && items.length > 0 ? items : [item];
+  const currentIndex = safeItems.findIndex((i) => i && String(i.id) === String(item.id));
+  const total = safeItems.length;
 
   const handlePrev = (e) => {
     e?.stopPropagation();
+    if (total <= 1) return;
     if (currentIndex > 0) {
-      onSelect(items[currentIndex - 1]);
+      onSelect(safeItems[currentIndex - 1]);
     } else {
-      onSelect(items[items.length - 1]);
+      onSelect(safeItems[total - 1]);
     }
   };
 
   const handleNext = (e) => {
     e?.stopPropagation();
-    if (currentIndex < items.length - 1) {
-      onSelect(items[currentIndex + 1]);
+    if (total <= 1) return;
+    if (currentIndex >= 0 && currentIndex < total - 1) {
+      onSelect(safeItems[currentIndex + 1]);
     } else {
-      onSelect(items[0]);
+      onSelect(safeItems[0]);
     }
   };
 
@@ -113,15 +116,18 @@ export default function CatalogueLightbox({
   const whatsappInquiryUrl = `https://wa.me/${finalPhone}?text=${inquiryMessage}`;
 
   const handleShare = () => {
+    const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
     if (navigator.share) {
-      navigator.share({
-        title: item.title || item.category || 'Baldevji Jitmal Textile Piece',
-        text: item.description,
-        url: window.location.href,
-      }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(mediaSrc || window.location.href);
-      toast.success('Image link copied to clipboard');
+      navigator
+        .share({
+          title: item.title || item.category || 'Baldevji Jitmal Textile Piece',
+          text: item.description || 'Authentic traditional Indian textile from Baldevji Jitmal, Indore.',
+          url: shareUrl,
+        })
+        .catch(() => {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareUrl);
+      toast.success('Catalogue piece link copied to clipboard');
     }
   };
 

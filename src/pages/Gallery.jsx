@@ -563,7 +563,7 @@ export default function Gallery() {
       {/* Lightbox Modal */}
       <CatalogueLightbox
         item={selectedLightboxItem}
-        items={sortedItems}
+        items={sortedItems.length > 0 ? sortedItems : allItems}
         onClose={handleCloseLightbox}
         onSelect={handleSelectLightboxItem}
       />
