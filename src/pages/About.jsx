@@ -54,6 +54,7 @@ export default function About() {
             alt="Traditional Indian textiles at Baldevji Jitmal"
             width={1600}
             height={1100}
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover animate-cinematic"
           />
           {/* Subtle soft vignette */}

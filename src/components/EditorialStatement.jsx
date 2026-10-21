@@ -57,6 +57,7 @@ export default function EditorialStatement() {
                 src={editorial.featureImageUrl || settings.hero.heroImageUrl || '/assets/hero-textiles-CKsuSuq6.jpg'}
                 alt="Traditional Indian textiles curated by Baldevji Jitmal"
                 loading="lazy"
+                decoding="async"
                 width={1600}
                 height={1100}
                 className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -7,6 +7,7 @@ import { Pencil, Trash2, X, Check, Search, Maximize2, MessageCircle } from 'luci
 import { supabase } from '../lib/supabase';
 import { useSiteSettings } from '../context/SiteContext';
 import { useProductCards, useCategoryCanonicalizer } from '../hooks/useProductCards';
+import { getThumbnailImageUrl } from '../lib/imageOptimization';
 import CatalogueLightbox from '../components/CatalogueLightbox';
 
 function useIsAdmin() {
@@ -48,7 +49,7 @@ function useIsAdmin() {
   return isAdmin;
 }
 
-function GalleryCard({ item, isAdmin, onOpenLightbox }) {
+function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
   const queryClient = useQueryClient();
   const settings = useSiteSettings();
   const [isEditing, setIsEditing] = useState(false);
@@ -64,11 +65,26 @@ function GalleryCard({ item, isAdmin, onOpenLightbox }) {
   const cleanPhone = rawPhone.replace(/[^\d]/g, '');
   const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
-  const itemImg = item.media_url || item.imageUrl || item.thumbnail_url || item.image_url || item.url || '';
-  const fullImg = itemImg.startsWith('http')
-    ? itemImg
-    : itemImg && typeof window !== 'undefined'
-    ? `${window.location.origin}${itemImg}`
+  const rawImg = item.media_url || item.imageUrl || item.thumbnail_url || item.image_url || item.url || '';
+  const optimizedImg = getThumbnailImageUrl(rawImg);
+  const [displayImg, setDisplayImg] = useState(optimizedImg);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  useEffect(() => {
+    setDisplayImg(getThumbnailImageUrl(rawImg));
+    setImgLoaded(false);
+  }, [rawImg]);
+
+  const handleImgError = () => {
+    if (displayImg !== rawImg && rawImg) {
+      setDisplayImg(rawImg);
+    }
+  };
+
+  const fullImg = rawImg.startsWith('http')
+    ? rawImg
+    : rawImg && typeof window !== 'undefined'
+    ? `${window.location.origin}${rawImg}`
     : '';
 
   const inquiryMessage = encodeURIComponent(
@@ -119,7 +135,16 @@ function GalleryCard({ item, isAdmin, onOpenLightbox }) {
       onClick={onOpenLightbox}
       className="group mb-3 break-inside-avoid overflow-hidden border-b border-accent/50 bg-card shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift sm:mb-5 cursor-pointer relative rounded-sm"
     >
-      <div className="overflow-hidden bg-secondary relative">
+      <div className="overflow-hidden bg-secondary/80 relative min-h-[170px] sm:min-h-[220px]">
+        {/* Shimmer skeleton while loading */}
+        {!imgLoaded && item.media_type !== 'video' && (
+          <div className="absolute inset-0 bg-secondary/80 animate-pulse flex items-center justify-center pointer-events-none">
+            <span className="text-[11px] font-mono tracking-widest text-primary/30 font-semibold select-none">
+              BJ
+            </span>
+          </div>
+        )}
+
         <motion.div
           initial={{ scale: 1.08 }}
           whileInView={{ scale: 1.0 }}
@@ -135,10 +160,16 @@ function GalleryCard({ item, isAdmin, onOpenLightbox }) {
             />
           ) : (
             <img
-              src={item.media_url || item.imageUrl || item.thumbnail_url || item.url}
+              src={displayImg}
               alt={item.description || item.category || 'Textile item'}
-              loading="lazy"
-              className="w-full h-auto object-cover group-hover:scale-[1.05] transition duration-700 ease-out"
+              loading={index < 4 ? 'eager' : 'lazy'}
+              fetchPriority={index < 2 ? 'high' : 'auto'}
+              decoding="async"
+              onLoad={() => setImgLoaded(true)}
+              onError={handleImgError}
+              className={`w-full h-auto object-cover group-hover:scale-[1.05] transition duration-500 ease-out ${
+                imgLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
             />
           )}
         </motion.div>
@@ -365,6 +396,37 @@ export default function Gallery() {
     return copy;
   }, [filteredItems, sortMode]);
 
+  const BATCH_SIZE = 24;
+  const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
+  const sentinelRef = useRef(null);
+
+  // Reset pagination whenever category filter, search query, or sort mode changes
+  useEffect(() => {
+    setVisibleCount(BATCH_SIZE);
+  }, [canonicalCategory, searchQuery, sortMode]);
+
+  const displayedItems = useMemo(() => {
+    return sortedItems.slice(0, visibleCount);
+  }, [sortedItems, visibleCount]);
+
+  // Infinite scroll intersection observer: preloads the next batch 600px before the user hits the bottom
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && visibleCount < sortedItems.length) {
+          setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, sortedItems.length));
+        }
+      },
+      { rootMargin: '600px 0px' }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [visibleCount, sortedItems.length]);
+
   // Deep-link: automatically open lightbox if URL has ?item=
   useEffect(() => {
     if (itemIdParam && allItems.length > 0) {
@@ -547,16 +609,41 @@ export default function Gallery() {
             No items found matching your criteria. Try another search or filter.
           </p>
         ) : (
-          <div className="mt-10 columns-2 gap-3 sm:columns-2 sm:gap-5 lg:columns-3">
-            {sortedItems.map((item) => (
-              <GalleryCard
-                key={item.id}
-                item={item}
-                isAdmin={isAdmin}
-                onOpenLightbox={() => handleOpenLightbox(item)}
-              />
-            ))}
-          </div>
+          <>
+            <div className="mt-10 columns-2 gap-3 sm:columns-2 sm:gap-5 lg:columns-3">
+              {displayedItems.map((item, idx) => (
+                <GalleryCard
+                  key={item.id}
+                  item={item}
+                  index={idx}
+                  isAdmin={isAdmin}
+                  onOpenLightbox={() => handleOpenLightbox(item)}
+                />
+              ))}
+            </div>
+
+            {/* Infinite Scroll Sentinel & Fallback Action */}
+            {visibleCount < sortedItems.length && (
+              <div ref={sentinelRef} className="mt-12 text-center py-6 flex flex-col items-center gap-3">
+                <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                  Showing {displayedItems.length} of {sortedItems.length} pieces
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, sortedItems.length))}
+                  className="px-6 py-2.5 rounded-full border border-primary/30 hover:border-primary text-xs uppercase tracking-widest text-primary font-medium hover:bg-primary/5 active:scale-95 transition-all shadow-soft"
+                >
+                  Load More Pieces ({sortedItems.length - displayedItems.length} remaining)
+                </button>
+              </div>
+            )}
+
+            {visibleCount >= sortedItems.length && sortedItems.length > BATCH_SIZE && (
+              <div className="mt-12 text-center py-6 text-xs uppercase tracking-widest text-muted-foreground/70">
+                ✦ All {sortedItems.length} pieces loaded ✦
+              </div>
+            )}
+          </>
         )}
       </section>
 

@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { useProductCards } from '../hooks/useProductCards';
 import { useSiteSettings, defaultSettings } from '../context/SiteContext';
 import { MotionFade, MotionBlurFade, MotionStagger, MotionItem } from '../components/MotionReveal';
+import { getThumbnailImageUrl } from '../lib/imageOptimization';
 
 export default function Products() {
   const { cards, isLoading } = useProductCards();
@@ -58,9 +59,10 @@ export default function Products() {
                   <div className="aspect-[4/5] bg-secondary overflow-hidden relative">
                     {card.imageUrl ? (
                       <img
-                        src={card.imageUrl}
+                        src={getThumbnailImageUrl(card.imageUrl)}
                         alt={card.name}
                         loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
                       />
                     ) : (

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, MessageCircle, Share2, Loader2, ImageOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSiteSettings } from '../context/SiteContext';
+import { getLightboxImageUrl } from '../lib/imageOptimization';
 
 export default function CatalogueLightbox({
   item,
@@ -22,15 +23,26 @@ export default function CatalogueLightbox({
     item?.url ||
     (typeof item?.media === 'string' ? item.media : '');
 
+  const [activeImgSrc, setActiveImgSrc] = useState(() => getLightboxImageUrl(mediaSrc));
+
   const isVideo =
     item?.media_type === 'video' ||
     (typeof mediaSrc === 'string' && /\.(mp4|webm|mov|ogg)(\?|$)/i.test(mediaSrc));
 
-  // Reset loading and error states whenever the active item changes
+  // Reset loading, source and error states whenever the active item changes
   useEffect(() => {
+    setActiveImgSrc(getLightboxImageUrl(mediaSrc));
     setLoaded(false);
     setImgError(false);
   }, [item?.id, mediaSrc]);
+
+  const handleImageError = () => {
+    if (activeImgSrc !== mediaSrc && mediaSrc) {
+      setActiveImgSrc(mediaSrc); // Fallback to raw original URL
+    } else {
+      setImgError(true);
+    }
+  };
 
   useEffect(() => {
     if (!item) return;
@@ -95,6 +107,30 @@ export default function CatalogueLightbox({
       }
     }
   };
+
+  // Background prefetch for adjacent images to make navigation instantaneous
+  useEffect(() => {
+    if (!item || !safeItems || safeItems.length <= 1) return;
+    const preload = (target) => {
+      if (!target) return;
+      const src =
+        target.media_url ||
+        target.imageUrl ||
+        target.thumbnail_url ||
+        target.image_url ||
+        target.url ||
+        (typeof target.media === 'string' ? target.media : '');
+      if (src && target.media_type !== 'video' && typeof src === 'string') {
+        const img = new Image();
+        img.src = getLightboxImageUrl(src);
+      }
+    };
+
+    const nextIdx = (currentIndex + 1) % total;
+    const prevIdx = (currentIndex - 1 + total) % total;
+    preload(safeItems[nextIdx]);
+    preload(safeItems[prevIdx]);
+  }, [currentIndex, total, safeItems, item]);
 
   const settings = useSiteSettings();
   const rawPhone = settings?.contact?.phone2 || settings?.hero?.whatsappPhone || '917869849449';
@@ -233,14 +269,14 @@ export default function CatalogueLightbox({
             />
           ) : (
             <img
-              key={mediaSrc}
-              src={mediaSrc}
+              key={activeImgSrc}
+              src={activeImgSrc}
               alt={item.title || item.description || item.category || 'Baldevji Jitmal Textile Piece'}
               loading="eager"
-              decoding="sync"
+              decoding="async"
               referrerPolicy="no-referrer"
               onLoad={() => setLoaded(true)}
-              onError={() => setImgError(true)}
+              onError={handleImageError}
               className={`max-h-full max-w-full w-auto h-auto object-contain select-none transition-opacity duration-300 ${
                 loaded ? 'opacity-100' : 'opacity-0'
               }`}

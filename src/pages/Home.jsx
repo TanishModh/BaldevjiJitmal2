@@ -11,6 +11,7 @@ import WeavesMarqueeRibbon from '../components/WeavesMarqueeRibbon';
 import RotatingHeritageSeal from '../components/RotatingHeritageSeal';
 import EditorialStatement from '../components/EditorialStatement';
 import { MotionFade, MotionBlurFade, MotionStagger, MotionItem } from '../components/MotionReveal';
+import { getThumbnailImageUrl } from '../lib/imageOptimization';
 
 function AnimatedCounter({ value, delay = 0 }) {
   const parsed = useMemo(() => {
@@ -119,6 +120,7 @@ export default function Home() {
             width={1600}
             height={1100}
             fetchPriority="high"
+            decoding="async"
             className="h-full w-full object-cover animate-cinematic opacity-85"
           />
         </div>
@@ -306,9 +308,10 @@ export default function Home() {
                     >
                       {card.imageUrl ? (
                         <img
-                          src={card.imageUrl}
+                          src={getThumbnailImageUrl(card.imageUrl)}
                           alt={card.name}
                           loading="lazy"
+                          decoding="async"
                           width={1024}
                           height={1024}
                           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -395,9 +398,14 @@ export default function Home() {
                 className="w-full h-64 sm:h-80 md:h-[34rem]"
               >
                 <img
-                  src={settings.shop.photo1Url || '/assets/shop-exterior-1-Y8qJ9GsL.png'}
+                  src={
+                    settings.shop.photo1Url
+                      ? settings.shop.photo1Url.replace('.png', '.jpg')
+                      : '/assets/shop-exterior-1-Y8qJ9GsL.jpg'
+                  }
                   alt={settings.shop.photo1Caption || 'The storefront'}
                   loading="lazy"
+                  decoding="async"
                   width={1600}
                   height={900}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
@@ -420,9 +428,14 @@ export default function Home() {
                 className="w-full h-64 sm:h-80 md:h-[28rem]"
               >
                 <img
-                  src={settings.shop.photo2Url || '/assets/shop-exterior-2-B3lADtzs.png'}
+                  src={
+                    settings.shop.photo2Url
+                      ? settings.shop.photo2Url.replace('.png', '.jpg')
+                      : '/assets/shop-exterior-2-B3lADtzs.jpg'
+                  }
                   alt={settings.shop.photo2Caption || 'A glimpse of the collection'}
                   loading="lazy"
+                  decoding="async"
                   width={1600}
                   height={900}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
