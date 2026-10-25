@@ -1,18 +1,32 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { useSiteSettings } from '../context/SiteContext';
 
 export default function RotatingHeritageSeal({ to, size = 110, className = '' }) {
+  const pathId = useId();
   const settings = useSiteSettings();
   const seal = settings.heritageSeal;
   const brand = settings.brand;
 
   const targetLink = to || seal?.link || '/gallery';
-  const sealText = seal?.text || `· ESTD ${brand?.est || '1937'} · ${brand?.name?.toUpperCase() || 'BALDEVJI JITMAL'} · ${brand?.city?.toUpperCase() || 'INDORE'} · HERITAGE ·`;
+  const rawText =
+    seal?.text ||
+    `· ESTD ${brand?.est || '1937'} · ${brand?.name?.toUpperCase() || 'BALDEVJI JITMAL'} · ${brand?.city?.toUpperCase() || 'INDORE'} · HERITAGE ·`;
+
+  const cleanText = (rawText || '').trim();
+  const charLen = Math.max(1, cleanText.length);
+
+  // Dynamic circular geometry: radius 38 gives circumference 238.76 in a 100x100 viewBox
+  const radius = 38;
+  const circumference = +(2 * Math.PI * radius).toFixed(2);
+
+  // Proportional font sizing: dynamically balances font scale and letter spacing so any text length (short or long) completes the full 360° circle with zero truncation
+  const fontSize = Math.min(7.6, Math.max(4.6, +(315 / charLen).toFixed(2)));
+  const letterSpacing = fontSize >= 6.5 ? '0.16em' : fontSize >= 5.5 ? '0.10em' : '0.05em';
 
   // Dynamically proportion center disc and diagonal arrow to the seal size
-  const centerSize = Math.round(size * 0.46);
+  const centerSize = Math.round(size * 0.44);
   const arrowSize = Math.max(16, Math.round(size * 0.22));
 
   return (
@@ -29,13 +43,21 @@ export default function RotatingHeritageSeal({ to, size = 110, className = '' })
       >
         <defs>
           <path
-            id="heritageSealPath"
-            d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
+            id={pathId}
+            d="M 50, 50 m -38, 0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"
           />
         </defs>
-        <text className="text-[7.8px] uppercase tracking-[0.22em] fill-current font-medium">
-          <textPath href="#heritageSealPath" startOffset="0%">
-            {sealText}
+        <text
+          style={{ fontSize: `${fontSize}px`, letterSpacing }}
+          className="uppercase fill-current font-medium"
+        >
+          <textPath
+            href={`#${pathId}`}
+            startOffset="0%"
+            textLength={circumference}
+            lengthAdjust="spacing"
+          >
+            {cleanText}
           </textPath>
         </text>
       </svg>
