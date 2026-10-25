@@ -10,6 +10,15 @@ import { useProductCards, useCategoryCanonicalizer } from '../hooks/useProductCa
 import { getThumbnailImageUrl } from '../lib/imageOptimization';
 import CatalogueLightbox from '../components/CatalogueLightbox';
 
+// Exact duplicate re-uploads in database to filter out permanently
+const KNOWN_DUPLICATE_IDS = new Set([
+  '2833d458-0398-4a54-b1e0-ed09de557b79', // Silk duplicate of bdeb8fdf-7986-4b37-aa12-8fd6fb2401ea
+  '153a8164-a1fc-41e0-b9e5-f68ec801cc07', // Silk duplicate of 2e9fc799-c844-455d-bc57-a8770764bc22
+  '7cbf12e3-264f-4983-afb2-a1045bb0066f', // Silk duplicate of 687c389e-9e75-41b3-88d8-9f90b42a3885
+  '12aeb09b-466a-42b3-90b7-b0d017a69b95', // Silk duplicate of 33e06747-ae60-47a9-ab32-6881b84973a2
+  '91991706-22de-40a8-a28e-eb5f03803402', // Silk duplicate of 55fdb112-ad05-432e-81ec-1bd697f7ec80
+]);
+
 function useIsAdmin() {
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -49,7 +58,7 @@ function useIsAdmin() {
   return isAdmin;
 }
 
-function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
+function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox, variantLabel }) {
   const queryClient = useQueryClient();
   const settings = useSiteSettings();
   const [isEditing, setIsEditing] = useState(false);
@@ -133,12 +142,12 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
   return (
     <figure
       onClick={onOpenLightbox}
-      className="group mb-3 break-inside-avoid overflow-hidden border-b border-accent/50 bg-card shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift sm:mb-5 cursor-pointer relative rounded-sm"
+      className="group overflow-hidden border border-border/70 hover:border-accent/60 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift cursor-pointer relative rounded-sm flex flex-col h-full"
     >
-      <div className="overflow-hidden bg-[#241715]/10 relative min-h-[170px] sm:min-h-[220px]">
+      <div className="overflow-hidden bg-[#241715]/10 relative aspect-[4/5] sm:aspect-[3/4] w-full shrink-0">
         {/* Luxurious textile specimen placeholder while image buffers */}
         {!imgLoaded && item.media_type !== 'video' && (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#f8f4ed] via-[#ede0cf] to-[#f4ebe0] flex flex-col items-center justify-center p-3 text-center pointer-events-none transition-opacity duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f8f4ed] via-[#ede0cf] to-[#f4ebe0] flex flex-col items-center justify-center p-3 text-center pointer-events-none transition-opacity duration-300 z-10">
             <span className="text-[10px] uppercase tracking-[0.2em] font-display text-primary/75 font-semibold">
               {item.category || 'Traditional Textile'}
             </span>
@@ -149,7 +158,7 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
         )}
 
         <motion.div
-          initial={{ scale: 1.08 }}
+          initial={{ scale: 1.05 }}
           whileInView={{ scale: 1.0 }}
           viewport={{ once: true, margin: '0px 0px -15px 0px' }}
           transition={{ duration: 0.9, ease: [0.165, 0.84, 0.44, 1] }}
@@ -159,7 +168,7 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
             <video
               src={item.media_url || item.imageUrl || item.url}
               controls
-              className="w-full max-h-[38rem] object-cover"
+              className="w-full h-full object-cover"
             />
           ) : (
             <img
@@ -170,13 +179,13 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
               decoding="async"
               onLoad={() => setImgLoaded(true)}
               onError={handleImgError}
-              className="w-full h-auto object-cover group-hover:scale-[1.05] transition duration-500 ease-out"
+              className="w-full h-full object-cover group-hover:scale-[1.05] transition duration-500 ease-out"
             />
           )}
         </motion.div>
 
         {/* Hover Action Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3 pointer-events-none z-20">
           <span className="inline-flex items-center gap-1.5 text-[11px] text-white/90 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-sm">
             <Maximize2 size={12} /> View Full
           </span>
@@ -194,7 +203,7 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
         </div>
       </div>
 
-      <figcaption className="p-4" onClick={(e) => isEditing && e.stopPropagation()}>
+      <figcaption className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between" onClick={(e) => isEditing && e.stopPropagation()}>
         {isEditing && canEdit ? (
           <div className="space-y-2">
             <input
@@ -236,15 +245,25 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
             </div>
           </div>
         ) : (
-          <div>
+          <div className="flex flex-col h-full justify-between">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-accent-foreground font-semibold">
                   {item.category}
                 </p>
+                {item.title && item.title !== '.' && item.title.toLowerCase() !== 'untitled' && (
+                  <h3 className="font-display text-sm sm:text-base text-primary mt-1 line-clamp-1">
+                    {item.title}
+                  </h3>
+                )}
                 {item.description && (
-                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line line-clamp-3">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 whitespace-pre-line line-clamp-3">
                     {item.description}
+                    {variantLabel && (
+                      <span className="ml-2 inline-block text-[9px] sm:text-[10px] uppercase tracking-wider text-accent font-semibold bg-accent/10 border border-accent/20 px-1.5 py-0.5 rounded-sm">
+                        {variantLabel}
+                      </span>
+                    )}
                   </p>
                 )}
               </div>
@@ -337,10 +356,19 @@ export default function Gallery() {
   const canonicalCategory = rawCategoryParam ? canonicalize(rawCategoryParam) : undefined;
 
   const normalizedDbItems = useMemo(() => {
-    return rawItems.map((item) => ({
-      ...item,
-      category: canonicalize(item.category),
-    }));
+    return rawItems
+      .filter((item) => !KNOWN_DUPLICATE_IDS.has(item.id))
+      .map((item) => {
+        let cat = item.category;
+        // Fix 20 bedsheet items inadvertently tagged with category "all"
+        if ((cat || '').toLowerCase() === 'all') {
+          cat = 'Bedsheets';
+        }
+        return {
+          ...item,
+          category: canonicalize(cat),
+        };
+      });
   }, [rawItems, canonicalize]);
 
   const highlightItems = useMemo(() => {
@@ -358,13 +386,36 @@ export default function Gallery() {
   }, [cards, canonicalize]);
 
   const allItems = useMemo(() => {
-    const seen = new Set(
-      normalizedDbItems.map((i) => `${(i.title || '').toLowerCase()}|${(i.category || '').toLowerCase()}`)
-    );
-    const uniqueHighlights = highlightItems.filter(
-      (h) => !seen.has(`${(h.title || '').toLowerCase()}|${(h.category || '').toLowerCase()}`)
-    );
-    return [...normalizedDbItems, ...uniqueHighlights];
+    const seenIds = new Set();
+    const seenUrls = new Set();
+    const result = [];
+
+    for (const item of normalizedDbItems) {
+      if (KNOWN_DUPLICATE_IDS.has(item.id)) continue;
+      const url = (item.media_url || item.imageUrl || '').trim().toLowerCase();
+      if (seenIds.has(item.id)) continue;
+      if (url && seenUrls.has(url)) continue;
+      seenIds.add(item.id);
+      if (url) seenUrls.add(url);
+      result.push(item);
+    }
+
+    for (const h of highlightItems) {
+      if (KNOWN_DUPLICATE_IDS.has(h.id)) continue;
+      const url = (h.media_url || h.imageUrl || '').trim().toLowerCase();
+      const titleCat = `${(h.title || '').toLowerCase()}|${(h.category || '').toLowerCase()}`;
+      if (seenIds.has(h.id)) continue;
+      if (url && seenUrls.has(url)) continue;
+      const exists = result.some(
+        (i) => `${(i.title || '').toLowerCase()}|${(i.category || '').toLowerCase()}` === titleCat
+      );
+      if (exists) continue;
+      seenIds.add(h.id);
+      if (url) seenUrls.add(url);
+      result.push(h);
+    }
+
+    return result;
   }, [normalizedDbItems, highlightItems]);
 
   const filteredItems = useMemo(() => {
@@ -418,6 +469,28 @@ export default function Gallery() {
       return weightA - weightB;
     });
   }, [filteredItems, sortMode, shuffleSeed]);
+
+  // Variant labels for items sharing the exact same category and description
+  const variantMap = useMemo(() => {
+    const groups = new Map();
+    sortedItems.forEach((item) => {
+      const desc = (item.description || '').trim();
+      if (!desc) return;
+      const key = `${(item.category || '').toLowerCase()}|${desc.toLowerCase()}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(item.id);
+    });
+
+    const map = new Map();
+    groups.forEach((ids) => {
+      if (ids.length > 1) {
+        ids.forEach((id, index) => {
+          map.set(id, `Design ${index + 1} of ${ids.length}`);
+        });
+      }
+    });
+    return map;
+  }, [sortedItems]);
 
   const BATCH_SIZE = 16;
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
@@ -629,7 +702,7 @@ export default function Gallery() {
           </p>
         ) : (
           <>
-            <div className="mt-10 columns-2 gap-3 sm:columns-2 sm:gap-5 lg:columns-3">
+            <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6 items-start">
               {displayedItems.map((item, idx) => (
                 <GalleryCard
                   key={item.id}
@@ -637,6 +710,7 @@ export default function Gallery() {
                   index={idx}
                   isAdmin={isAdmin}
                   onOpenLightbox={() => handleOpenLightbox(item)}
+                  variantLabel={variantMap.get(item.id)}
                 />
               ))}
             </div>
@@ -670,6 +744,7 @@ export default function Gallery() {
           items={sortedItems.length > 0 ? sortedItems : allItems}
           onClose={handleCloseLightbox}
           onSelect={handleSelectLightboxItem}
+          variantMap={variantMap}
         />
       )}
     </>
