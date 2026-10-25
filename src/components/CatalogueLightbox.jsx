@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { X, ChevronLeft, ChevronRight, MessageCircle, Share2, Loader2, ImageOff } from 'lucide-react';
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  MessageCircle,
+  Share2,
+  ImageOff,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { useSiteSettings } from '../context/SiteContext';
 import { getLightboxImageUrl } from '../lib/imageOptimization';
@@ -11,10 +21,27 @@ export default function CatalogueLightbox({
   onSelect,
 }) {
   const settings = useSiteSettings();
+
+  // Navigation & Swipe touch refs
   const touchStartXRef = useRef(0);
   const touchStartYRef = useRef(0);
+  const lastTouchPosRef = useRef({ x: 0, y: 0 });
+  const lastTapTimeRef = useRef(0);
+
+  // Zoom & Loupe refs & state
+  const imageContainerRef = useRef(null);
+  const imageElRef = useRef(null);
+  const dragStartRef = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
+  const didDragRef = useRef(false);
+  const pinchStartDistRef = useRef(0);
+  const pinchStartScaleRef = useRef(1);
+
   const [loaded, setLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1);
+  const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
   const mediaSrc =
     item?.media_url ||
@@ -37,11 +64,22 @@ export default function CatalogueLightbox({
   const currentIndex = item ? safeItems.findIndex((i) => i && String(i.id) === String(item.id)) : -1;
   const total = safeItems.length;
 
-  // Reset loading, source and error states whenever the active item changes
+  // Reset zoom state helper
+  const resetZoom = () => {
+    setZoomScale(1);
+    setZoomOrigin({ x: 50, y: 50 });
+    setPanOffset({ x: 0, y: 0 });
+    setIsDragging(false);
+    didDragRef.current = false;
+    pinchStartDistRef.current = 0;
+  };
+
+  // Reset loading, source, error, and zoom whenever active item changes
   useEffect(() => {
     setActiveImgSrc(mediaSrc);
     setLoaded(false);
     setImgError(false);
+    resetZoom();
   }, [item?.id, mediaSrc]);
 
   const handleImageError = () => {
@@ -55,6 +93,7 @@ export default function CatalogueLightbox({
   const handlePrev = (e) => {
     e?.stopPropagation();
     if (total <= 1) return;
+    resetZoom();
     if (currentIndex > 0) {
       onSelect(safeItems[currentIndex - 1]);
     } else {
@@ -65,10 +104,210 @@ export default function CatalogueLightbox({
   const handleNext = (e) => {
     e?.stopPropagation();
     if (total <= 1) return;
+    resetZoom();
     if (currentIndex >= 0 && currentIndex < total - 1) {
       onSelect(safeItems[currentIndex + 1]);
     } else {
       onSelect(safeItems[0]);
+    }
+  };
+
+  // Zoom controls
+  const handleZoomIn = (e) => {
+    e?.stopPropagation();
+    setZoomScale((prev) => Math.min(3.2, Number((prev + 0.5).toFixed(1))));
+  };
+
+  const handleZoomOut = (e) => {
+    e?.stopPropagation();
+    setZoomScale((prev) => {
+      const next = Number((prev - 0.5).toFixed(1));
+      if (next <= 1.05) {
+        resetZoom();
+        return 1;
+      }
+      return next;
+    });
+  };
+
+  const handleToggleZoom = (e) => {
+    e?.stopPropagation();
+    if (zoomScale > 1.05) {
+      resetZoom();
+    } else {
+      setZoomScale(2.3);
+      setZoomOrigin({ x: 50, y: 50 });
+      setPanOffset({ x: 0, y: 0 });
+    }
+  };
+
+  // Desktop Click on Image: Zoom in to clicked point or reset
+  const handleImageClick = (e) => {
+    if (isVideo) return;
+    e.stopPropagation();
+
+    // If user just finished dragging, don't trigger click toggle
+    if (didDragRef.current) {
+      didDragRef.current = false;
+      return;
+    }
+
+    if (zoomScale > 1.05) {
+      resetZoom();
+    } else {
+      if (imageContainerRef.current) {
+        const rect = imageContainerRef.current.getBoundingClientRect();
+        const x = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+        const y = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+        setZoomOrigin({ x, y });
+      }
+      setZoomScale(2.3);
+      setPanOffset({ x: 0, y: 0 });
+    }
+  };
+
+  // Desktop Mouse Drag / Pan when zoomed
+  const handleMouseDown = (e) => {
+    if (zoomScale <= 1.05 || isVideo) return;
+    e.preventDefault();
+    setIsDragging(true);
+    didDragRef.current = false;
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      panX: panOffset.x,
+      panY: panOffset.y,
+    };
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || zoomScale <= 1.05) return;
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    if (Math.hypot(dx, dy) > 4) {
+      didDragRef.current = true;
+    }
+    setPanOffset({
+      x: dragStartRef.current.panX + dx,
+      y: dragStartRef.current.panY + dy,
+    });
+  };
+
+  const handleMouseUp = () => {
+    if (isDragging) {
+      setIsDragging(false);
+    }
+  };
+
+  // Mobile Touch Handlers: Pinch-to-zoom + 1-finger pan + swipe carousel
+  const handleTouchStart = (e) => {
+    if (isVideo) return;
+
+    if (e.touches.length === 2) {
+      // Two fingers: Pinch start
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      pinchStartDistRef.current = dist;
+      pinchStartScaleRef.current = zoomScale;
+
+      if (imageContainerRef.current) {
+        const rect = imageContainerRef.current.getBoundingClientRect();
+        const midX = (t1.clientX + t2.clientX) / 2;
+        const midY = (t1.clientY + t2.clientY) / 2;
+        setZoomOrigin({
+          x: Math.max(0, Math.min(100, ((midX - rect.left) / rect.width) * 100)),
+          y: Math.max(0, Math.min(100, ((midY - rect.top) / rect.height) * 100)),
+        });
+      }
+    } else if (e.touches.length === 1) {
+      // Single finger
+      touchStartXRef.current = e.touches[0].clientX;
+      touchStartYRef.current = e.touches[0].clientY;
+      lastTouchPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      dragStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        panX: panOffset.x,
+        panY: panOffset.y,
+      };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (isVideo) return;
+
+    if (e.touches.length === 2 && pinchStartDistRef.current > 0) {
+      // Pinching
+      e.preventDefault();
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      const factor = dist / pinchStartDistRef.current;
+      const targetScale = Math.min(3.2, Math.max(1, pinchStartScaleRef.current * factor));
+      setZoomScale(targetScale);
+    } else if (e.touches.length === 1 && zoomScale > 1.05) {
+      // 1-finger pan on zoomed fabric
+      e.preventDefault();
+      const touch = e.touches[0];
+      const dx = touch.clientX - dragStartRef.current.x;
+      const dy = touch.clientY - dragStartRef.current.y;
+      setPanOffset({
+        x: dragStartRef.current.panX + dx,
+        y: dragStartRef.current.panY + dy,
+      });
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (isVideo) return;
+
+    if (pinchStartDistRef.current > 0) {
+      pinchStartDistRef.current = 0;
+      if (zoomScale < 1.1) {
+        resetZoom();
+      }
+      return;
+    }
+
+    if (e.changedTouches.length === 0) return;
+
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartXRef.current;
+    const deltaY = touch.clientY - touchStartYRef.current;
+    const moveDist = Math.hypot(deltaX, deltaY);
+
+    // Double-tap detection
+    const now = Date.now();
+    const timeSinceLastTap = now - lastTapTimeRef.current;
+
+    if (moveDist < 12 && timeSinceLastTap < 300) {
+      // Double tap triggered!
+      lastTapTimeRef.current = 0;
+      if (zoomScale > 1.05) {
+        resetZoom();
+      } else {
+        if (imageContainerRef.current) {
+          const rect = imageContainerRef.current.getBoundingClientRect();
+          const x = Math.max(0, Math.min(100, ((touch.clientX - rect.left) / rect.width) * 100));
+          const y = Math.max(0, Math.min(100, ((touch.clientY - rect.top) / rect.height) * 100));
+          setZoomOrigin({ x, y });
+        }
+        setZoomScale(2.3);
+        setPanOffset({ x: 0, y: 0 });
+      }
+      return;
+    }
+
+    lastTapTimeRef.current = now;
+
+    // Carousel swipe navigation (only when at 1x view)
+    if (zoomScale <= 1.05 && Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
     }
   };
 
@@ -77,9 +316,18 @@ export default function CatalogueLightbox({
     if (!item) return;
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        if (zoomScale > 1.05) {
+          resetZoom();
+        } else {
+          onClose();
+        }
+      }
       if (e.key === 'ArrowLeft') handlePrev();
       if (e.key === 'ArrowRight') handleNext();
+      if (e.key === '+' || e.key === '=') handleZoomIn();
+      if (e.key === '-' || e.key === '_') handleZoomOut();
+      if (e.key === '0') resetZoom();
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -89,9 +337,9 @@ export default function CatalogueLightbox({
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = '';
     };
-  }, [item, currentIndex, total, safeItems, onClose, onSelect]);
+  }, [item, currentIndex, total, safeItems, zoomScale, onClose]);
 
-  // Background prefetch for adjacent images to make navigation instantaneous
+  // Background prefetch for adjacent images
   useEffect(() => {
     if (!item || !safeItems || safeItems.length <= 1) return;
     const preload = (target) => {
@@ -114,25 +362,6 @@ export default function CatalogueLightbox({
     preload(safeItems[nextIdx]);
     preload(safeItems[prevIdx]);
   }, [currentIndex, total, safeItems, item]);
-
-  // Mobile Touch Swipe Handlers
-  const handleTouchStart = (e) => {
-    touchStartXRef.current = e.touches[0].clientX;
-    touchStartYRef.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e) => {
-    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
-    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
-
-    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
-      if (deltaX < 0) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
-    }
-  };
 
   // Early return ONLY after all hooks have been unconditionally registered
   if (!item) return null;
@@ -225,16 +454,74 @@ export default function CatalogueLightbox({
       {/* Modal Dialog Content */}
       <div
         onClick={(e) => e.stopPropagation()}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
         className="relative max-w-5xl w-full bg-card rounded-md overflow-hidden shadow-2xl border border-accent/40 flex flex-col md:flex-row max-h-[92svh] md:h-[82vh] md:max-h-[720px]"
       >
         {/* Media Container: Guaranteed full height on desktop, comfortable height on mobile */}
-        <div className="flex-1 min-w-0 bg-gradient-to-b from-[#140e0d] to-[#0a0706] flex items-center justify-center p-3 sm:p-6 relative overflow-hidden h-[46svh] sm:h-[52svh] md:h-full shrink-0 md:shrink">
-          {/* Subtle discreet buffer indicator if on slow mobile link */}
+        <div
+          ref={imageContainerRef}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          className="flex-1 min-w-0 bg-gradient-to-b from-[#140e0d] to-[#0a0706] flex items-center justify-center p-3 sm:p-6 relative overflow-hidden h-[46svh] sm:h-[52svh] md:h-full shrink-0 md:shrink select-none"
+        >
+          {/* Subtle discreet buffer indicator if loading */}
           {!loaded && !imgError && mediaSrc && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-8 h-8 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
+            </div>
+          )}
+
+          {/* Textile Detail Loupe Toolbar (Top-Left of media pane) */}
+          {!isVideo && !imgError && mediaSrc && loaded && (
+            <div className="absolute top-3 left-3 z-30 flex items-center gap-1.5 pointer-events-auto">
+              {zoomScale <= 1.05 ? (
+                <button
+                  type="button"
+                  onClick={handleToggleZoom}
+                  className="inline-flex items-center gap-1.5 bg-black/75 hover:bg-black/90 backdrop-blur-md text-white/95 border border-white/20 hover:border-accent/80 text-[11px] font-medium px-3 py-1.5 rounded-full transition-all shadow-lift active:scale-95 select-none"
+                  title="Inspect thread count, border weaving & fabric texture up close"
+                >
+                  <ZoomIn size={13} className="text-accent" />
+                  <span>Inspect Weave</span>
+                </button>
+              ) : (
+                <div className="flex items-center gap-1 bg-black/85 backdrop-blur-md border border-accent/50 rounded-full px-2 py-1 shadow-lift text-white text-[11px] select-none">
+                  <button
+                    type="button"
+                    onClick={handleZoomOut}
+                    disabled={zoomScale <= 1.1}
+                    className="h-6 w-6 rounded-full hover:bg-white/20 active:bg-white/30 flex items-center justify-center transition disabled:opacity-30"
+                    title="Zoom out (-)"
+                  >
+                    <ZoomOut size={12} />
+                  </button>
+                  <span className="font-mono text-[11px] text-accent font-semibold px-1.5">
+                    {zoomScale.toFixed(1)}× Loupe
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleZoomIn}
+                    disabled={zoomScale >= 3.2}
+                    className="h-6 w-6 rounded-full hover:bg-white/20 active:bg-white/30 flex items-center justify-center transition disabled:opacity-30"
+                    title="Zoom in (+)"
+                  >
+                    <ZoomIn size={12} />
+                  </button>
+                  <span className="h-3 w-px bg-white/25 mx-0.5" />
+                  <button
+                    type="button"
+                    onClick={resetZoom}
+                    className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-sand-100 hover:text-white px-2 py-0.5 rounded-full hover:bg-white/15 transition active:scale-95"
+                    title="Reset view (0 / Esc)"
+                  >
+                    <RotateCcw size={10} />
+                    <span>Reset</span>
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -273,6 +560,7 @@ export default function CatalogueLightbox({
           ) : (
             <img
               key={activeImgSrc}
+              ref={imageElRef}
               src={activeImgSrc}
               alt={item.title || item.description || item.category || 'Baldevji Jitmal Textile Piece'}
               loading="eager"
@@ -280,16 +568,46 @@ export default function CatalogueLightbox({
               referrerPolicy="no-referrer"
               onLoad={() => setLoaded(true)}
               onError={handleImageError}
-              className="max-h-full max-w-full w-auto h-auto object-contain select-none"
+              onClick={handleImageClick}
+              style={{
+                transform:
+                  zoomScale > 1.05
+                    ? `scale(${zoomScale}) translate(${panOffset.x / zoomScale}px, ${panOffset.y / zoomScale}px)`
+                    : 'scale(1)',
+                transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
+                transition:
+                  isDragging || pinchStartDistRef.current > 0
+                    ? 'none'
+                    : 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
+                cursor: isVideo
+                  ? 'default'
+                  : zoomScale > 1.05
+                  ? isDragging
+                    ? 'grabbing'
+                    : 'grab'
+                  : 'zoom-in',
+                userSelect: 'none',
+                touchAction: zoomScale > 1.05 ? 'none' : 'pan-y',
+              }}
+              className="max-h-full max-w-full w-auto h-auto object-contain select-none will-change-transform"
             />
           )}
 
-          {/* Mobile Swipe Hint Pill */}
-          <div className="sm:hidden absolute bottom-2 inset-x-0 flex justify-center pointer-events-none">
-            <span className="text-[9px] uppercase tracking-wider text-white/75 bg-black/60 px-3 py-0.5 rounded-full backdrop-blur-sm border border-white/10">
-              Swipe ‹ › to browse
-            </span>
-          </div>
+          {/* Bottom Hint Pill */}
+          {!isVideo && !imgError && mediaSrc && (
+            <div className="absolute bottom-2.5 inset-x-0 flex justify-center pointer-events-none">
+              {zoomScale > 1.05 ? (
+                <span className="text-[10px] uppercase tracking-wider text-accent font-medium bg-black/85 px-3 py-0.5 rounded-full backdrop-blur-md border border-accent/40 shadow-lift animate-fade-in">
+                  Drag to pan across fabric weave · Click or tap to exit
+                </span>
+              ) : (
+                <span className="text-[9px] uppercase tracking-wider text-white/80 bg-black/60 px-3 py-0.5 rounded-full backdrop-blur-sm border border-white/10">
+                  <span className="sm:hidden">Swipe ‹ › · Double-tap to zoom weave</span>
+                  <span className="hidden sm:inline">Click image or 'Inspect Weave' to zoom</span>
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Sidebar Info & Inquire: Fixed width on desktop, full width on mobile */}

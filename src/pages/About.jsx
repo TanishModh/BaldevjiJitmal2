@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSiteSettings, defaultSettings } from '../context/SiteContext';
 import { MotionFade, MotionBlurFade } from '../components/MotionReveal';
+import GoogleRatingBadge from '../components/GoogleRatingBadge';
 
 export default function About() {
   const settings = useSiteSettings();
@@ -43,6 +44,11 @@ export default function About() {
                   {about.ctaLabel || defaultSettings.about.ctaLabel}
                 </Link>
               </div>
+
+              {/* Google Reviews & Heritage Rating Badge */}
+              <MotionFade delay={0.4}>
+                <GoogleRatingBadge className="mt-6 sm:mt-8" />
+              </MotionFade>
             </div>
           </div>
         </div>
