@@ -17,11 +17,10 @@ export default function Contact() {
   });
   const [errors, setErrors] = useState({});
 
-  const rawPhone = settings?.contact?.phone2 || '917869849449';
-  const cleanPhone = rawPhone.replace(/[^\d]/g, '');
-  const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+  const contactPhone1 = '7828072394';
+  const contactPhone2 = '9827213393';
 
-  const directWhatsAppUrl = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
+  const directWhatsAppUrl = `https://wa.me/91${contactPhone1}?text=${encodeURIComponent(
     formData.message?.trim()
       ? `Namaste Baldevji Jitmal,\n\n*Inquiry from Website*\n*Name:* ${formData.name || 'Customer'}\n${
           formData.phone ? `*Phone:* ${formData.phone}\n` : ''
@@ -132,27 +131,50 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Phone */}
+            {/* Phone (Mobile Numbers Only) */}
             <div className="flex items-start gap-3">
               <Phone className="text-accent mt-1 shrink-0" size={20} />
               <div>
-                <p className="font-display text-xl text-primary">Phone</p>
-                <p className="text-muted-foreground leading-relaxed">
-                  <a href={`tel:${(settings.contact.phone1 || '07312459280').replace(/\s+/g, '')}`} className="hover:text-primary transition-colors">
-                    {settings.contact.phone1 || '0731 245 9280'}
-                  </a>
-                  {settings.contact.phone2 && (
-                    <>
-                      <br />
-                      <a
-                        href={`tel:${settings.contact.phone2.replace(/\s+/g, '')}`}
-                        className="hover:text-primary transition-colors"
-                      >
-                        {settings.contact.phone2}
-                      </a>
-                    </>
-                  )}
-                </p>
+                <p className="font-display text-xl text-primary">Phone & WhatsApp</p>
+                <div className="text-muted-foreground leading-relaxed space-y-2 mt-1.5">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <a
+                      href="tel:+917828072394"
+                      className="hover:text-primary transition-colors font-medium text-foreground tracking-wide"
+                    >
+                      +91 78280 72394
+                    </a>
+                    <a
+                      href="https://wa.me/917828072394?text=Namaste%20Baldevji%20Jitmal%2C%20I%20am%20contacting%20you%20from%20your%20website."
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[11px] text-[#128c7e] hover:text-[#075e54] font-medium inline-flex items-center gap-1 bg-[#25d366]/10 hover:bg-[#25d366]/20 px-2 py-0.5 rounded transition-all active:scale-95"
+                      title="Chat on WhatsApp"
+                    >
+                      <MessageCircle size={12} className="fill-current text-[#25d366]" />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <a
+                      href="tel:+919827213393"
+                      className="hover:text-primary transition-colors font-medium text-foreground tracking-wide"
+                    >
+                      +91 98272 13393
+                    </a>
+                    <a
+                      href="https://wa.me/919827213393?text=Namaste%20Baldevji%20Jitmal%2C%20I%20am%20contacting%20you%20from%20your%20website."
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[11px] text-[#128c7e] hover:text-[#075e54] font-medium inline-flex items-center gap-1 bg-[#25d366]/10 hover:bg-[#25d366]/20 px-2 py-0.5 rounded transition-all active:scale-95"
+                      title="Chat on WhatsApp"
+                    >
+                      <MessageCircle size={12} className="fill-current text-[#25d366]" />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -268,7 +290,7 @@ export default function Contact() {
                   name="phone"
                   type="tel"
                   maxLength={32}
-                  placeholder="e.g. +91 7869849449"
+                  placeholder="e.g. +91 78280 72394"
                   value={formData.phone}
                   onChange={handleChange}
                   className="mt-1 w-full bg-background border border-input px-3.5 py-3 outline-none focus:border-primary transition text-base md:text-sm rounded-sm"
