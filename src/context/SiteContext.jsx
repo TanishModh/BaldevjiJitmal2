@@ -282,6 +282,20 @@ export const defaultSettings = {
   ],
 };
 
+const SETTINGS_CACHE_KEY = 'bj_site_settings_v5';
+try {
+  if (typeof window !== 'undefined') {
+    [
+      'bj_site_settings_cache',
+      'bj_site_settings',
+      'bj_site_settings_v1',
+      'bj_site_settings_v2',
+      'bj_site_settings_v3',
+      'bj_site_settings_v4',
+    ].forEach((k) => window.localStorage.removeItem(k));
+  }
+} catch (_) {}
+
 const SiteContext = createContext({
   settings: defaultSettings,
   isLoading: false,
@@ -293,6 +307,8 @@ function stripBlankets(val) {
       .replace(/,\s*blankets?\b/gi, '')
       .replace(/\bblankets?,\s*/gi, '')
       .replace(/\bblankets?\b/gi, '')
+      .replace(/0731\s*245\s*9280\s*\/?\s*/gi, '')
+      .replace(/0731\s*2459280\s*\/?\s*/gi, '')
       .replace(/\s{2,}/g, ' ')
       .trim();
   }
@@ -324,7 +340,7 @@ export function SiteProvider({ children }) {
           console.warn('Failed to fetch site_settings from Supabase:', error.message);
           // Check local cache
           try {
-            const cached = localStorage.getItem('bj_site_settings_cache');
+            const cached = localStorage.getItem(SETTINGS_CACHE_KEY);
             if (cached) return JSON.parse(cached);
           } catch (_) {}
           return null;
@@ -332,7 +348,7 @@ export function SiteProvider({ children }) {
 
         if (data?.value) {
           try {
-            localStorage.setItem('bj_site_settings_cache', JSON.stringify(data.value));
+            localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(data.value));
           } catch (_) {}
           return data.value;
         }
@@ -341,7 +357,7 @@ export function SiteProvider({ children }) {
       } catch (err) {
         console.warn('Site settings error:', err);
         try {
-          const cached = localStorage.getItem('bj_site_settings_cache');
+          const cached = localStorage.getItem(SETTINGS_CACHE_KEY);
           if (cached) return JSON.parse(cached);
         } catch (_) {}
         return null;

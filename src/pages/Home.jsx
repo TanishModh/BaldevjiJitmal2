@@ -155,11 +155,14 @@ export default function Home() {
             </motion.p>
 
             {/* H1 Heading - Agnes Toth signature de-blur reveal */}
-            <MotionBlurFade delay={0.16}>
-              <h1 className="mt-3 sm:mt-4 font-display text-4xl sm:text-6xl md:text-8xl leading-[1.04] text-primary-foreground drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
-                {settings.brand.name?.trim() || 'Baldevji Jitmal'}
-              </h1>
-            </MotionBlurFade>
+            <motion.h1
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-3 sm:mt-4 font-display text-4xl sm:text-6xl md:text-8xl leading-[1.04] text-primary-foreground drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
+            >
+              {settings.brand.name?.trim() || 'Baldevji Jitmal'}
+            </motion.h1>
 
             {/* Elegant Line Draw (Hanson Wu inspired smooth scaleX expansion) */}
             <motion.div
