@@ -54,13 +54,25 @@ export default function Footer() {
             <MapPin size={16} className="mt-0.5 text-accent shrink-0" />
             <span>{settings.contact.address || '221, M.T. Cloth Market, Indore, MP'}</span>
           </p>
-          <p className="flex items-center gap-2 text-primary-foreground/70">
-            <Phone size={16} className="text-accent shrink-0" />
-            <span>
-              {settings.contact.phone1 || '0731 245 9280'}
-              {settings.contact.phone2 && ` · ${settings.contact.phone2}`}
-            </span>
-          </p>
+          <div className="flex items-start gap-2 text-primary-foreground/70">
+            <Phone size={16} className="mt-1 text-accent shrink-0" />
+            <div className="space-y-1 text-xs sm:text-sm">
+              <p>
+                <a href="tel:07312459280" className="hover:text-accent transition-colors font-mono">
+                  0731-2459280
+                </a>
+              </p>
+              <p className="flex items-center gap-2 flex-wrap font-mono">
+                <a href="tel:+917828072394" className="hover:text-accent transition-colors">
+                  +91 78280 72394
+                </a>
+                <span className="text-primary-foreground/35">·</span>
+                <a href="tel:+919827213393" className="hover:text-accent transition-colors">
+                  +91 98272 13393
+                </a>
+              </p>
+            </div>
+          </div>
           {settings.contact.instagramUrl && (
             <a
               href={settings.contact.instagramUrl}
