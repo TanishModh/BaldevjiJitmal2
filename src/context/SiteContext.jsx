@@ -30,7 +30,7 @@ export const defaultSettings = {
     heading: 'Baldevji Jitmal',
     subheading: 'Traditional Indian textiles — From the heart of Indore, Since 1937.',
     intro:
-      'A Trusted Wholesale House dealing in Dhotis, Dupattas, Dhoti-Dupatta Sets, Ladies & Gents Shawls, Bedsheets, Blankets, Towels, Napkins, Bhagalpuri sets and Chadars, Silk sets, and Kurta-Pajama Cloth.',
+      'A Trusted Wholesale House dealing in Dhotis, Dupattas, Dhoti-Dupatta Sets, Ladies & Gents Shawls, Bedsheets, Towels, Napkins, Bhagalpuri sets and Chadars, Silk sets, and Kurta-Pajama Cloth.',
     ctaPrimaryLabel: 'Explore Collections',
     ctaSecondaryLabel: 'Plan a Visit',
     whatsappCtaLabel: 'Direct WhatsApp',
@@ -163,7 +163,7 @@ export const defaultSettings = {
     heading: 'About Baldevji Jitmal',
     paragraphs: [
       "Baldevji Jitmal is a family-run heritage textile house based in the legendary M.T. Cloth Market of Indore — one of central India's oldest and most prestigious fabric hubs, serving generations since 1937.",
-      "For decades we have curated and supplied traditional Indian fabrics to wedding families, retailers, and discerning patrons across the country. Our specialities include authentic dhotis, dupattas and dhoti-dupatta sets, fine ladies and gents shawls, premium bedsheets, blankets, towels, Bhagalpuri silk sets, and pure kurta-pajama fabrics.",
+      "For decades we have curated and supplied traditional Indian fabrics to wedding families, retailers, and discerning patrons across the country. Our specialities include authentic dhotis, dupattas and dhoti-dupatta sets, fine ladies and gents shawls, premium bedsheets, towels, napkins, Bhagalpuri silk sets, and pure kurta-pajama fabrics.",
       "We believe in honest pricing, careful craftsmanship, and treating every visitor — whether choosing wedding attire or sourcing for an institution — like family. Come visit our shop in the heart of Indore, or browse our latest catalogue online.",
     ],
     featureImageUrl: '/assets/hero-textiles-CKsuSuq6.jpg',
@@ -263,7 +263,7 @@ export const defaultSettings = {
     },
     {
       title: 'Home Textiles',
-      desc: 'Bedsheets, blankets, towels and napkins for homes and bulk buyers.',
+      desc: 'Bedsheets, towels and napkins for homes and bulk buyers.',
       imageUrl: '/assets/cat-home-BiWUfBZT.jpg',
       categorySlug: 'Home',
     },
@@ -286,6 +286,28 @@ const SiteContext = createContext({
   settings: defaultSettings,
   isLoading: false,
 });
+
+function stripBlankets(val) {
+  if (typeof val === 'string') {
+    return val
+      .replace(/,\s*blankets?\b/gi, '')
+      .replace(/\bblankets?,\s*/gi, '')
+      .replace(/\bblankets?\b/gi, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
+  if (Array.isArray(val)) {
+    return val.map(stripBlankets);
+  }
+  if (val && typeof val === 'object') {
+    const res = {};
+    for (const [k, v] of Object.entries(val)) {
+      res[k] = stripBlankets(v);
+    }
+    return res;
+  }
+  return val;
+}
 
 export function SiteProvider({ children }) {
   const { data: dbSettings, isLoading } = useQuery({
@@ -330,7 +352,7 @@ export function SiteProvider({ children }) {
   // Deep merge settings with comprehensive defaults so no component ever breaks
   const mergedSettings = React.useMemo(() => {
     if (!dbSettings) return defaultSettings;
-    return {
+    const raw = {
       ...defaultSettings,
       ...dbSettings,
       brand: {
@@ -440,6 +462,8 @@ export function SiteProvider({ children }) {
           ? dbSettings.highlights
           : defaultSettings.highlights,
     };
+
+    return stripBlankets(raw);
   }, [dbSettings]);
 
   // Apply theme variables to CSS root
