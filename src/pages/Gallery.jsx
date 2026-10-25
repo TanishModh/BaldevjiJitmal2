@@ -135,12 +135,15 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
       onClick={onOpenLightbox}
       className="group mb-3 break-inside-avoid overflow-hidden border-b border-accent/50 bg-card shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift sm:mb-5 cursor-pointer relative rounded-sm"
     >
-      <div className="overflow-hidden bg-secondary/80 relative min-h-[170px] sm:min-h-[220px]">
-        {/* Shimmer skeleton while loading */}
+      <div className="overflow-hidden bg-[#241715]/10 relative min-h-[170px] sm:min-h-[220px]">
+        {/* Luxurious textile specimen placeholder while image buffers */}
         {!imgLoaded && item.media_type !== 'video' && (
-          <div className="absolute inset-0 bg-secondary/80 animate-pulse flex items-center justify-center pointer-events-none">
-            <span className="text-[11px] font-mono tracking-widest text-primary/30 font-semibold select-none">
-              BJ
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f8f4ed] via-[#ede0cf] to-[#f4ebe0] flex flex-col items-center justify-center p-3 text-center pointer-events-none transition-opacity duration-300">
+            <span className="text-[10px] uppercase tracking-[0.2em] font-display text-primary/75 font-semibold">
+              {item.category || 'Traditional Textile'}
+            </span>
+            <span className="text-[8px] uppercase tracking-[0.25em] text-muted-foreground/60 mt-1">
+              Authentic Weave
             </span>
           </div>
         )}
@@ -162,14 +165,12 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
             <img
               src={displayImg}
               alt={item.description || item.category || 'Textile item'}
-              loading={index < 4 ? 'eager' : 'lazy'}
-              fetchPriority={index < 2 ? 'high' : 'auto'}
+              loading={index < 8 ? 'eager' : 'lazy'}
+              fetchPriority={index < 4 ? 'high' : 'auto'}
               decoding="async"
               onLoad={() => setImgLoaded(true)}
               onError={handleImgError}
-              className={`w-full h-auto object-cover group-hover:scale-[1.05] transition duration-500 ease-out ${
-                imgLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
+              className="w-full h-auto object-cover group-hover:scale-[1.05] transition duration-500 ease-out"
             />
           )}
         </motion.div>
@@ -396,7 +397,7 @@ export default function Gallery() {
     return copy;
   }, [filteredItems, sortMode]);
 
-  const BATCH_SIZE = 24;
+  const BATCH_SIZE = 16;
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
   const sentinelRef = useRef(null);
 
@@ -409,7 +410,7 @@ export default function Gallery() {
     return sortedItems.slice(0, visibleCount);
   }, [sortedItems, visibleCount]);
 
-  // Infinite scroll intersection observer: preloads the next batch 600px before the user hits the bottom
+  // Infinite scroll intersection observer: preloads the next batch 800px before the user hits the bottom
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
@@ -420,7 +421,7 @@ export default function Gallery() {
           setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, sortedItems.length));
         }
       },
-      { rootMargin: '600px 0px' }
+      { rootMargin: '800px 0px' }
     );
 
     observer.observe(sentinel);

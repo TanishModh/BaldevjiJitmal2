@@ -4,6 +4,20 @@ import { useSiteSettings } from '../context/SiteContext';
 
 const normalize = (str) => (str ?? '').trim().toLowerCase();
 
+const OVERSIZED_CATEGORY_OVERRIDES = {
+  '1785152462084-1m5era.png': '/assets/categories/cat-aasan.jpg',
+  '1785158017108-gmbl9y.png': '/assets/categories/cat-towels.jpg',
+  '1785749475034-sosqwz.png': '/assets/categories/cat-bedsheets.jpg',
+};
+
+function getCategoryThumbnail(url) {
+  if (!url || typeof url !== 'string') return url;
+  for (const [rawName, localOpt] of Object.entries(OVERSIZED_CATEGORY_OVERRIDES)) {
+    if (url.includes(rawName)) return localOpt;
+  }
+  return url;
+}
+
 export function useCategories() {
   return useQuery({
     queryKey: ['categories'],
@@ -35,7 +49,7 @@ export function useProductCards() {
     id: c.id,
     name: c.name,
     description: c.description,
-    imageUrl: c.thumbnail_url,
+    imageUrl: getCategoryThumbnail(c.thumbnail_url),
     categoryParam: c.name,
     source: 'category',
   }));

@@ -24,7 +24,7 @@ export default function CatalogueLightbox({
     item?.url ||
     (typeof item?.media === 'string' ? item.media : '');
 
-  const [activeImgSrc, setActiveImgSrc] = useState(() => getLightboxImageUrl(mediaSrc));
+  const [activeImgSrc, setActiveImgSrc] = useState(mediaSrc);
 
   const isVideo =
     item?.media_type === 'video' ||
@@ -39,7 +39,7 @@ export default function CatalogueLightbox({
 
   // Reset loading, source and error states whenever the active item changes
   useEffect(() => {
-    setActiveImgSrc(getLightboxImageUrl(mediaSrc));
+    setActiveImgSrc(mediaSrc);
     setLoaded(false);
     setImgError(false);
   }, [item?.id, mediaSrc]);
@@ -230,12 +230,11 @@ export default function CatalogueLightbox({
         className="relative max-w-5xl w-full bg-card rounded-md overflow-hidden shadow-2xl border border-accent/40 flex flex-col md:flex-row max-h-[92svh] md:h-[82vh] md:max-h-[720px]"
       >
         {/* Media Container: Guaranteed full height on desktop, comfortable height on mobile */}
-        <div className="flex-1 min-w-0 bg-[#0c0908] flex items-center justify-center p-3 sm:p-6 relative overflow-hidden h-[46svh] sm:h-[52svh] md:h-full shrink-0 md:shrink">
-          {/* Subtle loading spinner while high-res image buffers */}
+        <div className="flex-1 min-w-0 bg-gradient-to-b from-[#140e0d] to-[#0a0706] flex items-center justify-center p-3 sm:p-6 relative overflow-hidden h-[46svh] sm:h-[52svh] md:h-full shrink-0 md:shrink">
+          {/* Subtle discreet buffer indicator if on slow mobile link */}
           {!loaded && !imgError && mediaSrc && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gold/70">
-              <Loader2 size={26} className="animate-spin text-accent" />
-              <span className="text-[10px] uppercase tracking-[0.2em] text-white/50">Loading piece…</span>
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-8 h-8 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
             </div>
           )}
 
@@ -281,9 +280,7 @@ export default function CatalogueLightbox({
               referrerPolicy="no-referrer"
               onLoad={() => setLoaded(true)}
               onError={handleImageError}
-              className={`max-h-full max-w-full w-auto h-auto object-contain select-none transition-opacity duration-300 ${
-                loaded ? 'opacity-100' : 'opacity-0'
-              }`}
+              className="max-h-full max-w-full w-auto h-auto object-contain select-none"
             />
           )}
 
