@@ -58,7 +58,7 @@ function useIsAdmin() {
   return isAdmin;
 }
 
-function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox, variantLabel }) {
+function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
   const queryClient = useQueryClient();
   const settings = useSiteSettings();
   const [isEditing, setIsEditing] = useState(false);
@@ -259,11 +259,6 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox, variantLabel })
                 {item.description && (
                   <p className="text-xs sm:text-sm text-muted-foreground mt-1 whitespace-pre-line line-clamp-3">
                     {item.description}
-                    {variantLabel && (
-                      <span className="ml-2 inline-block text-[9px] sm:text-[10px] uppercase tracking-wider text-accent font-semibold bg-accent/10 border border-accent/20 px-1.5 py-0.5 rounded-sm">
-                        {variantLabel}
-                      </span>
-                    )}
                   </p>
                 )}
               </div>
@@ -469,28 +464,6 @@ export default function Gallery() {
       return weightA - weightB;
     });
   }, [filteredItems, sortMode, shuffleSeed]);
-
-  // Variant labels for items sharing the exact same category and description
-  const variantMap = useMemo(() => {
-    const groups = new Map();
-    sortedItems.forEach((item) => {
-      const desc = (item.description || '').trim();
-      if (!desc) return;
-      const key = `${(item.category || '').toLowerCase()}|${desc.toLowerCase()}`;
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(item.id);
-    });
-
-    const map = new Map();
-    groups.forEach((ids) => {
-      if (ids.length > 1) {
-        ids.forEach((id, index) => {
-          map.set(id, `Design ${index + 1} of ${ids.length}`);
-        });
-      }
-    });
-    return map;
-  }, [sortedItems]);
 
   const BATCH_SIZE = 16;
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
@@ -710,7 +683,6 @@ export default function Gallery() {
                   index={idx}
                   isAdmin={isAdmin}
                   onOpenLightbox={() => handleOpenLightbox(item)}
-                  variantLabel={variantMap.get(item.id)}
                 />
               ))}
             </div>
@@ -744,7 +716,6 @@ export default function Gallery() {
           items={sortedItems.length > 0 ? sortedItems : allItems}
           onClose={handleCloseLightbox}
           onSelect={handleSelectLightboxItem}
-          variantMap={variantMap}
         />
       )}
     </>

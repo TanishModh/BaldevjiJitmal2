@@ -16,10 +16,8 @@ export default function CatalogueLightbox({
   items,
   onClose,
   onSelect,
-  variantMap,
 }) {
   const settings = useSiteSettings();
-  const variantLabel = variantMap?.get(item?.id);
 
   // Navigation & Swipe touch refs
   const touchStartXRef = useRef(0);
@@ -559,11 +557,6 @@ export default function CatalogueLightbox({
             {item.description ? (
               <p className="text-xs sm:text-sm text-foreground/85 leading-relaxed whitespace-pre-wrap">
                 {item.description}
-                {variantLabel && (
-                  <span className="ml-2.5 inline-block text-[10px] uppercase tracking-wider text-accent font-semibold bg-accent/15 border border-accent/30 px-2 py-0.5 rounded-sm">
-                    {variantLabel}
-                  </span>
-                )}
               </p>
             ) : (
               <p className="text-xs text-muted-foreground italic">
