@@ -4,7 +4,6 @@ import { MapPin, Phone, Instagram, Clock, MessageCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useSiteSettings } from '../context/SiteContext';
 import { MotionFade } from '../components/MotionReveal';
-import GoogleRatingBadge from '../components/GoogleRatingBadge';
 
 export default function Contact() {
   const settings = useSiteSettings();
@@ -208,9 +207,6 @@ export default function Contact() {
               </div>
             </div>
           </div>
-
-          {/* Google Maps Reviews & Heritage Rating Badge */}
-          <GoogleRatingBadge />
 
           {/* Embedded Google Map */}
           <div className="overflow-hidden border border-border shadow-lift rounded-sm">
