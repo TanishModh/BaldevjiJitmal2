@@ -273,20 +273,17 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
             </div>
 
             {/* Direct Inquire action row for mobile & quick desktop access */}
-            <div className="mt-3 pt-2.5 border-t border-border/40 flex items-center justify-between">
-              <span className="text-[9px] uppercase tracking-[0.16em] text-muted-foreground font-medium">
-                Wholesale · Retail
-              </span>
+            <div className="mt-3 pt-2.5 border-t border-border/40 flex items-center justify-end">
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#128C7E] hover:text-[#075E54] bg-[#25D366]/10 hover:bg-[#25D366]/20 px-2.5 py-1 rounded transition-all active:scale-95"
+                className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#128C7E] hover:text-[#075E54] bg-[#25D366]/10 hover:bg-[#25D366]/20 py-1.5 px-3 rounded transition-all active:scale-95"
                 title="Inquire on WhatsApp"
               >
                 <MessageCircle size={13} className="fill-current text-[#25D366]" />
-                <span>Inquire</span>
+                <span>Inquire on WhatsApp</span>
               </a>
             </div>
           </div>
@@ -557,7 +554,7 @@ export default function Gallery() {
                   : 'border-border bg-card text-muted-foreground hover:border-primary hover:text-primary'
               }`}
             >
-              All ({allItems.length})
+              All
             </Link>
             {categoryFilters.map((cat) => {
               const isActive =
@@ -579,12 +576,8 @@ export default function Gallery() {
           </div>
         )}
 
-        {/* Controls Bar: Item count & Sort Mode */}
-        <div className="mt-6 flex items-center justify-between flex-wrap gap-4 pt-2">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider">
-            Showing <span className="font-semibold text-primary">{sortedItems.length}</span> pieces
-          </p>
-
+        {/* Controls Bar: Sort Mode */}
+        <div className="mt-6 flex items-center justify-end flex-wrap gap-4 pt-2">
           <div className="flex items-center gap-3">
             <label htmlFor="sort-mode" className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
               Sort by
@@ -626,22 +619,19 @@ export default function Gallery() {
             {/* Infinite Scroll Sentinel & Fallback Action */}
             {visibleCount < sortedItems.length && (
               <div ref={sentinelRef} className="mt-12 text-center py-6 flex flex-col items-center gap-3">
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                  Showing {displayedItems.length} of {sortedItems.length} pieces
-                </p>
                 <button
                   type="button"
                   onClick={() => setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, sortedItems.length))}
                   className="px-6 py-2.5 rounded-full border border-primary/30 hover:border-primary text-xs uppercase tracking-widest text-primary font-medium hover:bg-primary/5 active:scale-95 transition-all shadow-soft"
                 >
-                  Load More Pieces ({sortedItems.length - displayedItems.length} remaining)
+                  Load More
                 </button>
               </div>
             )}
 
             {visibleCount >= sortedItems.length && sortedItems.length > BATCH_SIZE && (
               <div className="mt-12 text-center py-6 text-xs uppercase tracking-widest text-muted-foreground/70">
-                ✦ All {sortedItems.length} pieces loaded ✦
+                ✦ End of Collection ✦
               </div>
             )}
           </>

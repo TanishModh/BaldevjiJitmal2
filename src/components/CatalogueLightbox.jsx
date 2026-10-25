@@ -617,9 +617,6 @@ export default function CatalogueLightbox({
               <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold px-2.5 py-0.5 bg-accent/10 border border-accent/30 rounded-sm">
                 {item.category || 'Catalogue Piece'}
               </span>
-              <span className="text-xs text-muted-foreground font-mono">
-                {currentIndex >= 0 ? currentIndex + 1 : 1} / {total || 1}
-              </span>
             </div>
 
             <h3 className="font-display text-xl sm:text-2xl text-primary mt-3 sm:mt-4 leading-tight">
