@@ -303,8 +303,19 @@ export default function Gallery() {
   const settings = useSiteSettings();
 
   const [sortMode, setSortMode] = useState('random');
+  const [shuffleSeed, setShuffleSeed] = useState(0);
+  const shuffleWeightsRef = useRef(new Map());
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLightboxItem, setSelectedLightboxItem] = useState(null);
+
+  const handleSortChange = (e) => {
+    const nextMode = e.target.value;
+    if (nextMode === 'random') {
+      shuffleWeightsRef.current.clear();
+      setShuffleSeed((s) => s + 1);
+    }
+    setSortMode(nextMode);
+  };
 
   const { data: rawItems = [], isLoading } = useQuery({
     queryKey: ['gallery'],
@@ -391,8 +402,22 @@ export default function Gallery() {
         return timeA - timeB;
       });
     }
-    return copy;
-  }, [filteredItems, sortMode]);
+
+    // Curated: Display randomly shuffled items, stably preserved for this session
+    const weights = shuffleWeightsRef.current;
+    copy.forEach((item) => {
+      const key = String(item.id || item.title || item.media_url || '');
+      if (!weights.has(key)) {
+        weights.set(key, Math.random());
+      }
+    });
+
+    return copy.sort((a, b) => {
+      const weightA = weights.get(String(a.id || a.title || a.media_url || '')) ?? 0.5;
+      const weightB = weights.get(String(b.id || b.title || b.media_url || '')) ?? 0.5;
+      return weightA - weightB;
+    });
+  }, [filteredItems, sortMode, shuffleSeed]);
 
   const BATCH_SIZE = 16;
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
@@ -585,7 +610,7 @@ export default function Gallery() {
             <select
               id="sort-mode"
               value={sortMode}
-              onChange={(e) => setSortMode(e.target.value)}
+              onChange={handleSortChange}
               className="bg-background border border-input rounded-md px-3 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer shadow-soft"
             >
               <option value="random">Curated (Featured)</option>
