@@ -6,9 +6,6 @@ import {
   MessageCircle,
   Share2,
   ImageOff,
-  ZoomIn,
-  ZoomOut,
-  RotateCcw,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSiteSettings } from '../context/SiteContext';
@@ -474,57 +471,6 @@ export default function CatalogueLightbox({
             </div>
           )}
 
-          {/* Textile Detail Loupe Toolbar (Top-Left of media pane) */}
-          {!isVideo && !imgError && mediaSrc && loaded && (
-            <div className="absolute top-3 left-3 z-30 flex items-center gap-1.5 pointer-events-auto">
-              {zoomScale <= 1.05 ? (
-                <button
-                  type="button"
-                  onClick={handleToggleZoom}
-                  className="inline-flex items-center gap-1.5 bg-black/75 hover:bg-black/90 backdrop-blur-md text-white/95 border border-white/20 hover:border-accent/80 text-[11px] font-medium px-3 py-1.5 rounded-full transition-all shadow-lift active:scale-95 select-none"
-                  title="Inspect thread count, border weaving & fabric texture up close"
-                >
-                  <ZoomIn size={13} className="text-accent" />
-                  <span>Inspect Weave</span>
-                </button>
-              ) : (
-                <div className="flex items-center gap-1 bg-black/85 backdrop-blur-md border border-accent/50 rounded-full px-2 py-1 shadow-lift text-white text-[11px] select-none">
-                  <button
-                    type="button"
-                    onClick={handleZoomOut}
-                    disabled={zoomScale <= 1.1}
-                    className="h-6 w-6 rounded-full hover:bg-white/20 active:bg-white/30 flex items-center justify-center transition disabled:opacity-30"
-                    title="Zoom out (-)"
-                  >
-                    <ZoomOut size={12} />
-                  </button>
-                  <span className="font-mono text-[11px] text-accent font-semibold px-1.5">
-                    {zoomScale.toFixed(1)}× Loupe
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleZoomIn}
-                    disabled={zoomScale >= 3.2}
-                    className="h-6 w-6 rounded-full hover:bg-white/20 active:bg-white/30 flex items-center justify-center transition disabled:opacity-30"
-                    title="Zoom in (+)"
-                  >
-                    <ZoomIn size={12} />
-                  </button>
-                  <span className="h-3 w-px bg-white/25 mx-0.5" />
-                  <button
-                    type="button"
-                    onClick={resetZoom}
-                    className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-sand-100 hover:text-white px-2 py-0.5 rounded-full hover:bg-white/15 transition active:scale-95"
-                    title="Reset view (0 / Esc)"
-                  >
-                    <RotateCcw size={10} />
-                    <span>Reset</span>
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
           {/* Fallback if image failed to load or no url */}
           {imgError || !mediaSrc ? (
             <div className="flex flex-col items-center justify-center text-center p-6 text-muted-foreground gap-3">
@@ -592,22 +538,6 @@ export default function CatalogueLightbox({
               className="max-h-full max-w-full w-auto h-auto object-contain select-none will-change-transform"
             />
           )}
-
-          {/* Bottom Hint Pill */}
-          {!isVideo && !imgError && mediaSrc && (
-            <div className="absolute bottom-2.5 inset-x-0 flex justify-center pointer-events-none">
-              {zoomScale > 1.05 ? (
-                <span className="text-[10px] uppercase tracking-wider text-accent font-medium bg-black/85 px-3 py-0.5 rounded-full backdrop-blur-md border border-accent/40 shadow-lift animate-fade-in">
-                  Drag to pan across fabric weave · Click or tap to exit
-                </span>
-              ) : (
-                <span className="text-[9px] uppercase tracking-wider text-white/80 bg-black/60 px-3 py-0.5 rounded-full backdrop-blur-sm border border-white/10">
-                  <span className="sm:hidden">Swipe ‹ › · Double-tap to zoom weave</span>
-                  <span className="hidden sm:inline">Click image or 'Inspect Weave' to zoom</span>
-                </span>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Sidebar Info & Inquire: Fixed width on desktop, full width on mobile */}
@@ -633,21 +563,6 @@ export default function CatalogueLightbox({
                 Authentic traditional weave available at our M.T. Cloth Market store.
               </p>
             )}
-
-            <div className="mt-5 pt-3.5 border-t border-border/60 text-[11px] sm:text-xs text-muted-foreground space-y-1.5">
-              <p className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent"></span>
-                <span>Authentic weaver & mill craftsmanship</span>
-              </p>
-              <p className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent"></span>
-                <span>Ready dispatch across India</span>
-              </p>
-              <p className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent"></span>
-                <span>221, M.T. Cloth Market, Indore (Est. 1937)</span>
-              </p>
-            </div>
           </div>
 
           <div className="mt-5 sm:mt-6 pt-3.5 border-t border-border/60">
