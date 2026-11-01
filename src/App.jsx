@@ -1,8 +1,8 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { LazyMotion, domAnimation } from 'framer-motion';
-import { Toaster } from 'sonner';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/queryClient';
+import { LazyMotion } from 'framer-motion';
 
 import { SiteProvider } from './context/SiteContext';
 import Header from './components/Header';
@@ -17,15 +17,9 @@ const Gallery = lazy(() => import('./pages/Gallery'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Login = lazy(() => import('./pages/Login'));
 const Admin = lazy(() => import('./pages/Admin'));
+const Toaster = lazy(() => import('sonner').then((m) => ({ default: m.Toaster })));
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+const loadMotionFeatures = () => import('./lib/motionFeatures').then((res) => res.default);
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -50,7 +44,7 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <LazyMotion features={domAnimation} strict>
+    <LazyMotion features={loadMotionFeatures} strict>
       <QueryClientProvider client={queryClient}>
         <SiteProvider>
           <BrowserRouter>
@@ -75,7 +69,9 @@ export default function App() {
               <Footer />
               <WhatsAppButton />
             </div>
-            <Toaster position="top-right" richColors />
+            <Suspense fallback={null}>
+              <Toaster position="top-right" richColors />
+            </Suspense>
           </BrowserRouter>
         </SiteProvider>
       </QueryClientProvider>

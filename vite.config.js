@@ -37,12 +37,13 @@ export default defineConfig({
     chunkSizeWarningLimit: 900,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          motion: ['framer-motion'],
-          supabase: ['@supabase/supabase-js'],
-          query: ['@tanstack/react-query'],
-          icons: ['lucide-react'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@supabase')) return 'supabase';
+            if (id.includes('@tanstack/react-query')) return 'query';
+            if (id.includes('lucide-react')) return 'icons';
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) return 'vendor';
+          }
         },
       },
     },
