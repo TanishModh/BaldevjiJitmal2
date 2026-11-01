@@ -191,6 +191,7 @@ function ContentTab() {
     setSaving(true);
     try {
       const payload = JSON.parse(JSON.stringify(settings));
+      delete payload.adminPasscode; // Security: Never leak owner master passcode to public site_settings table
       
       // Update local storage immediate cache
       try {

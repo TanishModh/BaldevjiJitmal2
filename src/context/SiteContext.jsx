@@ -282,7 +282,7 @@ export const defaultSettings = {
   ],
 };
 
-const SETTINGS_CACHE_KEY = 'bj_site_settings_v5';
+const SETTINGS_CACHE_KEY = 'bj_site_settings_v6';
 try {
   if (typeof window !== 'undefined') {
     [
@@ -292,6 +292,7 @@ try {
       'bj_site_settings_v2',
       'bj_site_settings_v3',
       'bj_site_settings_v4',
+      'bj_site_settings_v5',
     ].forEach((k) => window.localStorage.removeItem(k));
   }
 } catch (_) {}
@@ -307,8 +308,6 @@ function stripBlankets(val) {
       .replace(/,\s*blankets?\b/gi, '')
       .replace(/\bblankets?,\s*/gi, '')
       .replace(/\bblankets?\b/gi, '')
-      .replace(/0731\s*245\s*9280\s*\/?\s*/gi, '')
-      .replace(/0731\s*2459280\s*\/?\s*/gi, '')
       .replace(/\s{2,}/g, ' ')
       .trim();
   }
@@ -318,6 +317,7 @@ function stripBlankets(val) {
   if (val && typeof val === 'object') {
     const res = {};
     for (const [k, v] of Object.entries(val)) {
+      if (k === 'adminPasscode') continue; // Never leak admin passcode to public site context
       res[k] = stripBlankets(v);
     }
     return res;
@@ -374,6 +374,7 @@ export function SiteProvider({ children }) {
       brand: {
         ...defaultSettings.brand,
         ...dbSettings.brand,
+        monogramUrl: '/logo-baldevji-mark-refined.png',
       },
       announcementBar: {
         ...defaultSettings.announcementBar,
