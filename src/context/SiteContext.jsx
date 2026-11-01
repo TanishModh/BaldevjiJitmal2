@@ -225,16 +225,16 @@ export const defaultSettings = {
     watermark: 'BJ',
   },
   theme: {
-    background: '#f1e8d8',
-    foreground: '#2a1f15',
+    background: '#f4efe5',
+    foreground: '#221d19',
     primary: '#5a1f1c',
-    primaryForeground: '#fbf5e9',
-    accent: '#b88636',
-    gold: '#b88636',
-    mutedForeground: '#5b4a3a',
-    card: '#f9f1df',
-    border: '#d5c4a8',
-    sand200: '#e3d3b8',
+    primaryForeground: '#fcf9f2',
+    accent: '#7d5218',
+    gold: '#dfb76c',
+    mutedForeground: '#6a6054',
+    card: '#faf5ec',
+    border: 'rgba(125, 82, 24, 0.22)',
+    sand200: '#ebe1d0',
   },
   highlights: [
     {
@@ -488,8 +488,10 @@ export function SiteProvider({ children }) {
       if (theme.foreground) root.style.setProperty('--foreground', theme.foreground);
       if (theme.primary) root.style.setProperty('--primary', theme.primary);
       if (theme.primaryForeground) root.style.setProperty('--primary-foreground', theme.primaryForeground);
-      if (theme.accent) root.style.setProperty('--accent', theme.accent);
-      if (theme.gold) root.style.setProperty('--gold', theme.gold);
+      const safeAccent = theme.accent && !['#b88636', '#b28342'].includes(theme.accent) ? theme.accent : '#7d5218';
+      root.style.setProperty('--accent', safeAccent);
+      const safeGold = theme.gold && !['#b88636', '#b28342'].includes(theme.gold) ? theme.gold : '#dfb76c';
+      root.style.setProperty('--gold', safeGold);
       if (theme.mutedForeground) root.style.setProperty('--muted-foreground', theme.mutedForeground);
       if (theme.card) root.style.setProperty('--card', theme.card);
       if (theme.border) root.style.setProperty('--border', theme.border);

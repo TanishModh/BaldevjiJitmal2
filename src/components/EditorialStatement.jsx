@@ -15,12 +15,22 @@ export default function EditorialStatement() {
   return (
     <section className="relative overflow-hidden bg-background py-20 sm:py-28 md:py-36 border-t border-border/50">
       {/* Background Watermark Crest */}
-      <div
-        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 font-display text-[14rem] sm:text-[22rem] leading-none text-primary/[0.02] select-none"
+      <svg
+        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 select-none overflow-visible w-72 sm:w-96 h-72 sm:h-96"
+        viewBox="0 0 200 120"
         aria-hidden="true"
+        focusable="false"
       >
-        BJ
-      </div>
+        <text
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          dominantBaseline="central"
+          className="font-display fill-primary/[0.025] text-8xl"
+        >
+          BJ
+        </text>
+      </svg>
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         {/* Statement Header */}

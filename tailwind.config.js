@@ -11,10 +11,14 @@ export default {
           foreground: '#fcf9f2',
         },
         accent: {
-          DEFAULT: '#b28342',
-          foreground: '#221d19',
+          DEFAULT: '#7d5218',
+          light: '#dfb76c',
+          foreground: '#fcf9f2',
         },
-        gold: '#b28342',
+        gold: {
+          DEFAULT: '#dfb76c',
+          deep: '#7d5218',
+        },
         'muted-foreground': '#6a6054',
         card: {
           DEFAULT: '#faf5ec',

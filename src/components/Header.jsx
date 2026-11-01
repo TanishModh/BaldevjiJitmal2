@@ -72,7 +72,7 @@ export default function Header() {
             <span className="font-display text-lg sm:text-xl md:text-2xl leading-tight text-primary font-medium tracking-tight">
               {settings.brand.name || 'Baldevji Jitmal'}
             </span>
-            <span className="mt-0.5 text-[8px] sm:text-[9px] uppercase tracking-[0.16em] text-accent">
+            <span className="mt-0.5 text-[8px] sm:text-[9px] uppercase tracking-[0.16em] text-accent font-medium">
               {settings.brand.tagline || 'Textiles · Indore'}
             </span>
           </span>

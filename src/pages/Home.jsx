@@ -207,7 +207,7 @@ export default function Home() {
             >
               <Link
                 to="/products"
-                className="group inline-flex min-h-12 items-center justify-center gap-2.5 bg-gold px-6 text-xs font-semibold uppercase tracking-[0.14em] text-primary transition-all duration-300 hover:bg-primary-foreground shadow-lift rounded-sm active:scale-[0.98]"
+                className="group inline-flex min-h-12 items-center justify-center gap-2.5 bg-gold px-6 text-xs font-semibold uppercase tracking-[0.14em] text-[#2b0c0a] transition-all duration-300 hover:bg-primary-foreground hover:text-primary shadow-lift rounded-sm active:scale-[0.98]"
               >
                 <span>{settings.hero.ctaPrimaryLabel || 'Explore Collections'}</span>
                 <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
@@ -276,7 +276,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <MotionFade className="grid items-end gap-4 md:gap-6 md:grid-cols-[1fr_auto]">
             <div className="max-w-3xl">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-gold font-medium">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-accent font-medium">
                 {settings.homeCollections?.eyebrow || 'Curated Collections'}
               </p>
               <h2 className="font-display text-3xl sm:text-4xl md:text-6xl text-primary mt-2 sm:mt-3 leading-tight">
