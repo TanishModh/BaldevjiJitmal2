@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { defaultSettings, useSiteSettings } from '../context/SiteContext';
+import SEO from '../components/SEO';
 
 // Helper to upload media to Supabase storage bucket "catalogue" with instant resilient fallback
 async function uploadMedia(file, folder) {
@@ -3407,6 +3408,7 @@ export default function Admin() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 animate-rise">
+      <SEO title="Admin Management — Baldevji Jitmal" noindex={true} />
       {/* Top Header */}
       <div className="flex items-center justify-between flex-wrap gap-4 pb-4">
         <div>

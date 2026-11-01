@@ -43,7 +43,7 @@
       rel="stylesheet"
     />
 
-    <!-- Google Structured Data Schema (WholesaleStore & LocalBusiness JSON-LD) -->
+    <!-- Google Structured Data Schema (WholesaleStore, WebSite & FAQPage JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -55,14 +55,16 @@
           "alternateName": [
             "Baldevji Jitmal Indore",
             "Baldevji Jitmal Wholesale Traditional Textiles",
-            "Baldevji Jitmal & Sons"
+            "Baldevji Jitmal & Sons",
+            "बलदेवजी जीतमल इंदौर"
           ],
           "url": "https://baldevjijitmal.vercel.app",
           "logo": "https://baldevjijitmal.vercel.app/logo-baldevji-jitmal-refined.png",
           "image": [
-            "https://baldevjijitmal.vercel.app/logo-baldevji-jitmal-refined.png"
+            "https://baldevjijitmal.vercel.app/logo-baldevji-jitmal-refined.png",
+            "https://baldevjijitmal.vercel.app/hero-textiles.jpg"
           ],
-          "description": "Established in 1937 at 221, M.T. Cloth Market, Indore. Baldevji Jitmal is a trusted wholesale supplier and distributor of traditional Indian textiles including pure cotton dhotis, Solapuri chaddars, gamchas, lungis, dupattas, safas, pooja vastra, bedsheets, and uniform fabrics.",
+          "description": "Established in 1937 at 221, M.T. Cloth Market, Indore. Baldevji Jitmal is a trusted wholesale supplier and distributor of traditional Indian textiles including pure cotton dhotis, Solapuri chaddars, gamchas, lungis, dupattas, safas, pooja vastra, bedsheets, towels, and kurta uniform fabrics.",
           "foundingDate": "1937",
           "founder": {
             "@type": "Person",
@@ -156,6 +158,66 @@
           "sameAs": [
             "https://maps.google.com/?q=Baldevji+Jitmal+Jitmal+%26+Sons+221+M.T.+Cloth+Market+Indore",
             "https://www.google.com/maps?q=Baldevji+Jitmal+Jitmal+%26+Sons+221+M.T.+Cloth+Market+Indore"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://baldevjijitmal.vercel.app/#website",
+          "url": "https://baldevjijitmal.vercel.app",
+          "name": "Baldevji Jitmal",
+          "alternateName": "Baldevji Jitmal Wholesale Traditional Textiles",
+          "description": "Wholesale supplier and distributor of traditional Indian textiles since 1937 in M.T. Cloth Market, Indore.",
+          "inLanguage": ["en-IN", "hi-IN"],
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://baldevjijitmal.vercel.app/gallery?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://baldevjijitmal.vercel.app/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How can outstation customers and retailers place wholesale orders with Baldevji Jitmal?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can visit our heritage shop at 221, M.T. Cloth Market, Indore, or connect with us directly on WhatsApp (+91 7869849449 / 0731-2459280 / +91 7828072394 / +91 9827213393). We gladly share live photographs, shade cards, and product details. Once you select your items, we safely pack and dispatch them to your destination."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do you deliver wholesale traditional textiles across India?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Being located in central India at Indore’s historic textile hub, we have reliable daily transport and parcel tie-ups delivering across Madhya Pradesh, Rajasthan, Maharashtra, Gujarat, Uttar Pradesh, Chhattisgarh, and all states nationwide."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can we order coordinated traditional sets for weddings, temple ceremonies, and family functions?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. We specialize in coordinated Dhoti + Dupatta sets, 3-piece Dhoti-Dupatta-Kurta cloth combinations, and gift shawls for weddings, spiritual functions, and temple trusts, complete with matching presentation packaging."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do you cater to both bulk wholesale buyers and personal/family requirements?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. We welcome retail shopkeepers purchasing full bales and thans, as well as families and wedding planners looking for curated traditional sets. Every customer is treated with the same warmth and dedication."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What payment modes are accepted for deliveries?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We accept UPI, NEFT, RTGS, IMPS, and standard bank transfers. All dispatches are properly billed and accompanied by dispatch tracking and transport bilti receipts."
+              }
+            }
           ]
         }
       ]

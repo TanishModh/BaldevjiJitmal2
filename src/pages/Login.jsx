@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { KeyRound, Mail, ShieldCheck, ArrowRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import SEO from '../components/SEO';
 
 function sanitizeNextUrl(url) {
   if (!url || !url.startsWith('/') || url.startsWith('//')) return '';
@@ -127,6 +128,7 @@ export default function Login() {
 
   return (
     <section className="max-w-md mx-auto px-5 py-16 sm:py-24 animate-rise">
+      <SEO title="Store Owner Login — Baldevji Jitmal" noindex={true} />
       <div className="text-center mb-6">
         <div className="inline-grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary mb-3">
           <ShieldCheck size={24} />

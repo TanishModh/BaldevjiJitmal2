@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Core Pages -->
   <url>
     <loc>https://baldevjijitmal.vercel.app/</loc>
     <changefreq>weekly</changefreq>
@@ -24,5 +26,67 @@
     <loc>https://baldevjijitmal.vercel.app/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <!-- Category Deep-Links for High-Volume Wholesale Search -->
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Dhotis</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Silk</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Bhagalpuri</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Kurta%20Cloth</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Ladies%20Shawl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Gents%20Shawl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Bedsheets</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Towels%2FNapkins</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Readymade%20Dhoti</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=3%20Piece%20Set</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Aasan</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://baldevjijitmal.vercel.app/gallery?category=Lungi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
   </url>
 </urlset>

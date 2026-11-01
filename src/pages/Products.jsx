@@ -5,6 +5,7 @@ import { useProductCards } from '../hooks/useProductCards';
 import { useSiteSettings, defaultSettings } from '../context/SiteContext';
 import { MotionFade, MotionBlurFade, MotionStagger, MotionItem } from '../components/MotionReveal';
 import { getThumbnailImageUrl } from '../lib/imageOptimization';
+import SEO from '../components/SEO';
 
 export default function Products() {
   const { cards, isLoading } = useProductCards();
@@ -13,6 +14,15 @@ export default function Products() {
 
   return (
     <section className="relative overflow-hidden bg-background pb-20 sm:pb-24">
+      <SEO
+        title="Traditional Indian Textile Collections — Wholesale Dhotis, Silks & Shawls"
+        description="Explore our wholesale textile collections: pure cotton dhotis, Bhagalpuri silks, ladies & gents shawls, bedsheets, towels, lungis & kurta fabrics from Indore's historic M.T. Cloth Market."
+        keywords="traditional textile collections indore, dhoti wholesale collections, pashmina shawl wholesale, bhagalpuri silk chadar indore, kurta cloth wholesale MP"
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Collections', url: '/products' },
+        ]}
+      />
       {/* Header Banner */}
       <div className="border-b border-border bg-paper">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-28">
@@ -60,7 +70,7 @@ export default function Products() {
                     {card.imageUrl ? (
                       <img
                         src={getThumbnailImageUrl(card.imageUrl)}
-                        alt={card.name}
+                        alt={`${card.name} Traditional Wholesale Textile Collection — Baldevji Jitmal Indore`}
                         loading="lazy"
                         decoding="async"
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"

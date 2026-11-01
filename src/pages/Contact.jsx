@@ -4,6 +4,7 @@ import { MapPin, Phone, Instagram, Clock, MessageCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useSiteSettings } from '../context/SiteContext';
 import { MotionFade } from '../components/MotionReveal';
+import SEO from '../components/SEO';
 
 export default function Contact() {
   const settings = useSiteSettings();
@@ -106,6 +107,15 @@ export default function Contact() {
 
   return (
     <section className="max-w-7xl mx-auto px-5 lg:px-8 py-16 lg:py-24">
+      <SEO
+        title="Contact & Store Visit — 221, M.T. Cloth Market, Indore | Baldevji Jitmal"
+        description="Visit Baldevji Jitmal at 221, M.T. Cloth Market, Indore or call 0731-2459280 / WhatsApp +91 78280 72394 / +91 98272 13393. Store hours, live Google Map directions & wholesale dispatch inquiries."
+        keywords="baldevji jitmal contact, mt cloth market indore phone number, wholesale cloth merchant indore address, baldevji jitmal whatsapp, textile shop indore timings"
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Contact', url: '/contact' },
+        ]}
+      />
       <MotionFade delay={0.1}>
         <p className="text-[10px] uppercase tracking-[0.3em] text-accent font-medium">
           {settings.contact.eyebrow || 'Get in Touch'}

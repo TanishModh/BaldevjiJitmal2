@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSiteSettings, defaultSettings } from '../context/SiteContext';
 import { MotionFade, MotionBlurFade } from '../components/MotionReveal';
+import SEO from '../components/SEO';
 
 export default function About() {
   const settings = useSiteSettings();
@@ -12,6 +13,15 @@ export default function About() {
 
   return (
     <section className="overflow-hidden bg-background">
+      <SEO
+        title="Our Heritage Since 1937 — Baldevji Jitmal, M.T. Cloth Market, Indore"
+        description="Over 8 decades of textile mastery. Discover the story of Baldevji Jitmal, serving generations of families, wedding planners and retailers from Indore's historic M.T. Cloth Market."
+        keywords="about baldevji jitmal, heritage textile house indore, mt cloth market history, traditional cloth merchant indore est 1937"
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'About Us', url: '/about' },
+        ]}
+      />
       <div className="grid min-h-[78svh] lg:grid-cols-[.9fr_1.1fr]">
         {/* Story Text */}
         <div className="order-2 flex items-center px-5 sm:px-8 py-10 sm:py-14 lg:order-1 lg:px-14 xl:px-24">

@@ -508,7 +508,7 @@ export default function CatalogueLightbox({
               key={activeImgSrc}
               ref={imageElRef}
               src={activeImgSrc}
-              alt={item.title || item.description || item.category || 'Baldevji Jitmal Textile Piece'}
+              alt={`${item.title && item.title !== '.' && item.title.toLowerCase() !== 'untitled' ? `${item.title} — ` : ''}${item.category || 'Traditional Textile'} ${item.description ? `(${item.description})` : ''} — Baldevji Jitmal M.T. Cloth Market Indore`}
               loading="eager"
               decoding="async"
               referrerPolicy="no-referrer"

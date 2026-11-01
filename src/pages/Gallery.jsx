@@ -9,6 +9,7 @@ import { useSiteSettings } from '../context/SiteContext';
 import { useProductCards, useCategoryCanonicalizer } from '../hooks/useProductCards';
 import { getThumbnailImageUrl } from '../lib/imageOptimization';
 import CatalogueLightbox from '../components/CatalogueLightbox';
+import SEO from '../components/SEO';
 
 // Exact duplicate re-uploads in database to filter out permanently
 const KNOWN_DUPLICATE_IDS = new Set([
@@ -173,7 +174,7 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
           ) : (
             <img
               src={displayImg}
-              alt={item.description || item.category || 'Textile item'}
+              alt={`${item.title && item.title !== '.' && item.title.toLowerCase() !== 'untitled' ? `${item.title} — ` : ''}${item.category || 'Traditional Textile'} ${item.description ? `(${item.description})` : ''} — Baldevji Jitmal Indore`}
               loading={index < 8 ? 'eager' : 'lazy'}
               fetchPriority={index < 4 ? 'high' : 'auto'}
               decoding="async"
@@ -566,6 +567,35 @@ export default function Gallery() {
 
   return (
     <>
+      <SEO
+        title={
+          canonicalCategory
+            ? `${canonicalCategory} Wholesale Catalogue & Weaves | Baldevji Jitmal Indore`
+            : 'Wholesale Fabric Catalogue & Traditional Weaves Gallery | Baldevji Jitmal Indore'
+        }
+        description={
+          canonicalCategory
+            ? `Explore wholesale ${canonicalCategory} fabrics, thread details and designs at Baldevji Jitmal, 221 M.T. Cloth Market, Indore. Direct WhatsApp dispatch inquiries available.`
+            : 'Browse high-resolution photographs, fabric textures and wholesale designs of authentic Indian textiles from Baldevji Jitmal, 221 M.T. Cloth Market, Indore.'
+        }
+        keywords={
+          canonicalCategory
+            ? `${canonicalCategory} wholesale indore, ${canonicalCategory} designs mt cloth market, buy ${canonicalCategory} wholesale MP, baldevji jitmal ${canonicalCategory}`
+            : 'fabric catalogue indore, traditional textile photo gallery, wholesale textile designs indore, dhoti designs whatsapp inquiry'
+        }
+        breadcrumbs={
+          canonicalCategory
+            ? [
+                { name: 'Home', url: '/' },
+                { name: 'Catalogue', url: '/gallery' },
+                { name: canonicalCategory, url: `/gallery?category=${encodeURIComponent(canonicalCategory)}` },
+              ]
+            : [
+                { name: 'Home', url: '/' },
+                { name: 'Catalogue', url: '/gallery' },
+              ]
+        }
+      />
       <section className="max-w-7xl mx-auto px-5 lg:px-8 py-16 lg:py-24 animate-rise">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>

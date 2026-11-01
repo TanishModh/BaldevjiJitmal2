@@ -12,6 +12,7 @@ import RotatingHeritageSeal from '../components/RotatingHeritageSeal';
 import EditorialStatement from '../components/EditorialStatement';
 import { MotionFade, MotionBlurFade, MotionStagger, MotionItem } from '../components/MotionReveal';
 import { getThumbnailImageUrl } from '../lib/imageOptimization';
+import SEO from '../components/SEO';
 
 function AnimatedCounter({ value, delay = 0 }) {
   const parsed = useMemo(() => {
@@ -107,6 +108,11 @@ export default function Home() {
 
   return (
     <>
+      <SEO
+        title="Baldevji Jitmal — Wholesale Traditional Indian Textiles, Indore (Est. 1937)"
+        description="A trusted wholesale textile house in 221, M.T. Cloth Market, Indore. Supplying authentic pure cotton dhotis, dupattas, Solapuri chaddars, Bhagalpuri silks, shawls, bedsheets & kurta fabrics across India."
+        keywords="wholesale dhoti indore, M.T. cloth market wholesale textiles, baldevji jitmal, solapuri chadar wholesale indore, traditional indian fabrics MP, wedding dhoti dupatta sets, pooja vastra indore"
+      />
       {/* Hero Section with Mobile-First Fluid Centering & Cinematic Visuals */}
       <section
         onMouseMove={handleMouseMove}
@@ -312,7 +318,7 @@ export default function Home() {
                       {card.imageUrl ? (
                         <img
                           src={getThumbnailImageUrl(card.imageUrl)}
-                          alt={card.name}
+                          alt={`${card.name} — Traditional Textile Weave Baldevji Jitmal Indore`}
                           loading="lazy"
                           decoding="async"
                           width={1024}
@@ -406,7 +412,11 @@ export default function Home() {
                       ? settings.shop.photo1Url.replace('.png', '.jpg')
                       : '/assets/shop-exterior-1-Y8qJ9GsL.jpg'
                   }
-                  alt={settings.shop.photo1Caption || 'The storefront'}
+                  alt={
+                    settings.shop.photo1Caption
+                      ? `${settings.shop.photo1Caption} — Baldevji Jitmal 221 M.T. Cloth Market Indore`
+                      : 'Baldevji Jitmal Storefront 221 M.T. Cloth Market Indore'
+                  }
                   loading="lazy"
                   decoding="async"
                   width={1600}
@@ -436,7 +446,11 @@ export default function Home() {
                       ? settings.shop.photo2Url.replace('.png', '.jpg')
                       : '/assets/shop-exterior-2-B3lADtzs.jpg'
                   }
-                  alt={settings.shop.photo2Caption || 'A glimpse of the collection'}
+                  alt={
+                    settings.shop.photo2Caption
+                      ? `${settings.shop.photo2Caption} — Traditional Indian Fabrics Baldevji Jitmal Indore`
+                      : 'Traditional Indian Fabrics Collection Baldevji Jitmal Indore'
+                  }
                   loading="lazy"
                   decoding="async"
                   width={1600}
