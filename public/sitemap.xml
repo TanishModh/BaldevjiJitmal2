@@ -28,6 +28,18 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- High-Intent Local Indore Textile Search Hubs -->
+  <url>
+    <loc>https://www.baldevjijitmal.in/dhotis-in-indore</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://www.baldevjijitmal.in/shawls-in-indore</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
   <!-- Category Deep-Links for High-Volume Wholesale Search -->
   <url>
     <loc>https://www.baldevjijitmal.in/gallery?category=Dhotis</loc>

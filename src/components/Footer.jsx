@@ -33,7 +33,7 @@ export default function Footer() {
       </svg>
 
       {/* Main Footer Content */}
-      <div className="relative max-w-7xl mx-auto px-5 lg:px-8 py-16 lg:py-20 grid gap-12 md:grid-cols-3">
+      <div className="relative max-w-7xl mx-auto px-5 lg:px-8 py-16 lg:py-20 grid gap-10 sm:gap-12 md:grid-cols-2 lg:grid-cols-4">
         {/* Brand Information */}
         <div>
           <div className="flex items-center gap-3">
@@ -57,6 +57,76 @@ export default function Footer() {
             {settings.footer.blurb ||
               'A trusted name in traditional Indian textiles since 1937 — authentic dhotis, dupattas, shawls, bedsheets, and ceremonial fabrics from the heart of Indore.'}
           </p>
+          <p className="mt-3 text-xs text-[#dfb76c] font-mono">
+            Wholesale & Retail · Central India
+          </p>
+        </div>
+
+        {/* Traditional Textiles in Indore (Topical SEO Hub) */}
+        <div className="text-sm">
+          <h3 className="font-display text-2xl text-[#dfb76c] mb-4">Textiles in Indore</h3>
+          <ul className="flex flex-col gap-1 text-primary-foreground/80">
+            <li>
+              <Link to="/dhotis-in-indore" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
+                Dhotis in Indore
+              </Link>
+            </li>
+            <li>
+              <Link to="/shawls-in-indore" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
+                Shawls in Indore (Ladies & Gents)
+              </Link>
+            </li>
+            <li>
+              <Link to="/gallery?category=Dhotis" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
+                Pure Cotton & Temple Border Dhotis
+              </Link>
+            </li>
+            <li>
+              <Link to="/gallery?category=Ladies%20Shawl" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
+                Ladies Kashmiri Shawls
+              </Link>
+            </li>
+            <li>
+              <Link to="/gallery?category=Gents%20Shawl" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
+                Gents Woollen Lohis & Wraps
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Explore Links */}
+        <div className="text-sm">
+          <h3 className="font-display text-2xl text-[#dfb76c] mb-4">Explore</h3>
+          <ul className="flex flex-col gap-1 text-primary-foreground/80">
+            <li>
+              <Link to="/about" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
+                About Our Heritage
+              </Link>
+            </li>
+            <li>
+              <Link to="/products" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
+                Curated Collections
+              </Link>
+            </li>
+            <li>
+              <Link to="/gallery" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
+                Catalogue Gallery
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
+                Contact & Store Visit
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/login"
+                className="inline-flex items-center min-h-[36px] py-1 text-xs text-primary-foreground/75 transition-colors hover:text-[#dfb76c]"
+              >
+                Admin
+              </Link>
+            </li>
+          </ul>
         </div>
 
         {/* Visit Us */}
@@ -109,41 +179,6 @@ export default function Footer() {
               <span>{settings.contact.instagramHandle || '@baldevji.jitmal'}</span>
             </a>
           )}
-        </div>
-
-        {/* Explore Links */}
-        <div className="text-sm">
-          <h3 className="font-display text-2xl text-[#dfb76c] mb-4">Explore</h3>
-          <ul className="flex flex-col gap-1 text-primary-foreground/80">
-            <li>
-              <Link to="/about" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/products" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
-                Products
-              </Link>
-            </li>
-            <li>
-              <Link to="/gallery" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
-                Catalogue
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
-                Contact
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/login"
-                className="inline-flex items-center min-h-[36px] py-1 text-xs text-primary-foreground/75 transition-colors hover:text-[#dfb76c]"
-              >
-                Admin
-              </Link>
-            </li>
-          </ul>
         </div>
       </div>
 

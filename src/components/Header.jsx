@@ -127,6 +127,7 @@ export default function Header() {
                 <NavLink
                   key={link.to}
                   to={link.to}
+                  onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `flex items-center justify-between min-h-[48px] py-3 text-sm uppercase tracking-[0.14em] font-medium transition-colors ${
                       isActive ? 'text-primary font-semibold' : 'text-foreground/80 hover:text-primary'
@@ -138,6 +139,31 @@ export default function Header() {
                 </NavLink>
               ))}
             </nav>
+
+            {/* Quick Textile Guides for Indore (Local Search Hubs) */}
+            <div className="mt-4 pt-3 border-t border-border/40">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-accent font-medium mb-2">
+                Special Collections · Indore
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  to="/dhotis-in-indore"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between p-2.5 rounded bg-sand-200/50 hover:bg-sand-200 text-xs font-medium text-primary border border-gold/30 min-h-[44px]"
+                >
+                  <span>Dhotis in Indore</span>
+                  <ChevronRight size={13} className="text-accent/60" />
+                </Link>
+                <Link
+                  to="/shawls-in-indore"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between p-2.5 rounded bg-sand-200/50 hover:bg-sand-200 text-xs font-medium text-primary border border-gold/30 min-h-[44px]"
+                >
+                  <span>Shawls in Indore</span>
+                  <ChevronRight size={13} className="text-accent/60" />
+                </Link>
+              </div>
+            </div>
 
             {/* Mobile Quick Action Buttons */}
             <div className="mt-6 pt-5 border-t border-border/60 space-y-3">

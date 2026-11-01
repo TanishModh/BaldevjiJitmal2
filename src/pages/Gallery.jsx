@@ -614,6 +614,28 @@ export default function Gallery() {
                 ? `Showing items in the “${canonicalCategory}” collection.`
                 : (settings.cataloguePage?.intro || 'A growing collection of our latest traditional textiles.')}
             </p>
+            {canonicalCategory && canonicalCategory.toLowerCase().includes('dhoti') && (
+              <div className="mt-3">
+                <Link
+                  to="/dhotis-in-indore"
+                  className="inline-flex items-center gap-1.5 text-xs text-accent font-medium hover:text-primary transition underline underline-offset-4 bg-sand-200/60 px-3 py-1.5 rounded-sm"
+                >
+                  <span>Looking for dhotis in Indore? Read our Wholesale Guide & Rates</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            )}
+            {canonicalCategory && canonicalCategory.toLowerCase().includes('shawl') && (
+              <div className="mt-3">
+                <Link
+                  to="/shawls-in-indore"
+                  className="inline-flex items-center gap-1.5 text-xs text-accent font-medium hover:text-primary transition underline underline-offset-4 bg-sand-200/60 px-3 py-1.5 rounded-sm"
+                >
+                  <span>Looking for shawls in Indore? Read our Ladies & Gents Shawls Guide</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Quick Search Input */}

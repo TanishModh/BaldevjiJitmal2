@@ -17,6 +17,8 @@ const Gallery = lazy(() => import('./pages/Gallery'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Login = lazy(() => import('./pages/Login'));
 const Admin = lazy(() => import('./pages/Admin'));
+const DhotisInIndore = lazy(() => import('./pages/DhotisInIndore'));
+const ShawlsInIndore = lazy(() => import('./pages/ShawlsInIndore'));
 const Toaster = lazy(() => import('sonner').then((m) => ({ default: m.Toaster })));
 
 const loadMotionFeatures = () => import('./lib/motionFeatures').then((res) => res.default);
@@ -60,6 +62,8 @@ export default function App() {
                     <Route path="/products" element={<Products />} />
                     <Route path="/gallery" element={<Gallery />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/dhotis-in-indore" element={<DhotisInIndore />} />
+                    <Route path="/shawls-in-indore" element={<ShawlsInIndore />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="*" element={<Home />} />

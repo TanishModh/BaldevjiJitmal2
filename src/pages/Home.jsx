@@ -383,6 +383,26 @@ export default function Home() {
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </Link>
           </MotionFade>
+
+          {/* Indore Specialty Direct Guides */}
+          <MotionFade delay={0.2} className="mt-6 flex flex-wrap justify-center gap-2.5 sm:gap-3 text-xs">
+            <Link
+              to="/dhotis-in-indore"
+              className="inline-flex items-center gap-1.5 bg-card border border-gold/40 px-3.5 py-2 rounded-sm text-primary font-medium hover:bg-gold/15 transition shadow-soft min-h-[38px]"
+            >
+              <span className="text-gold font-mono">01.</span>
+              <span>Dhotis in Indore (Pure Cotton & Temple Borders)</span>
+              <ArrowRight size={13} className="text-accent" />
+            </Link>
+            <Link
+              to="/shawls-in-indore"
+              className="inline-flex items-center gap-1.5 bg-card border border-gold/40 px-3.5 py-2 rounded-sm text-primary font-medium hover:bg-gold/15 transition shadow-soft min-h-[38px]"
+            >
+              <span className="text-gold font-mono">02.</span>
+              <span>Shawls in Indore (Ladies Kashmiri & Gents Lohis)</span>
+              <ArrowRight size={13} className="text-accent" />
+            </Link>
+          </MotionFade>
         </div>
       </section>
 

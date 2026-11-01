@@ -42,6 +42,26 @@ export default function Products() {
               <p className="max-w-3xl text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
                 {page.intro || defaultSettings.productsPage.intro}
               </p>
+
+              {/* Local Specialty Quick Links */}
+              <div className="mt-5 flex flex-wrap gap-2.5 sm:gap-3 text-xs">
+                <Link
+                  to="/dhotis-in-indore"
+                  className="inline-flex items-center gap-1.5 bg-card border border-gold/40 px-3.5 py-2 rounded-sm text-primary font-medium hover:bg-gold/15 transition shadow-soft min-h-[38px]"
+                >
+                  <span className="text-gold font-mono">01.</span>
+                  <span>Dhotis in Indore (Pure Cotton & Temple Borders)</span>
+                  <ArrowRight size={13} className="text-accent" />
+                </Link>
+                <Link
+                  to="/shawls-in-indore"
+                  className="inline-flex items-center gap-1.5 bg-card border border-gold/40 px-3.5 py-2 rounded-sm text-primary font-medium hover:bg-gold/15 transition shadow-soft min-h-[38px]"
+                >
+                  <span className="text-gold font-mono">02.</span>
+                  <span>Shawls in Indore (Ladies Embroidered & Gents Lohis)</span>
+                  <ArrowRight size={13} className="text-accent" />
+                </Link>
+              </div>
             </MotionFade>
           </div>
         </div>
