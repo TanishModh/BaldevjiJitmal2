@@ -1,0 +1,40 @@
+# Baldevji Jitmal — Heritage Textiles Indore
+
+> Baldevji Jitmal is a historic, family-run wholesale and retail traditional textile house established in 1937 at M.T. Cloth Market, Indore, Madhya Pradesh, India. Specialising in authentic Indian weaves including dhotis, dupattas, ladies and gents shawls, pure cotton bedsheets, towels, Bhagalpuri silks, pooja aasans, and ceremonial fabrics.
+
+Baldevji Jitmal has served wedding families, boutique retailers, and institutions for over eight decades from the heart of central India's historic fabric trading hub.
+
+## Primary Pages
+
+- [Home](https://www.baldevjijitmal.in/): Overview of Baldevji Jitmal, legacy since 1937, curated collections, and store details.
+- [About Us](https://www.baldevjijitmal.in/about): The heritage, weaving philosophy, generational craftsmanship, and story of Baldevji Jitmal in M.T. Cloth Market, Indore.
+- [Curated Collections](https://www.baldevjijitmal.in/products): Complete directory of traditional Indian textile categories with wholesale inquiries.
+- [Catalogue Gallery](https://www.baldevjijitmal.in/gallery): Live visual catalogue of current stock pieces with high-resolution inspection and direct WhatsApp inquiry.
+- [Contact & Visit](https://www.baldevjijitmal.in/contact): Landmark store address in M.T. Cloth Market, interactive map, phone numbers, and direct wholesale WhatsApp channels.
+
+## Textile Collections & Categories
+
+- [Traditional Dhotis & Sets](https://www.baldevjijitmal.in/gallery?category=Dhotis): Pure cotton dhotis, single dhotis, dupattas, and traditional ceremonial sets.
+- [Artificial & Bhagalpuri Silk Sets](https://www.baldevjijitmal.in/gallery?category=Silk): Premium silk dhotis, dupattas, and heritage ceremonial attire.
+- [Bhagalpuri Tussar & Chaddars](https://www.baldevjijitmal.in/gallery?category=Bhagalpuri): Authentic Bhagalpuri all-weather chaddars and dhoti-dupatta sets.
+- [Kurta-Pajama Cloth](https://www.baldevjijitmal.in/gallery?category=Kurta%20Cloth): Unstitched linen, pure cotton, and blended fabric for traditional kurtas.
+- [Ladies Shawls](https://www.baldevjijitmal.in/gallery?category=Ladies%20Shawl): Soft pashmina, cashmere-feel, and fine woollen shawls in classic paisley and floral jacquards.
+- [Gents Shawls](https://www.baldevjijitmal.in/gallery?category=Gents%20Shawl): Understated masculine woollen shawls, lohis, and ceremonial wraps.
+- [Pure Cotton Bedsheets](https://www.baldevjijitmal.in/gallery?category=Bedsheets): Single and double-bed pure cotton bedsheets for daily comfort and hospitality bulk orders.
+- [Towels & Napkins](https://www.baldevjijitmal.in/gallery?category=Towels%2FNapkins): High-absorbency bath towels, hand towels, and cotton napkins for wholesale.
+- [Readymade Free-Size Dhotis](https://www.baldevjijitmal.in/gallery?category=Readymade%20Dhoti): Pre-stitched, universal-fit dhotis tailored with full ceremonial fabric.
+- [3-Piece Ceremonial Sets](https://www.baldevjijitmal.in/gallery?category=3%20Piece%20Set): Complete coordinated set containing Dhoti, Dupatta, and Kurta fabric.
+- [Pooja Aasan](https://www.baldevjijitmal.in/gallery?category=Aasan): Woollen, cotton, polyester, and velvet prayer mats in auspicious traditional prints.
+- [Cotton & Silk Lungis](https://www.baldevjijitmal.in/gallery?category=Lungi): Authentic 2m, 2.25m, and 2.5m lungis in breathable weaves.
+
+## Store Location & Direct Contact
+
+- Address: 221, M.T. Cloth Market, Maharaja Tukojirao Cloth Market, Indore, Madhya Pradesh 452002, India
+- Landmark: Near Sheetal Kulfi, central corridor of M.T. Cloth Market
+- Landline: 0731-2459280
+- Mobile: +91 78280 72394 / +91 98272 13393
+- WhatsApp Wholesale Inquiry: +91 78698 49449
+
+## Optional
+
+- [Full Context & Catalogue Data](https://www.baldevjijitmal.in/llms-full.txt): Complete LLM training and RAG ingestion context with detailed specifications and wholesale terms.

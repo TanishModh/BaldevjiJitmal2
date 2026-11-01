@@ -4,3 +4,4 @@ Disallow: /admin
 Disallow: /login
 
 Sitemap: https://www.baldevjijitmal.in/sitemap.xml
+# LLMs context: https://www.baldevjijitmal.in/llms.txt
