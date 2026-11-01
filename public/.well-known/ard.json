@@ -1,0 +1,64 @@
+{
+  "$schema": "https://agenticresourcediscovery.org/spec/schemas/ard.json",
+  "version": "0.91",
+  "provider": {
+    "name": "Baldevji Jitmal",
+    "domain": "baldevjijitmal.in",
+    "description": "Historic traditional Indian wholesale and retail textile house established in 1937 at M.T. Cloth Market, Indore, Madhya Pradesh.",
+    "contact": {
+      "telephone": "+91-78280-72394",
+      "address": "221, M.T. Cloth Market, Indore, MP 452002, India",
+      "whatsapp": "+91-78698-49449"
+    }
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:baldevjijitmal.in:textiles:catalogue",
+      "displayName": "Baldevji Jitmal Traditional Textile Catalogue",
+      "type": "text/markdown",
+      "url": "https://www.baldevjijitmal.in/llms.txt",
+      "description": "Machine-readable curated inventory and product taxonomy for traditional Indian textiles including dhotis, dupattas, shawls, bedsheets, Bhagalpuri silks, and pooja aasans.",
+      "capabilities": [
+        "ProductCatalogue",
+        "WholesalePricingInquiry",
+        "WeaveSpecifications",
+        "StoreNavigation"
+      ],
+      "representativeQueries": [
+        "wholesale dhoti distributor in Indore",
+        "traditional Indian wedding textiles M.T. cloth market",
+        "Bhagalpuri chaddar and dhoti dupatta sets",
+        "cashmere woollen shawls Indore supplier",
+        "pure cotton wholesale bedsheets Madhya Pradesh"
+      ]
+    },
+    {
+      "identifier": "urn:air:baldevjijitmal.in:textiles:full-knowledge",
+      "displayName": "Baldevji Jitmal Complete Knowledge Base",
+      "type": "text/markdown",
+      "url": "https://www.baldevjijitmal.in/llms-full.txt",
+      "description": "Comprehensive knowledge base covering eight decades of textile heritage, fabric weaves, wholesale terms, and ordering specifications.",
+      "capabilities": [
+        "HeritageTextilesHistory",
+        "WholesaleOrderWorkflow",
+        "FabricMaterialDetails"
+      ],
+      "representativeQueries": [
+        "Baldevji Jitmal history since 1937",
+        "M.T. cloth market Indore fabric wholesale house",
+        "how to order traditional fabrics on WhatsApp"
+      ]
+    },
+    {
+      "identifier": "urn:air:baldevjijitmal.in:textiles:sitemap",
+      "displayName": "Baldevji Jitmal Web Sitemap",
+      "type": "application/xml",
+      "url": "https://www.baldevjijitmal.in/sitemap.xml",
+      "description": "Complete search index and URL directory for Baldevji Jitmal pages and category deep-links.",
+      "capabilities": [
+        "UrlDiscovery",
+        "CategoryDeepLinks"
+      ]
+    }
+  ]
+}
