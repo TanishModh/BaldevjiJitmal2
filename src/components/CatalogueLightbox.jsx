@@ -552,9 +552,9 @@ export default function CatalogueLightbox({
               </span>
             </div>
 
-            <h3 className="font-display text-xl sm:text-2xl text-primary mt-3 sm:mt-4 leading-tight">
+            <h2 className="font-display text-xl sm:text-2xl text-primary mt-3 sm:mt-4 leading-tight">
               {item.title || item.category || 'Traditional Handloom Piece'}
-            </h3>
+            </h2>
             <div className="gold-divider my-2.5 sm:my-3 w-14"></div>
 
             {item.description ? (

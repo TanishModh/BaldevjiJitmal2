@@ -9,9 +9,10 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden bg-primary text-primary-foreground">
+    <footer className="relative overflow-hidden bg-primary text-primary-foreground" aria-labelledby="footer-heading">
       {/* Top Gold Gradient Line */}
       <div className="h-px bg-gradient-to-r from-transparent via-accent to-transparent"></div>
+      <h2 id="footer-heading" className="sr-only">Store Navigation and Contact Details</h2>
 
       {/* Background Watermark */}
       <svg
@@ -60,7 +61,7 @@ export default function Footer() {
 
         {/* Visit Us */}
         <div className="text-sm space-y-2">
-          <h4 className="font-display text-2xl text-[#dfb76c] mb-4">Visit Us</h4>
+          <h3 className="font-display text-2xl text-[#dfb76c] mb-4">Visit Us</h3>
           <p className="flex items-start gap-2 text-primary-foreground/80">
             <MapPin size={16} className="mt-0.5 text-[#dfb76c] shrink-0" />
             <span>{settings.contact.address || '221, M.T. Cloth Market, Indore, MP'}</span>
@@ -99,7 +100,7 @@ export default function Footer() {
 
         {/* Explore Links */}
         <div className="text-sm">
-          <h4 className="font-display text-2xl text-[#dfb76c] mb-4">Explore</h4>
+          <h3 className="font-display text-2xl text-[#dfb76c] mb-4">Explore</h3>
           <ul className="space-y-2 text-primary-foreground/80">
             <li>
               <Link to="/about" className="transition-colors hover:text-[#dfb76c]">
@@ -135,9 +136,9 @@ export default function Footer() {
 
       {/* Map Section */}
       <div className="relative max-w-7xl mx-auto px-5 lg:px-8 pb-12">
-        <h4 className="font-display text-2xl text-primary-foreground mb-4 flex items-center gap-2">
+        <h3 className="font-display text-2xl text-primary-foreground mb-4 flex items-center gap-2">
           <MapPin size={18} className="text-[#dfb76c]" /> Find us on the map
-        </h4>
+        </h3>
         <div className="overflow-hidden border border-[#dfb76c]/30 shadow-lift rounded-sm">
           <LazyMap
             src={

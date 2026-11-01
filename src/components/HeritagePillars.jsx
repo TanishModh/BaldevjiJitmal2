@@ -12,8 +12,9 @@ export default function HeritagePillars() {
   const pillars = Array.isArray(rawPillars) && rawPillars.length > 0 ? rawPillars : defaultSettings.pillars;
 
   return (
-    <section className="bg-sand-200/50 border-y border-border/60 py-12 sm:py-16 md:py-20">
+    <section className="bg-sand-200/50 border-y border-border/60 py-12 sm:py-16 md:py-20" aria-labelledby="heritage-pillars-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="heritage-pillars-heading" className="sr-only">Our Heritage Pillars and Craftsmanship Principles</h2>
         <MotionStagger
           stagger={0.08}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8"

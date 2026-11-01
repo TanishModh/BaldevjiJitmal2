@@ -704,6 +704,7 @@ export default function Gallery() {
         </div>
 
         {/* Gallery Items Grid */}
+        <h2 className="sr-only">Catalogue Items Collection</h2>
         {isLoading ? (
           <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6 items-start" aria-busy="true" aria-label="Loading catalogue items">
             {Array.from({ length: 9 }).map((_, idx) => (
