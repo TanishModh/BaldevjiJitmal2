@@ -102,7 +102,7 @@
       "destination": "https://brlkrualghugxskjzydi.supabase.co/storage/v1/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api/|cdn-media/).*)",
       "destination": "/"
     }
   ]

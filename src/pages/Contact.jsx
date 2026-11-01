@@ -77,6 +77,41 @@ export default function Contact() {
         message: formData.message.trim(),
       };
 
+      // 1. Send instant email notification to tmodh49449@gmail.com
+      try {
+        let sent = false;
+        try {
+          const apiRes = await fetch('/api/send-inquiry', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(inquiryPayload),
+          });
+          if (apiRes.ok) sent = true;
+        } catch (_) {}
+
+        // Direct FormSubmit fallback if serverless function not reachable
+        if (!sent) {
+          await fetch('https://formsubmit.co/ajax/tmodh49449@gmail.com', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              _subject: `New Customer Inquiry: ${formData.name.trim()} — Baldevji Jitmal`,
+              Name: formData.name.trim(),
+              Phone: formData.phone.trim() || 'Not provided',
+              Email: formData.email.trim() || 'Not provided',
+              Message: formData.message.trim(),
+              _template: 'table',
+              _captcha: 'false',
+            }),
+          });
+        }
+      } catch (emailErr) {
+        console.warn('Email dispatch notice:', emailErr);
+      }
+
       // Always save a local backup copy so admin panel can access even in offline/passcode mode
       try {
         const local = JSON.parse(localStorage.getItem('bj_inquiries') || '[]');
