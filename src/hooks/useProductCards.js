@@ -6,9 +6,21 @@ import { getThumbnailImageUrl } from '../lib/imageOptimization';
 const normalize = (str) => (str ?? '').trim().toLowerCase();
 
 const OVERSIZED_CATEGORY_OVERRIDES = {
-  '1785152462084-1m5era.png': '/assets/categories/cat-aasan.jpg',
-  '1785158017108-gmbl9y.png': '/assets/categories/cat-towels.jpg',
-  '1785749475034-sosqwz.png': '/assets/categories/cat-bedsheets.jpg',
+  // Aasan, Towels, Bedsheets
+  '1785152462084-1m5era': '/assets/categories/cat-aasan.webp',
+  '1785158017108-gmbl9y': '/assets/categories/cat-towels.webp',
+  '1785749475034-sosqwz': '/assets/categories/cat-bedsheets.webp',
+  // Shawls & Readymade Dhotis
+  '1792937023211-0pbvfg': '/assets/categories/cat-ladies-shawl.webp',
+  '1792937367756-qcasx3': '/assets/categories/cat-gents-shawl.webp',
+  '1792937455957-3m7n5j': '/assets/categories/cat-readymade-dhoti.webp',
+  // Silk, Dhoti-Dupatta, Kurta, 3-Piece, Lungi, Bhagalpuri
+  '1780566969749-qh7lic': '/assets/categories/cat-silk.webp',
+  '1782903874479-tp9raw': '/assets/categories/cat-dhoti-dupatta.webp',
+  '1782903995648-rnvssg': '/assets/categories/cat-kurta-cloth.webp',
+  '1781601985221-hjf3g2': '/assets/categories/cat-3-piece-set.webp',
+  '1782908103025-wanuib': '/assets/categories/cat-lungi.webp',
+  '1780306620914-jwt94p': '/assets/categories/cat-bhagalpuri.webp',
 };
 
 function getCategoryThumbnail(url) {
@@ -25,7 +37,7 @@ export const DEFAULT_CATEGORIES = [
     name: '3 Piece Set',
     slug: '3-piece-set',
     description: 'Complete set consisting of Dhoti+Dupatta+Kurta cloth.',
-    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1781601985221-hjf3g2.jpg'),
+    thumbnail_url: '/assets/categories/cat-3-piece-set.webp',
     sort_order: 0,
   },
   {
@@ -33,7 +45,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Lungi',
     slug: 'lungi',
     description: '2m/2.25m/2.5m silk and cotton lungis.',
-    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1782908103025-wanuib.jpg'),
+    thumbnail_url: '/assets/categories/cat-lungi.webp',
     sort_order: 0,
   },
   {
@@ -41,7 +53,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Aasan',
     slug: 'aasan',
     description: 'Wide range of woollen, cotton, polyester, velvet pooja aasan in a broad range of colors, prints and styles.',
-    thumbnail_url: '/assets/categories/cat-aasan.jpg',
+    thumbnail_url: '/assets/categories/cat-aasan.webp',
     sort_order: 0,
   },
   {
@@ -49,7 +61,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Silk',
     slug: 'silk',
     description: 'Premium Artificial silk dhotis and sets — heritage weaves.',
-    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1780566969749-qh7lic.png'),
+    thumbnail_url: '/assets/categories/cat-silk.webp',
     sort_order: 0,
   },
   {
@@ -57,7 +69,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Bhagalpuri',
     slug: 'bhagalpuri',
     description: 'Bhagalpuri Dhoti Dupatta sets and chaddars- your all-weather companion.',
-    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1780306620914-jwt94p.png'),
+    thumbnail_url: '/assets/categories/cat-bhagalpuri.webp',
     sort_order: 0,
   },
   {
@@ -65,7 +77,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Kurta Cloth',
     slug: 'kurta-cloth',
     description: 'Full Kurta Cloth- Mix, Cotton, Linen',
-    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1782903995648-rnvssg.jpg'),
+    thumbnail_url: '/assets/categories/cat-kurta-cloth.webp',
     sort_order: 0,
   },
   {
@@ -73,7 +85,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Towels/Napkins',
     slug: 'home',
     description: 'Towels and napkins for homes and bulk buyers.',
-    thumbnail_url: '/assets/categories/cat-towels.jpg',
+    thumbnail_url: '/assets/categories/cat-towels.webp',
     sort_order: 0,
   },
   {
@@ -81,7 +93,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Bedsheets',
     slug: 'bedsheets',
     description: 'Pure Cotton Single and Double-bed bedsheets for daily luxury and comfort.',
-    thumbnail_url: '/assets/categories/cat-bedsheets.jpg',
+    thumbnail_url: '/assets/categories/cat-bedsheets.webp',
     sort_order: 0,
   },
   {
@@ -89,7 +101,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Dhoti Dupatta Sets',
     slug: 'dhotis',
     description: 'Cotton Dhoti and Dupatta sets, Single Dhotis and Dupattas.',
-    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1782903874479-tp9raw.jpg'),
+    thumbnail_url: '/assets/categories/cat-dhoti-dupatta.webp',
     sort_order: 0,
   },
   {
@@ -97,7 +109,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Ladies Shawl',
     slug: 'ladies-shawl',
     description: 'Soft pashmina and wool shawls in classic paisley and modern weaves.',
-    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1792937023211-0pbvfg.png'),
+    thumbnail_url: '/assets/categories/cat-ladies-shawl.webp',
     sort_order: 0,
   },
   {
@@ -105,7 +117,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Gents Shawl',
     slug: 'gents-shawl',
     description: 'Soft, pashmina and wool shawls in classic paisley and modern weaves.',
-    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1792937367756-qcasx3.png'),
+    thumbnail_url: '/assets/categories/cat-gents-shawl.webp',
     sort_order: 0,
   },
   {
@@ -113,7 +125,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Readymade Dhoti',
     slug: 'readymade-dhoti',
     description: 'Readymade Free Size Dhotis made of entire Dhoti cloth with no compromises. Fits anyone, everyone.',
-    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1792937455957-3m7n5j.png'),
+    thumbnail_url: '/assets/categories/cat-readymade-dhoti.webp',
     sort_order: 0,
   },
 ];

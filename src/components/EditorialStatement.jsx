@@ -64,15 +64,30 @@ export default function EditorialStatement() {
           {/* Left: Atmospheric Photography with Agnes Scrim */}
           <MotionFade delay={0.2} className="relative overflow-hidden rounded-sm shadow-lift group">
             <div className="aspect-[4/3] sm:aspect-[16/10] overflow-hidden relative bg-primary">
-              <img
-                src={getOptimizedImageUrl(editorial.featureImageUrl || settings.hero.heroImageUrl || '/assets/hero-textiles-CKsuSuq6.jpg', { width: 1200, quality: 78, format: 'webp' })}
-                alt="Traditional Indian textiles curated by Baldevji Jitmal"
-                loading="lazy"
-                decoding="async"
-                width={1600}
-                height={1100}
-                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-              />
+              {(() => {
+                const rawUrl = editorial.featureImageUrl || settings.hero?.heroImageUrl;
+                const isSupabase = rawUrl && (rawUrl.includes('.supabase.co') || rawUrl.includes('/cdn-media/'));
+                const imgSrc = isSupabase
+                  ? getOptimizedImageUrl(rawUrl, { width: 800, quality: 65, format: 'webp' })
+                  : (rawUrl && !rawUrl.includes('hero-textiles') ? rawUrl : '/assets/hero-textiles-800.webp');
+                const imgSrcSet = isSupabase
+                  ? getResponsiveSrcSet(rawUrl)
+                  : '/assets/hero-textiles-480.webp 480w, /assets/hero-textiles-800.webp 800w, /assets/hero-textiles-1200.webp 1200w';
+
+                return (
+                  <img
+                    src={imgSrc}
+                    srcSet={imgSrcSet}
+                    sizes="(max-width: 1024px) 100vw, 700px"
+                    alt="Traditional Indian textiles curated by Baldevji Jitmal"
+                    loading="lazy"
+                    decoding="async"
+                    width={800}
+                    height={500}
+                    className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                  />
+                );
+              })()}
               <div
                 className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none"
                 aria-hidden="true"

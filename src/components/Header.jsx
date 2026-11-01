@@ -62,11 +62,11 @@ export default function Header() {
           {/* Brand Emblem & Text */}
           <Link to="/" className="flex items-center gap-2.5 sm:gap-3 leading-tight group">
             <img
-              src={settings.brand.monogramUrl || '/logo-baldevji-mark-refined.png'}
+              src={settings.brand.monogramUrl || '/logo-baldevji-mark-refined.webp'}
               alt={settings.brand.name || 'Baldevji Jitmal'}
               className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 shrink-0 object-contain transition-transform duration-300 group-hover:scale-105"
-              width={80}
-              height={80}
+              width={56}
+              height={56}
             />
           <span className="flex min-w-0 flex-col">
             <span className="font-display text-lg sm:text-xl md:text-2xl leading-tight text-primary font-medium tracking-tight">

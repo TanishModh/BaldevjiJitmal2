@@ -120,15 +120,30 @@ export default function Home() {
       >
         {/* Cinematic Drifting Textile Background */}
         <div className="absolute inset-0 overflow-hidden">
-          <img
-            src={settings.hero.heroImageUrl || '/assets/hero-textiles-CKsuSuq6.jpg'}
-            alt="Traditional Indian textiles in the Baldevji Jitmal collection"
-            width={1600}
-            height={1100}
-            fetchPriority="high"
-            decoding="async"
-            className="h-full w-full object-cover animate-cinematic opacity-85"
-          />
+          {(() => {
+            const rawUrl = settings.hero?.heroImageUrl;
+            const isSupabase = rawUrl && (rawUrl.includes('.supabase.co') || rawUrl.includes('/cdn-media/'));
+            const heroSrc = isSupabase
+              ? getOptimizedImageUrl(rawUrl, { width: 1200, quality: 75, format: 'webp' })
+              : (rawUrl && !rawUrl.includes('hero-textiles') ? rawUrl : '/assets/hero-textiles-1200.webp');
+            const heroSrcSet = isSupabase
+              ? getResponsiveSrcSet(rawUrl)
+              : '/assets/hero-textiles-480.webp 480w, /assets/hero-textiles-800.webp 800w, /assets/hero-textiles-1200.webp 1200w';
+
+            return (
+              <img
+                src={heroSrc}
+                srcSet={heroSrcSet}
+                sizes="100vw"
+                alt="Traditional Indian textiles in the Baldevji Jitmal collection"
+                width={1200}
+                height={675}
+                fetchPriority="high"
+                decoding="async"
+                className="h-full w-full object-cover animate-cinematic opacity-85"
+              />
+            );
+          })()}
         </div>
 
         {/* Deep Maroon Rich Filter Overlay (Responsive top-to-bottom on mobile, left-to-right on desktop) */}

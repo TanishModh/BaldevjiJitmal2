@@ -39,9 +39,9 @@ export function getOptimizedImageUrl(url, options = {}) {
   // Supabase CDN Image Transformation endpoint
   if (SUPABASE_STORAGE_URL_PATTERN.test(url)) {
     const {
-      width = 540,
+      width = 480,
       height,
-      quality = 75,
+      quality = 60,
       format = 'webp',
       resize = 'cover',
     } = options;
@@ -69,12 +69,12 @@ export function getOptimizedImageUrl(url, options = {}) {
 
 /**
  * Optimized thumbnail for Catalogue Grid, Products cards, and Home Collections.
- * Delivers crisp 540px WebP at ~35-65KB (80%+ smaller than raw camera uploads).
+ * Delivers crisp 480px WebP at ~25-45KB (90%+ smaller than raw camera uploads).
  */
-export function getThumbnailImageUrl(url, width = 540) {
+export function getThumbnailImageUrl(url, width = 480) {
   return getOptimizedImageUrl(url, {
     width,
-    quality: 75,
+    quality: 60,
     format: 'webp',
     resize: 'cover',
   });
@@ -82,27 +82,27 @@ export function getThumbnailImageUrl(url, width = 540) {
 
 /**
  * Responsive srcset generator for Catalogue cards.
- * Generates 360w, 540w, 720w breakpoints for retina and responsive mobile displays.
+ * Generates 320w, 480w, 720w breakpoints for retina and responsive mobile displays.
  */
 export function getResponsiveSrcSet(url) {
   if (!url || typeof url !== 'string' || !SUPABASE_STORAGE_URL_PATTERN.test(url)) {
     return undefined;
   }
-  const w360 = getOptimizedImageUrl(url, { width: 360, quality: 75, format: 'webp' });
-  const w540 = getOptimizedImageUrl(url, { width: 540, quality: 75, format: 'webp' });
-  const w720 = getOptimizedImageUrl(url, { width: 720, quality: 75, format: 'webp' });
+  const w320 = getOptimizedImageUrl(url, { width: 320, quality: 58, format: 'webp' });
+  const w480 = getOptimizedImageUrl(url, { width: 480, quality: 60, format: 'webp' });
+  const w720 = getOptimizedImageUrl(url, { width: 720, quality: 65, format: 'webp' });
 
-  return `${w360} 360w, ${w540} 540w, ${w720} 720w`;
+  return `${w320} 320w, ${w480} 480w, ${w720} 720w`;
 }
 
 /**
  * High-definition optimized image for Catalogue Lightbox (fullscreen modal with pinch/zoom).
- * Delivers 1200px WebP at ~150-220KB (instead of 3MB+ raw original) while maintaining rich weave detail.
+ * Delivers 1200px WebP at ~120-180KB (instead of 3MB+ raw original) while maintaining rich weave detail.
  */
 export function getLightboxImageUrl(url) {
   return getOptimizedImageUrl(url, {
     width: 1200,
-    quality: 85,
+    quality: 80,
     format: 'webp',
   });
 }

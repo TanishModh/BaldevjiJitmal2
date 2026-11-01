@@ -38,11 +38,11 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-3">
             <img
-              src={settings.brand.monogramUrl || '/logo-baldevji-mark-refined.png'}
+              src={settings.brand.monogramUrl || '/logo-baldevji-mark-refined.webp'}
               alt={settings.brand.name || 'Baldevji Jitmal'}
               className="size-16 shrink-0 object-contain"
-              width={80}
-              height={80}
+              width={64}
+              height={64}
             />
             <div className="min-w-0">
               <p className="font-display text-2xl leading-tight text-primary-foreground">
