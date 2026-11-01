@@ -182,11 +182,11 @@ export default function Contact() {
               <Phone className="text-accent mt-1 shrink-0" size={20} />
               <div>
                 <p className="font-display text-xl text-primary">Phone & WhatsApp</p>
-                <div className="text-muted-foreground leading-relaxed space-y-2 mt-1.5">
-                  <div className="flex items-center gap-2.5 flex-wrap">
+                <div className="text-muted-foreground leading-relaxed flex flex-col gap-2 mt-1.5">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <a
                       href="tel:+917828072394"
-                      className="hover:text-primary transition-colors font-medium text-foreground tracking-wide"
+                      className="inline-flex items-center min-h-[44px] py-1 hover:text-primary transition-colors font-medium text-foreground tracking-wide font-mono"
                     >
                       +91 78280 72394
                     </a>
@@ -194,18 +194,18 @@ export default function Contact() {
                       href="https://wa.me/917828072394?text=Namaste%20Baldevji%20Jitmal%2C%20I%20am%20contacting%20you%20from%20your%20website."
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[11px] text-[#128c7e] hover:text-[#075e54] font-medium inline-flex items-center gap-1 bg-[#25d366]/10 hover:bg-[#25d366]/20 px-2 py-0.5 rounded transition-all active:scale-95"
+                      className="text-xs text-[#128c7e] hover:text-[#075e54] font-medium inline-flex items-center gap-1.5 bg-[#25d366]/10 hover:bg-[#25d366]/20 px-3 py-1.5 rounded-sm transition-all active:scale-95 min-h-[38px]"
                       title="Chat on WhatsApp"
                     >
-                      <MessageCircle size={12} className="fill-current text-[#25d366]" />
+                      <MessageCircle size={14} className="fill-current text-[#25d366]" />
                       <span>WhatsApp</span>
                     </a>
                   </div>
 
-                  <div className="flex items-center gap-2.5 flex-wrap">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <a
                       href="tel:+919827213393"
-                      className="hover:text-primary transition-colors font-medium text-foreground tracking-wide"
+                      className="inline-flex items-center min-h-[44px] py-1 hover:text-primary transition-colors font-medium text-foreground tracking-wide font-mono"
                     >
                       +91 98272 13393
                     </a>
@@ -213,10 +213,10 @@ export default function Contact() {
                       href="https://wa.me/919827213393?text=Namaste%20Baldevji%20Jitmal%2C%20I%20am%20contacting%20you%20from%20your%20website."
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[11px] text-[#128c7e] hover:text-[#075e54] font-medium inline-flex items-center gap-1 bg-[#25d366]/10 hover:bg-[#25d366]/20 px-2 py-0.5 rounded transition-all active:scale-95"
+                      className="text-xs text-[#128c7e] hover:text-[#075e54] font-medium inline-flex items-center gap-1.5 bg-[#25d366]/10 hover:bg-[#25d366]/20 px-3 py-1.5 rounded-sm transition-all active:scale-95 min-h-[38px]"
                       title="Chat on WhatsApp"
                     >
-                      <MessageCircle size={12} className="fill-current text-[#25d366]" />
+                      <MessageCircle size={14} className="fill-current text-[#25d366]" />
                       <span>WhatsApp</span>
                     </a>
                   </div>

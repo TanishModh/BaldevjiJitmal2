@@ -97,10 +97,10 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Mobile Hamburger Button with comfortable 44px tap target */}
+        {/* Mobile Hamburger Button with comfortable 48px tap target */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden grid h-11 w-11 place-items-center text-primary rounded-sm transition-colors active:bg-sand-200/80"
+          className="md:hidden grid h-12 w-12 place-items-center text-primary rounded-sm transition-colors active:bg-sand-200/80"
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileMenuOpen}
         >
@@ -128,7 +128,7 @@ export default function Header() {
                   key={link.to}
                   to={link.to}
                   className={({ isActive }) =>
-                    `flex items-center justify-between py-3.5 text-sm uppercase tracking-[0.14em] font-medium transition-colors ${
+                    `flex items-center justify-between min-h-[48px] py-3 text-sm uppercase tracking-[0.14em] font-medium transition-colors ${
                       isActive ? 'text-primary font-semibold' : 'text-foreground/80 hover:text-primary'
                     }`
                   }
@@ -145,7 +145,7 @@ export default function Header() {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full flex items-center justify-center gap-2 bg-[#17523f] text-[#fcf9f2] py-3.5 rounded-sm text-xs uppercase tracking-[0.12em] font-semibold shadow-soft active:scale-[0.99] transition"
+                className="w-full flex items-center justify-center min-h-[48px] gap-2 bg-[#17523f] text-[#fcf9f2] py-3.5 rounded-sm text-xs uppercase tracking-[0.12em] font-semibold shadow-soft active:scale-[0.99] transition"
               >
                 <MessageCircle size={16} className="text-[#34d399]" />
                 <span>Chat on WhatsApp</span>
@@ -153,7 +153,7 @@ export default function Header() {
 
               <a
                 href={`tel:${settings.contact.phone1?.replace(/\s+/g, '') || '07312459280'}`}
-                className="w-full flex items-center justify-center gap-2 border border-border bg-background text-primary py-3 rounded-sm text-xs uppercase tracking-[0.12em] font-medium active:bg-sand-200"
+                className="w-full flex items-center justify-center min-h-[48px] gap-2 border border-border bg-background text-primary py-3 rounded-sm text-xs uppercase tracking-[0.12em] font-medium active:bg-sand-200"
               >
                 <Phone size={15} className="text-accent" />
                 <span>Call Store ({settings.contact.phone1 || '0731 245 9280'})</span>
@@ -166,7 +166,7 @@ export default function Header() {
                 <MapPin size={13} className="text-accent" />
                 221, M.T. Cloth Market, Indore
               </span>
-              <Link to="/login" className="text-accent underline text-[10px] uppercase tracking-wider">
+              <Link to="/login" className="text-accent underline text-[11px] uppercase tracking-wider min-h-[36px] py-2 px-1 inline-flex items-center">
                 Admin
               </Link>
             </div>

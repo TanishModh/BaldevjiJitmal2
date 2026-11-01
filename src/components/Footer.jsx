@@ -66,23 +66,36 @@ export default function Footer() {
             <MapPin size={16} className="mt-0.5 text-[#dfb76c] shrink-0" />
             <span>{settings.contact.address || '221, M.T. Cloth Market, Indore, MP'}</span>
           </p>
-          <div className="flex items-start gap-2 text-primary-foreground/80">
-            <Phone size={16} className="mt-1 text-[#dfb76c] shrink-0" />
-            <div className="space-y-1 text-xs sm:text-sm">
-              <p>
-                <a href="tel:07312459280" className="hover:text-[#dfb76c] transition-colors font-mono">
-                  0731-2459280
-                </a>
-              </p>
-              <p className="flex items-center gap-2 flex-wrap font-mono">
-                <a href="tel:+917828072394" className="hover:text-[#dfb76c] transition-colors">
-                  +91 78280 72394
-                </a>
-                <span className="text-primary-foreground/45">·</span>
-                <a href="tel:+919827213393" className="hover:text-[#dfb76c] transition-colors">
-                  +91 98272 13393
-                </a>
-              </p>
+          <div className="flex items-start gap-3 text-primary-foreground/85">
+            <Phone size={18} className="mt-2 text-[#dfb76c] shrink-0" />
+            <div className="flex flex-col gap-1 text-sm font-mono">
+              <a
+                href="tel:07312459280"
+                className="inline-flex items-center min-h-[44px] py-1 text-primary-foreground hover:text-[#dfb76c] transition-colors tracking-wide"
+              >
+                0731-2459280
+                <span className="ml-2 text-[10px] text-[#dfb76c] uppercase tracking-wider font-sans font-medium px-1.5 py-0.5 rounded bg-black/20 border border-[#dfb76c]/30">
+                  Store
+                </span>
+              </a>
+              <a
+                href="tel:+917828072394"
+                className="inline-flex items-center min-h-[44px] py-1 text-primary-foreground hover:text-[#dfb76c] transition-colors tracking-wide"
+              >
+                +91 78280 72394
+                <span className="ml-2 text-[10px] text-[#dfb76c] uppercase tracking-wider font-sans font-medium px-1.5 py-0.5 rounded bg-black/20 border border-[#dfb76c]/30">
+                  Mobile
+                </span>
+              </a>
+              <a
+                href="tel:+919827213393"
+                className="inline-flex items-center min-h-[44px] py-1 text-primary-foreground hover:text-[#dfb76c] transition-colors tracking-wide"
+              >
+                +91 98272 13393
+                <span className="ml-2 text-[10px] text-[#dfb76c] uppercase tracking-wider font-sans font-medium px-1.5 py-0.5 rounded bg-black/20 border border-[#dfb76c]/30">
+                  Mobile
+                </span>
+              </a>
             </div>
           </div>
           {settings.contact.instagramUrl && (
@@ -90,7 +103,7 @@ export default function Footer() {
               href={settings.contact.instagramUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 text-primary-foreground/80 hover:text-[#dfb76c] transition-colors"
+              className="inline-flex items-center min-h-[44px] py-1 gap-2 text-primary-foreground/80 hover:text-[#dfb76c] transition-colors"
             >
               <Instagram size={16} className="text-[#dfb76c] shrink-0" />
               <span>{settings.contact.instagramHandle || '@baldevji.jitmal'}</span>
@@ -101,31 +114,31 @@ export default function Footer() {
         {/* Explore Links */}
         <div className="text-sm">
           <h3 className="font-display text-2xl text-[#dfb76c] mb-4">Explore</h3>
-          <ul className="space-y-2 text-primary-foreground/80">
+          <ul className="flex flex-col gap-1 text-primary-foreground/80">
             <li>
-              <Link to="/about" className="transition-colors hover:text-[#dfb76c]">
+              <Link to="/about" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
                 About
               </Link>
             </li>
             <li>
-              <Link to="/products" className="transition-colors hover:text-[#dfb76c]">
+              <Link to="/products" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
                 Products
               </Link>
             </li>
             <li>
-              <Link to="/gallery" className="transition-colors hover:text-[#dfb76c]">
+              <Link to="/gallery" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
                 Catalogue
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="transition-colors hover:text-[#dfb76c]">
+              <Link to="/contact" className="inline-flex items-center min-h-[40px] py-1 transition-colors hover:text-[#dfb76c]">
                 Contact
               </Link>
             </li>
             <li>
               <Link
                 to="/login"
-                className="text-xs text-primary-foreground/75 transition-colors hover:text-[#dfb76c]"
+                className="inline-flex items-center min-h-[36px] py-1 text-xs text-primary-foreground/75 transition-colors hover:text-[#dfb76c]"
               >
                 Admin
               </Link>
