@@ -1,18 +1,19 @@
-import React, { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { m } from 'framer-motion';
 import { Store, Clock, ArrowRight, MapPin, Phone, Instagram, MessageCircle } from 'lucide-react';
 import { useSiteSettings } from '../context/SiteContext';
 import { useProductCards } from '../hooks/useProductCards';
-import HeritagePillars from '../components/HeritagePillars';
-import OrderingFaq from '../components/OrderingFaq';
 import HeroScrollIndicator from '../components/HeroScrollIndicator';
 import WeavesMarqueeRibbon from '../components/WeavesMarqueeRibbon';
 import RotatingHeritageSeal from '../components/RotatingHeritageSeal';
-import EditorialStatement from '../components/EditorialStatement';
 import { MotionFade, MotionBlurFade, MotionStagger, MotionItem } from '../components/MotionReveal';
 import { getThumbnailImageUrl, getResponsiveSrcSet, getOptimizedImageUrl } from '../lib/imageOptimization';
 import SEO from '../components/SEO';
+
+const HeritagePillars = lazy(() => import('../components/HeritagePillars'));
+const EditorialStatement = lazy(() => import('../components/EditorialStatement'));
+const OrderingFaq = lazy(() => import('../components/OrderingFaq'));
 
 function AnimatedCounter({ value, delay = 0 }) {
   const parsed = useMemo(() => {
@@ -284,7 +285,9 @@ export default function Home() {
       </section>
 
       {/* Heritage & Values Pillars */}
-      <HeritagePillars />
+      <Suspense fallback={null}>
+        <HeritagePillars />
+      </Suspense>
 
       {/* Curated Traditional Textiles Collection with Stagger Reveal & Hanson Wu Spinning Seal */}
       <section className="relative overflow-hidden bg-sand-200/50 py-16 sm:py-20 md:py-28 border-y border-border/40">
@@ -384,10 +387,14 @@ export default function Home() {
       </section>
 
       {/* Agnes Toth Inspired Editorial Manifesto & Split Section */}
-      <EditorialStatement />
+      <Suspense fallback={null}>
+        <EditorialStatement />
+      </Suspense>
 
       {/* Frequently Asked Questions */}
-      <OrderingFaq />
+      <Suspense fallback={null}>
+        <OrderingFaq />
+      </Suspense>
 
       {/* Storefront / Visit Us Section */}
       <section className="py-16 sm:py-20 md:py-28 bg-sand-200/60 border-t border-border/40 overflow-hidden">
