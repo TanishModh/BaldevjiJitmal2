@@ -76,25 +76,38 @@ export default function Products() {
                   to={`/gallery?category=${encodeURIComponent(card.categoryParam || '')}`}
                   className="group overflow-hidden border-b border-accent/40 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift active:scale-[0.99] flex flex-col rounded-sm h-full"
                 >
-                  <div className="aspect-[4/5] bg-secondary overflow-hidden relative">
-                    {card.imageUrl ? (
+                  <div className="aspect-[4/5] bg-[#faf6ee] overflow-hidden relative flex items-center justify-center">
+                    {/* Ambient subtle blur to soften framing */}
+                    {card.imageUrl && (
                       <img
                         src={getThumbnailImageUrl(card.imageUrl)}
-                        srcSet={getResponsiveSrcSet(card.imageUrl)}
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        alt={`${card.name} Traditional Wholesale Textile Collection — Baldevji Jitmal Indore`}
-                        width="480"
-                        height="600"
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                        alt=""
+                        aria-hidden="true"
+                        tabIndex={-1}
+                        className="absolute inset-0 w-full h-full object-cover blur-xl opacity-20 scale-110 pointer-events-none select-none"
                       />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
-                        No image yet
-                      </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                    <div className="w-full h-full flex items-center justify-center p-2.5 sm:p-3 relative z-10">
+                      {card.imageUrl ? (
+                        <img
+                          src={getThumbnailImageUrl(card.imageUrl)}
+                          srcSet={getResponsiveSrcSet(card.imageUrl)}
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          alt={`${card.name} Traditional Wholesale Textile Collection — Baldevji Jitmal Indore`}
+                          width="480"
+                          height="600"
+                          loading="lazy"
+                          decoding="async"
+                          className="max-w-full max-h-full w-auto h-auto object-contain rounded-sm drop-shadow-sm transition duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
+                          No image yet
+                        </div>
+                      )}
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20" />
                   </div>
 
                   <div className="p-3 sm:p-6 flex flex-col flex-1 justify-between">

@@ -321,15 +321,20 @@ export default function Home() {
                   to={card.categoryParam ? `/gallery?category=${encodeURIComponent(card.categoryParam)}` : '/gallery'}
                   className="group relative overflow-hidden border-b border-gold/30 bg-card shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift active:scale-[0.99] rounded-sm flex flex-col h-full"
                 >
-                  {/* Hanson Wu Inspired Curtain Zoom-Settle Image Reveal */}
-                  <div className="aspect-[4/5] overflow-hidden relative bg-secondary">
-                    <m.div
-                      initial={{ scale: 1.12 }}
-                      whileInView={{ scale: 1.0 }}
-                      viewport={{ once: true, margin: '0px 0px -20px 0px' }}
-                      transition={{ duration: 1.1, ease: [0.165, 0.84, 0.44, 1] }}
-                      className="w-full h-full"
-                    >
+                  {/* Balanced Product Thumbnail Frame */}
+                  <div className="aspect-[4/5] overflow-hidden relative bg-[#faf6ee] flex items-center justify-center">
+                    {/* Ambient subtle blur to soften framing */}
+                    {card.imageUrl && (
+                      <img
+                        src={getThumbnailImageUrl(card.imageUrl)}
+                        alt=""
+                        aria-hidden="true"
+                        tabIndex={-1}
+                        className="absolute inset-0 w-full h-full object-cover blur-xl opacity-20 scale-110 pointer-events-none select-none"
+                      />
+                    )}
+
+                    <div className="w-full h-full flex items-center justify-center p-2 sm:p-2.5 relative z-10">
                       {card.imageUrl ? (
                         <img
                           src={getThumbnailImageUrl(card.imageUrl)}
@@ -340,19 +345,19 @@ export default function Home() {
                           decoding="async"
                           width={480}
                           height={600}
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                          className="max-w-full max-h-full w-auto h-auto object-contain rounded-sm drop-shadow-sm transition-transform duration-300"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
                           No image
                         </div>
                       )}
-                    </m.div>
+                    </div>
                     <div
-                      className="absolute inset-0 bg-gradient-to-t from-primary/45 via-transparent to-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-75"
+                      className="absolute inset-0 bg-gradient-to-t from-primary/35 via-transparent to-transparent opacity-25 transition-opacity duration-300 group-hover:opacity-50 pointer-events-none z-20"
                       aria-hidden="true"
                     ></div>
-                    <span className="absolute left-2.5 top-2.5 text-[9px] sm:text-[10px] tracking-[0.16em] text-primary-foreground/90 font-mono bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded-sm">
+                    <span className="absolute left-2.5 top-2.5 text-[9px] sm:text-[10px] tracking-[0.16em] text-primary-foreground/90 font-mono bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded-sm z-30">
                       {String(idx + 1).padStart(2, '0')}
                     </span>
                   </div>
