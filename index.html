@@ -80,12 +80,38 @@
             "@type": "Person",
             "name": "Baldevji Jitmal"
           },
-          "telephone": [
-            "0731-2459280",
-            "+91 78280 72394",
-            "+91 98272 13393",
-            "+91 78698 49449"
+          "telephone": "+91-731-2459280",
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91-731-2459280",
+              "contactType": "sales",
+              "areaServed": "IN",
+              "availableLanguage": ["en", "hi"]
+            },
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91 78698 49449",
+              "contactType": "customer service",
+              "areaServed": "IN",
+              "availableLanguage": ["en", "hi"]
+            },
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91 78280 72394",
+              "contactType": "wholesale inquiries",
+              "areaServed": "IN",
+              "availableLanguage": ["en", "hi"]
+            },
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91 98272 13393",
+              "contactType": "wholesale inquiries",
+              "areaServed": "IN",
+              "availableLanguage": ["en", "hi"]
+            }
           ],
+          "hasMap": "https://maps.app.goo.gl/Rv2U7Fw3jMkcTBAx5",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "221, M.T. Cloth Market, Maharaja Tukojirao Holkar Cloth Market",
@@ -132,35 +158,43 @@
             "name": "Traditional Wholesale Textiles",
             "itemListElement": [
               {
-                "@type": "OfferCatalog",
+                "@type": "ListItem",
+                "position": 1,
                 "name": "Pure Cotton Dhotis (धोती) - Temple & Silk Borders"
               },
               {
-                "@type": "OfferCatalog",
+                "@type": "ListItem",
+                "position": 2,
                 "name": "Authentic Solapuri Chaddars (सोलापुरी चादर)"
               },
               {
-                "@type": "OfferCatalog",
+                "@type": "ListItem",
+                "position": 3,
                 "name": "Traditional Gamchas & Angavastrams (गमछा / अंगवस्त्रम)"
               },
               {
-                "@type": "OfferCatalog",
+                "@type": "ListItem",
+                "position": 4,
                 "name": "Premium Lungis (लुंगी)"
               },
               {
-                "@type": "OfferCatalog",
+                "@type": "ListItem",
+                "position": 5,
                 "name": "Traditional Dupattas & Safas (दुपट्टा / साफा)"
               },
               {
-                "@type": "OfferCatalog",
+                "@type": "ListItem",
+                "position": 6,
                 "name": "Pooja Vastra & Temple Cloth (पूजा वस्त्र)"
               },
               {
-                "@type": "OfferCatalog",
+                "@type": "ListItem",
+                "position": 7,
                 "name": "Bedsheets & Home Linens"
               },
               {
-                "@type": "OfferCatalog",
+                "@type": "ListItem",
+                "position": 8,
                 "name": "Towels & Napkins"
               }
             ]
@@ -175,12 +209,19 @@
           "@id": "https://www.baldevjijitmal.in/#website",
           "url": "https://www.baldevjijitmal.in",
           "name": "Baldevji Jitmal",
-          "alternateName": "Baldevji Jitmal Wholesale Traditional Textiles",
+          "alternateName": [
+            "Baldevji Jitmal Indore",
+            "Baldevji Jitmal Wholesale Traditional Textiles",
+            "बलदेवजी जीतमल इंदौर"
+          ],
           "description": "Wholesale supplier and distributor of traditional Indian textiles since 1937 in M.T. Cloth Market, Indore.",
           "inLanguage": ["en-IN", "hi-IN"],
           "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://www.baldevjijitmal.in/gallery?q={search_term_string}",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.baldevjijitmal.in/gallery?q={search_term_string}"
+            },
             "query-input": "required name=search_term_string"
           }
         },
