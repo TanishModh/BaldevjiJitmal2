@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { LazyMotion, domAnimation } from 'framer-motion';
 import { Toaster } from 'sonner';
 
 import { SiteProvider } from './context/SiteContext';
@@ -49,33 +50,35 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SiteProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <ScrollProgress />
-          <div className="flex min-h-screen flex-col bg-background text-foreground relative">
-            <Header />
-            <main className="flex-1">
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/products" element={<Products />} />
-                  <Route path="/gallery" element={<Gallery />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/admin" element={<Admin />} />
-                  <Route path="*" element={<Home />} />
-                </Routes>
-              </Suspense>
-            </main>
-            <Footer />
-            <WhatsAppButton />
-          </div>
-          <Toaster position="top-right" richColors />
-        </BrowserRouter>
-      </SiteProvider>
-    </QueryClientProvider>
+    <LazyMotion features={domAnimation} strict>
+      <QueryClientProvider client={queryClient}>
+        <SiteProvider>
+          <BrowserRouter>
+            <ScrollToTop />
+            <ScrollProgress />
+            <div className="flex min-h-screen flex-col bg-background text-foreground relative">
+              <Header />
+              <main className="flex-1">
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/gallery" element={<Gallery />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="*" element={<Home />} />
+                  </Routes>
+                </Suspense>
+              </main>
+              <Footer />
+              <WhatsAppButton />
+            </div>
+            <Toaster position="top-right" richColors />
+          </BrowserRouter>
+        </SiteProvider>
+      </QueryClientProvider>
+    </LazyMotion>
   );
 }

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../lib/supabase';
+import { fetchFromSupabase } from '../lib/supabaseFetch';
 
 export const defaultSettings = {
   brand: {
@@ -330,29 +330,25 @@ export function SiteProvider({ children }) {
     queryKey: ['site-settings'],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase
-          .from('site_settings')
-          .select('value')
-          .eq('key', 'site')
-          .maybeSingle();
+        const rows = await fetchFromSupabase('site_settings', {
+          select: 'value',
+          key: 'eq.site',
+          limit: '1',
+        });
+        const val = rows && rows.length > 0 ? rows[0].value : null;
 
-        if (error) {
-          console.warn('Failed to fetch site_settings from Supabase:', error.message);
-          // Check local cache
+        if (val) {
           try {
-            const cached = localStorage.getItem(SETTINGS_CACHE_KEY);
-            if (cached) return JSON.parse(cached);
+            localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(val));
           } catch (_) {}
-          return null;
+          return val;
         }
 
-        if (data?.value) {
-          try {
-            localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(data.value));
-          } catch (_) {}
-          return data.value;
-        }
-
+        // Check local cache if empty
+        try {
+          const cached = localStorage.getItem(SETTINGS_CACHE_KEY);
+          if (cached) return JSON.parse(cached);
+        } catch (_) {}
         return null;
       } catch (err) {
         console.warn('Site settings error:', err);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Award, Sparkles, Truck, HeartHandshake } from 'lucide-react';
 import { useSiteSettings, defaultSettings } from '../context/SiteContext';
 import { MotionStagger, MotionItem } from './MotionReveal';
@@ -24,7 +24,7 @@ export default function HeritagePillars() {
               <MotionItem key={item.title || idx}>
                 <div className="relative overflow-hidden bg-card border border-border/80 p-5 sm:p-6 rounded-sm shadow-soft transition-all duration-300 hover:border-accent/60 hover:-translate-y-1 hover:shadow-lift group h-full flex flex-col justify-between">
                   {/* Hanson Wu style self-expanding top accent hairline */}
-                  <motion.div
+                  <m.div
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
                     viewport={{ once: true }}

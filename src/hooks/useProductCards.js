@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../lib/supabase';
+import { fetchFromSupabase } from '../lib/supabaseFetch';
 import { useSiteSettings } from '../context/SiteContext';
 import { getThumbnailImageUrl } from '../lib/imageOptimization';
 
@@ -123,17 +123,16 @@ export function useCategories() {
     queryKey: ['categories'],
     initialData: DEFAULT_CATEGORIES,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('id, name, slug, description, thumbnail_url, sort_order')
-        .order('sort_order', { ascending: true })
-        .order('name', { ascending: true });
-
-      if (error) {
-        console.warn('Error fetching categories:', error.message);
+      try {
+        const data = await fetchFromSupabase('categories', {
+          select: 'id,name,slug,description,thumbnail_url,sort_order',
+          order: 'sort_order.asc,name.asc',
+        });
+        return data && data.length > 0 ? data : DEFAULT_CATEGORIES;
+      } catch (err) {
+        console.warn('Error fetching categories:', err);
         return DEFAULT_CATEGORIES;
       }
-      return data ?? DEFAULT_CATEGORIES;
     },
   });
 }

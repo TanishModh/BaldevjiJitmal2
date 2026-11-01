@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 
 // Agnes Toth luxury ease: cubic-bezier(.22, 1, .36, 1)
 const AGNES_EASE = [0.22, 1, 0.36, 1];
@@ -19,7 +19,7 @@ export function MotionFade({ children, delay = 0, y = 14, duration = 0.6, classN
   }
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y }}
       animate={forceVisible ? { opacity: 1, y: 0 } : undefined}
       whileInView={{ opacity: 1, y: 0 }}
@@ -29,7 +29,7 @@ export function MotionFade({ children, delay = 0, y = 14, duration = 0.6, classN
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -55,7 +55,7 @@ export function MotionBlurFade({
   }
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y, filter: `blur(${blur})` }}
       animate={forceVisible ? { opacity: 1, y: 0, filter: 'blur(0px)' } : undefined}
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -65,7 +65,7 @@ export function MotionBlurFade({
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -94,7 +94,7 @@ export function MotionStagger({ children, delay = 0, stagger = 0.06, className =
   };
 
   return (
-    <motion.div
+    <m.div
       variants={containerVariants}
       initial="hidden"
       animate={forceVisible ? 'show' : undefined}
@@ -104,7 +104,7 @@ export function MotionStagger({ children, delay = 0, stagger = 0.06, className =
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -128,11 +128,11 @@ export function MotionItem({ children, className = '' }) {
   };
 
   return (
-    <motion.div
+    <m.div
       variants={itemVariants}
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

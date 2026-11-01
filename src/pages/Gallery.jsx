@@ -2,9 +2,8 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { motion } from 'framer-motion';
 import { Pencil, Trash2, X, Check, Search, Maximize2, MessageCircle } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { fetchFromSupabase } from '../lib/supabaseFetch';
 import { useSiteSettings } from '../context/SiteContext';
 import { useProductCards, useCategoryCanonicalizer } from '../hooks/useProductCards';
 import { getThumbnailImageUrl, getResponsiveSrcSet, getRawImageUrl } from '../lib/imageOptimization';
@@ -27,7 +26,15 @@ function useIsAdmin() {
     let active = true;
 
     const checkAdmin = async () => {
+      // Fast check: if no Supabase session token exists in localStorage, skip importing Supabase
+      const hasToken = Object.keys(localStorage).some((k) => k.startsWith('sb-') && k.endsWith('-auth-token'));
+      if (!hasToken) {
+        if (active) setIsAdmin(false);
+        return;
+      }
+
       try {
+        const { supabase } = await import('../lib/supabase');
         const { data } = await supabase.auth.getUser();
         if (!data.user) {
           if (active) setIsAdmin(false);
@@ -48,11 +55,8 @@ function useIsAdmin() {
     };
 
     checkAdmin();
-    const { data: authListener } = supabase.auth.onAuthStateChange(() => checkAdmin());
-
     return () => {
       active = false;
-      authListener?.subscription?.unsubscribe();
     };
   }, []);
 
@@ -107,6 +111,7 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
   const handleSave = async () => {
     setIsSaving(true);
     try {
+      const { supabase } = await import('../lib/supabase');
       const { error } = await supabase
         .from('gallery_items')
         .update({
@@ -132,6 +137,7 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
     if (!window.confirm(`Delete "${item.title || item.category || 'this item'}"?`)) return;
 
     try {
+      const { supabase } = await import('../lib/supabase');
       const { error } = await supabase.from('gallery_items').delete().eq('id', item.id);
       if (error) throw error;
       toast.success('Deleted');
@@ -337,17 +343,16 @@ export default function Gallery() {
   const { data: rawItems = [], isLoading } = useQuery({
     queryKey: ['gallery'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('gallery_items')
-        .select('id, title, description, category, media_type, media_url, created_at, sort_order')
-        .order('sort_order', { ascending: true })
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.warn('Error fetching gallery items:', error.message);
+      try {
+        const data = await fetchFromSupabase('gallery_items', {
+          select: 'id,title,description,category,media_type,media_url,created_at,sort_order',
+          order: 'sort_order.asc,created_at.desc',
+        });
+        return data ?? [];
+      } catch (err) {
+        console.warn('Error fetching gallery items:', err);
         return [];
       }
-      return data ?? [];
     },
   });
 

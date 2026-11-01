@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { MapPin, Phone, Instagram, Clock, MessageCircle } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { insertToSupabase } from '../lib/supabaseFetch';
 import { useSiteSettings } from '../context/SiteContext';
 import { MotionFade } from '../components/MotionReveal';
+import LazyMap from '../components/LazyMap';
 import SEO from '../components/SEO';
 
 export default function Contact() {
@@ -89,7 +90,7 @@ export default function Contact() {
 
       // Attempt Supabase insert if permitted
       try {
-        await supabase.from('inquiries').insert(inquiryPayload);
+        await insertToSupabase('inquiries', inquiryPayload);
       } catch (insertErr) {
         console.warn('Supabase inquiry insert note:', insertErr);
       }
@@ -219,21 +220,14 @@ export default function Contact() {
           </div>
 
           {/* Embedded Google Map */}
-          <div className="overflow-hidden border border-border shadow-lift rounded-sm">
-            <iframe
-              title="Baldevji Jitmal location map"
-              src={
-                settings.contact.mapEmbedUrl ||
-                'https://www.google.com/maps?q=Baldevji+Jitmal+Jitmal+%26+Sons+221+M.T.+Cloth+Market+Indore&output=embed'
-              }
-              width="100%"
-              height="320"
-              style={{ border: 0 }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="w-full"
-            ></iframe>
-          </div>
+          <LazyMap
+            title="Baldevji Jitmal location map"
+            src={
+              settings.contact.mapEmbedUrl ||
+              'https://www.google.com/maps?q=Baldevji+Jitmal+Jitmal+%26+Sons+221+M.T.+Cloth+Market+Indore&output=embed'
+            }
+            directionsUrl={settings.contact.mapDirectionsUrl || 'https://maps.app.goo.gl/Rv2U7Fw3jMkcTBAx5'}
+          />
         </MotionFade>
 
         {/* Right Column: Inquiry Form */}

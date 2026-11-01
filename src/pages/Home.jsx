@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Store, Clock, ArrowRight, MapPin, Phone, Instagram, MessageCircle } from 'lucide-react';
 import { useSiteSettings } from '../context/SiteContext';
 import { useProductCards } from '../hooks/useProductCards';
@@ -144,34 +144,34 @@ export default function Home() {
 
         {/* Main Content with Mobile-First Staggered Motion */}
         <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 py-10 sm:py-16 md:py-20 flex items-center">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="max-w-3xl text-primary-foreground"
           >
             {/* Top Badge */}
-            <motion.p
+            <m.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-gold font-medium"
             >
               {settings.hero.badge || 'Traditional Textiles · Indore · Est. 1937'}
-            </motion.p>
+            </m.p>
 
             {/* H1 Heading - Agnes Toth signature de-blur reveal */}
-            <motion.h1
+            <m.h1
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
               className="mt-3 sm:mt-4 font-display text-4xl sm:text-6xl md:text-8xl leading-[1.04] text-primary-foreground drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
             >
               {settings.brand.name?.trim() || 'Baldevji Jitmal'}
-            </motion.h1>
+            </m.h1>
 
             {/* Elegant Line Draw (Hanson Wu inspired smooth scaleX expansion) */}
-            <motion.div
+            <m.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 0.8, delay: 0.28, ease: [0.215, 0.61, 0.355, 1] }}
@@ -179,27 +179,27 @@ export default function Home() {
             />
 
             {/* Subheading */}
-            <motion.p
+            <m.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.35 }}
               className="max-w-2xl font-display text-xl sm:text-2xl md:text-4xl italic leading-snug text-primary-foreground/95 drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)]"
             >
               {settings.hero.subheading}
-            </motion.p>
+            </m.p>
 
             {/* Intro text */}
-            <motion.p
+            <m.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.45 }}
               className="mt-3 sm:mt-5 max-w-xl text-xs sm:text-sm md:text-base leading-relaxed text-primary-foreground/85 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]"
             >
               {settings.hero.intro}
-            </motion.p>
+            </m.p>
 
             {/* Mobile-Friendly Full-Touch Buttons */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.55 }}
@@ -229,8 +229,8 @@ export default function Home() {
                 <MessageCircle size={15} className="text-[#34d399]" />
                 <span>{settings.hero.whatsappCtaLabel || 'Direct WhatsApp'}</span>
               </a>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         </div>
 
         {/* Hanson Wu Inspired Elegant Scroll Indicator */}
@@ -308,7 +308,7 @@ export default function Home() {
                 >
                   {/* Hanson Wu Inspired Curtain Zoom-Settle Image Reveal */}
                   <div className="aspect-[4/5] overflow-hidden relative bg-secondary">
-                    <motion.div
+                    <m.div
                       initial={{ scale: 1.12 }}
                       whileInView={{ scale: 1.0 }}
                       viewport={{ once: true, margin: '0px 0px -20px 0px' }}
@@ -332,7 +332,7 @@ export default function Home() {
                           No image
                         </div>
                       )}
-                    </motion.div>
+                    </m.div>
                     <div
                       className="absolute inset-0 bg-gradient-to-t from-primary/45 via-transparent to-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-75"
                       aria-hidden="true"
@@ -401,7 +401,7 @@ export default function Home() {
 
           <MotionFade delay={0.15} className="mt-8 sm:mt-12 grid md:grid-cols-[1.15fr_.85fr] gap-4 md:gap-8">
             <figure className="group relative overflow-hidden shadow-soft hover:shadow-lift transition-all duration-500 rounded-sm">
-              <motion.div
+              <m.div
                 initial={{ scale: 1.08 }}
                 whileInView={{ scale: 1.0 }}
                 viewport={{ once: true }}
@@ -425,7 +425,7 @@ export default function Home() {
                   height={900}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 />
-              </motion.div>
+              </m.div>
               <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/85 to-transparent text-background p-4 sm:p-6">
                 <p className="font-display text-lg sm:text-xl">{settings.shop.photo1Caption}</p>
                 {settings.shop.photo1Sub && (
@@ -435,7 +435,7 @@ export default function Home() {
             </figure>
 
             <figure className="group relative overflow-hidden shadow-soft hover:shadow-lift transition-all duration-500 md:mt-16 rounded-sm">
-              <motion.div
+              <m.div
                 initial={{ scale: 1.08 }}
                 whileInView={{ scale: 1.0 }}
                 viewport={{ once: true }}
@@ -459,7 +459,7 @@ export default function Home() {
                   height={900}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 />
-              </motion.div>
+              </m.div>
               <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/85 to-transparent text-background p-4 sm:p-6">
                 <p className="font-display text-lg sm:text-xl">{settings.shop.photo2Caption}</p>
                 {settings.shop.photo2Sub && (
