@@ -11,7 +11,7 @@ export default function SEO({
   description,
   keywords,
   canonical,
-  ogImage = 'https://baldevjijitmal.vercel.app/logo-baldevji-jitmal-refined.png',
+  ogImage = 'https://www.baldevjijitmal.in/logo-baldevji-jitmal-refined.png',
   ogType = 'website',
   noindex = false,
   breadcrumbs = [],
@@ -49,7 +49,7 @@ export default function SEO({
     setMeta('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
 
     // 4. Canonical link
-    const currentOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://baldevjijitmal.vercel.app';
+    const currentOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://www.baldevjijitmal.in';
     const finalCanonical = canonical || `${currentOrigin}${location.pathname}${location.search ? location.search : ''}`;
     let canonEl = document.querySelector('link[rel="canonical"]');
     if (!canonEl) {

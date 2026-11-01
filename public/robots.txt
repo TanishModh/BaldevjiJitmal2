@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /login
 
-Sitemap: https://baldevjijitmal.vercel.app/sitemap.xml
+Sitemap: https://www.baldevjijitmal.in/sitemap.xml
