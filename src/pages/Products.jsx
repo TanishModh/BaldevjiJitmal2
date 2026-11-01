@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { useProductCards } from '../hooks/useProductCards';
 import { useSiteSettings, defaultSettings } from '../context/SiteContext';
 import { MotionFade, MotionBlurFade, MotionStagger, MotionItem } from '../components/MotionReveal';
-import { getThumbnailImageUrl } from '../lib/imageOptimization';
+import { getThumbnailImageUrl, getResponsiveSrcSet } from '../lib/imageOptimization';
 import SEO from '../components/SEO';
 
 export default function Products() {
@@ -70,7 +70,11 @@ export default function Products() {
                     {card.imageUrl ? (
                       <img
                         src={getThumbnailImageUrl(card.imageUrl)}
+                        srcSet={getResponsiveSrcSet(card.imageUrl)}
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         alt={`${card.name} Traditional Wholesale Textile Collection — Baldevji Jitmal Indore`}
+                        width="480"
+                        height="600"
                         loading="lazy"
                         decoding="async"
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"

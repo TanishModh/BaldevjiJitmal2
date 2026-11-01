@@ -7,7 +7,7 @@ import { Pencil, Trash2, X, Check, Search, Maximize2, MessageCircle } from 'luci
 import { supabase } from '../lib/supabase';
 import { useSiteSettings } from '../context/SiteContext';
 import { useProductCards, useCategoryCanonicalizer } from '../hooks/useProductCards';
-import { getThumbnailImageUrl } from '../lib/imageOptimization';
+import { getThumbnailImageUrl, getResponsiveSrcSet, getRawImageUrl } from '../lib/imageOptimization';
 import CatalogueLightbox from '../components/CatalogueLightbox';
 import SEO from '../components/SEO';
 
@@ -76,18 +76,20 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
   const finalPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
   const rawImg = item.media_url || item.imageUrl || item.thumbnail_url || item.image_url || item.url || '';
-  const optimizedImg = getThumbnailImageUrl(rawImg);
+  const optimizedImg = useMemo(() => getThumbnailImageUrl(rawImg), [rawImg]);
+  const responsiveSrcSet = useMemo(() => getResponsiveSrcSet(rawImg), [rawImg]);
   const [displayImg, setDisplayImg] = useState(optimizedImg);
   const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
-    setDisplayImg(getThumbnailImageUrl(rawImg));
+    setDisplayImg(optimizedImg);
     setImgLoaded(false);
-  }, [rawImg]);
+  }, [optimizedImg]);
 
   const handleImgError = () => {
-    if (displayImg !== rawImg && rawImg) {
-      setDisplayImg(rawImg);
+    const raw = getRawImageUrl(rawImg);
+    if (displayImg !== raw && raw) {
+      setDisplayImg(raw);
     }
   };
 
@@ -158,13 +160,7 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
           </div>
         )}
 
-        <motion.div
-          initial={{ scale: 1.05 }}
-          whileInView={{ scale: 1.0 }}
-          viewport={{ once: true, margin: '0px 0px -15px 0px' }}
-          transition={{ duration: 0.9, ease: [0.165, 0.84, 0.44, 1] }}
-          className="w-full h-full"
-        >
+        <div className="w-full h-full overflow-hidden">
           {item.media_type === 'video' ? (
             <video
               src={item.media_url || item.imageUrl || item.url}
@@ -174,16 +170,22 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
           ) : (
             <img
               src={displayImg}
+              srcSet={displayImg === optimizedImg ? responsiveSrcSet : undefined}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               alt={`${item.title && item.title !== '.' && item.title.toLowerCase() !== 'untitled' ? `${item.title} — ` : ''}${item.category || 'Traditional Textile'} ${item.description ? `(${item.description})` : ''} — Baldevji Jitmal Indore`}
-              loading={index < 8 ? 'eager' : 'lazy'}
-              fetchPriority={index < 4 ? 'high' : 'auto'}
+              width="480"
+              height="640"
+              loading={index < 2 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
               decoding="async"
               onLoad={() => setImgLoaded(true)}
               onError={handleImgError}
-              className="w-full h-full object-cover group-hover:scale-[1.05] transition duration-500 ease-out"
+              className={`w-full h-full object-cover group-hover:scale-[1.04] transition-all duration-500 ease-out ${
+                imgLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
             />
           )}
-        </motion.div>
+        </div>
 
         {/* Hover Action Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3 pointer-events-none z-20">

@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSiteSettings } from '../context/SiteContext';
-import { getLightboxImageUrl } from '../lib/imageOptimization';
+import { getLightboxImageUrl, getRawImageUrl } from '../lib/imageOptimization';
 
 export default function CatalogueLightbox({
   item,
@@ -48,7 +48,7 @@ export default function CatalogueLightbox({
     item?.url ||
     (typeof item?.media === 'string' ? item.media : '');
 
-  const [activeImgSrc, setActiveImgSrc] = useState(mediaSrc);
+  const [activeImgSrc, setActiveImgSrc] = useState(() => getLightboxImageUrl(mediaSrc));
 
   const isVideo =
     item?.media_type === 'video' ||
@@ -73,15 +73,16 @@ export default function CatalogueLightbox({
 
   // Reset loading, source, error, and zoom whenever active item changes
   useEffect(() => {
-    setActiveImgSrc(mediaSrc);
+    setActiveImgSrc(getLightboxImageUrl(mediaSrc));
     setLoaded(false);
     setImgError(false);
     resetZoom();
   }, [item?.id, mediaSrc]);
 
   const handleImageError = () => {
-    if (activeImgSrc !== mediaSrc && mediaSrc) {
-      setActiveImgSrc(mediaSrc); // Fallback to raw original URL
+    const raw = getRawImageUrl(mediaSrc);
+    if (activeImgSrc !== raw && raw) {
+      setActiveImgSrc(raw); // Fallback to raw original URL
     } else {
       setImgError(true);
     }
@@ -509,6 +510,8 @@ export default function CatalogueLightbox({
               ref={imageElRef}
               src={activeImgSrc}
               alt={`${item.title && item.title !== '.' && item.title.toLowerCase() !== 'untitled' ? `${item.title} — ` : ''}${item.category || 'Traditional Textile'} ${item.description ? `(${item.description})` : ''} — Baldevji Jitmal M.T. Cloth Market Indore`}
+              width="1200"
+              height="1600"
               loading="eager"
               decoding="async"
               referrerPolicy="no-referrer"

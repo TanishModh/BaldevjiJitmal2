@@ -11,7 +11,7 @@ import WeavesMarqueeRibbon from '../components/WeavesMarqueeRibbon';
 import RotatingHeritageSeal from '../components/RotatingHeritageSeal';
 import EditorialStatement from '../components/EditorialStatement';
 import { MotionFade, MotionBlurFade, MotionStagger, MotionItem } from '../components/MotionReveal';
-import { getThumbnailImageUrl } from '../lib/imageOptimization';
+import { getThumbnailImageUrl, getResponsiveSrcSet } from '../lib/imageOptimization';
 import SEO from '../components/SEO';
 
 function AnimatedCounter({ value, delay = 0 }) {
@@ -318,11 +318,13 @@ export default function Home() {
                       {card.imageUrl ? (
                         <img
                           src={getThumbnailImageUrl(card.imageUrl)}
+                          srcSet={getResponsiveSrcSet(card.imageUrl)}
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                           alt={`${card.name} — Traditional Textile Weave Baldevji Jitmal Indore`}
                           loading="lazy"
                           decoding="async"
-                          width={1024}
-                          height={1024}
+                          width={480}
+                          height={600}
                           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                         />
                       ) : (
