@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import { useSiteSettings } from '../context/SiteContext';
+import { getThumbnailImageUrl } from '../lib/imageOptimization';
 
 const normalize = (str) => (str ?? '').trim().toLowerCase();
 
@@ -15,7 +16,7 @@ function getCategoryThumbnail(url) {
   for (const [rawName, localOpt] of Object.entries(OVERSIZED_CATEGORY_OVERRIDES)) {
     if (url.includes(rawName)) return localOpt;
   }
-  return url;
+  return getThumbnailImageUrl(url);
 }
 
 export const DEFAULT_CATEGORIES = [
@@ -24,7 +25,7 @@ export const DEFAULT_CATEGORIES = [
     name: '3 Piece Set',
     slug: '3-piece-set',
     description: 'Complete set consisting of Dhoti+Dupatta+Kurta cloth.',
-    thumbnail_url: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1781601985221-hjf3g2.jpg',
+    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1781601985221-hjf3g2.jpg'),
     sort_order: 0,
   },
   {
@@ -32,7 +33,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Lungi',
     slug: 'lungi',
     description: '2m/2.25m/2.5m silk and cotton lungis.',
-    thumbnail_url: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1782908103025-wanuib.jpg',
+    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1782908103025-wanuib.jpg'),
     sort_order: 0,
   },
   {
@@ -48,7 +49,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Silk',
     slug: 'silk',
     description: 'Premium Artificial silk dhotis and sets — heritage weaves.',
-    thumbnail_url: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1780566969749-qh7lic.png',
+    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1780566969749-qh7lic.png'),
     sort_order: 0,
   },
   {
@@ -56,7 +57,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Bhagalpuri',
     slug: 'bhagalpuri',
     description: 'Bhagalpuri Dhoti Dupatta sets and chaddars- your all-weather companion.',
-    thumbnail_url: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1780306620914-jwt94p.png',
+    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1780306620914-jwt94p.png'),
     sort_order: 0,
   },
   {
@@ -64,7 +65,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Kurta Cloth',
     slug: 'kurta-cloth',
     description: 'Full Kurta Cloth- Mix, Cotton, Linen',
-    thumbnail_url: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1782903995648-rnvssg.jpg',
+    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1782903995648-rnvssg.jpg'),
     sort_order: 0,
   },
   {
@@ -88,7 +89,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Dhoti Dupatta Sets',
     slug: 'dhotis',
     description: 'Cotton Dhoti and Dupatta sets, Single Dhotis and Dupattas.',
-    thumbnail_url: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1782903874479-tp9raw.jpg',
+    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/site/highlights/1782903874479-tp9raw.jpg'),
     sort_order: 0,
   },
   {
@@ -96,7 +97,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Ladies Shawl',
     slug: 'ladies-shawl',
     description: 'Soft pashmina and wool shawls in classic paisley and modern weaves.',
-    thumbnail_url: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1792937023211-0pbvfg.png',
+    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1792937023211-0pbvfg.png'),
     sort_order: 0,
   },
   {
@@ -104,7 +105,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Gents Shawl',
     slug: 'gents-shawl',
     description: 'Soft, pashmina and wool shawls in classic paisley and modern weaves.',
-    thumbnail_url: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1792937367756-qcasx3.png',
+    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1792937367756-qcasx3.png'),
     sort_order: 0,
   },
   {
@@ -112,7 +113,7 @@ export const DEFAULT_CATEGORIES = [
     name: 'Readymade Dhoti',
     slug: 'readymade-dhoti',
     description: 'Readymade Free Size Dhotis made of entire Dhoti cloth with no compromises. Fits anyone, everyone.',
-    thumbnail_url: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1792937455957-3m7n5j.png',
+    thumbnail_url: getThumbnailImageUrl('https://brlkrualghugxskjzydi.supabase.co/storage/v1/object/public/catalogue/categories/1792937455957-3m7n5j.png'),
     sort_order: 0,
   },
 ];

@@ -1,7 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Instagram } from 'lucide-react';
 import { useSiteSettings } from '../context/SiteContext';
+
+function LazyMap({ src, directionsUrl }) {
+  const [inView, setInView] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '300px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="overflow-hidden border border-accent/30 shadow-lift rounded-sm min-h-[320px] bg-[#3a1412] relative flex items-center justify-center"
+    >
+      {inView ? (
+        <iframe
+          title="Baldevji Jitmal — 221, M.T. Cloth Market, Indore"
+          src={src}
+          width="100%"
+          height="320"
+          style={{ border: 0 }}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+        />
+      ) : (
+        <div className="flex flex-col items-center gap-2 p-6 text-center text-primary-foreground/75">
+          <MapPin size={24} className="text-accent" />
+          <p className="font-display text-lg text-primary-foreground">221, M.T. Cloth Market, Indore</p>
+          <a
+            href={directionsUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 text-xs uppercase tracking-wider text-accent border border-accent/40 px-3 py-1.5 rounded hover:bg-accent hover:text-primary transition"
+          >
+            Open in Google Maps
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Footer() {
   const settings = useSiteSettings();
@@ -128,19 +182,13 @@ export default function Footer() {
           <MapPin size={18} className="text-accent" /> Find us on the map
         </h4>
         <div className="overflow-hidden border border-accent/30 shadow-lift rounded-sm">
-          <iframe
-            title="Baldevji Jitmal — 221, M.T. Cloth Market, Indore"
+          <LazyMap
             src={
               settings.contact.mapEmbedUrl ||
               'https://www.google.com/maps?q=Baldevji+Jitmal+Jitmal+%26+Sons+221+M.T.+Cloth+Market+Indore&output=embed'
             }
-            width="100%"
-            height="320"
-            style={{ border: 0 }}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-          ></iframe>
+            directionsUrl={settings.contact.mapDirectionsUrl || 'https://maps.app.goo.gl/Rv2U7Fw3jMkcTBAx5'}
+          />
         </div>
         <a
           href={settings.contact.mapDirectionsUrl || 'https://maps.app.goo.gl/Rv2U7Fw3jMkcTBAx5'}
