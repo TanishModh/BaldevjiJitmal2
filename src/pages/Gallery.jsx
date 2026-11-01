@@ -700,7 +700,21 @@ export default function Gallery() {
 
         {/* Gallery Items Grid */}
         {isLoading ? (
-          <p className="mt-10 text-muted-foreground">Loading catalogue…</p>
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6 items-start" aria-busy="true" aria-label="Loading catalogue items">
+            {Array.from({ length: 9 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="overflow-hidden border border-border/70 bg-card rounded-sm flex flex-col h-full animate-pulse"
+              >
+                <div className="aspect-[4/5] sm:aspect-[3/4] w-full bg-secondary/60" />
+                <div className="p-3.5 sm:p-4 space-y-2.5">
+                  <div className="h-2.5 bg-muted rounded w-1/3" />
+                  <div className="h-4 bg-muted rounded w-3/4" />
+                  <div className="h-3 bg-muted rounded w-full" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : sortedItems.length === 0 ? (
           <p className="mt-10 text-muted-foreground py-12 text-center">
             No items found matching your criteria. Try another search or filter.

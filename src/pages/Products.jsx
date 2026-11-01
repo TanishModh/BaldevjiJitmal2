@@ -50,7 +50,17 @@ export default function Products() {
       {/* Categories Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-14">
         {isLoading ? (
-          <p className="text-muted-foreground py-12">Loading collections…</p>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-6 sm:gap-6" aria-busy="true">
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <div key={idx} className="overflow-hidden border-b border-accent/40 bg-card rounded-sm flex flex-col h-full animate-pulse">
+                <div className="aspect-[4/5] bg-secondary/60" />
+                <div className="p-3 sm:p-6 space-y-3">
+                  <div className="h-5 bg-muted rounded w-2/3" />
+                  <div className="h-3 bg-muted rounded w-full" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : cards.length === 0 ? (
           <p className="text-muted-foreground py-12">
             No categories yet — add them from the admin panel.

@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
 import WhatsAppButton from './components/WhatsAppButton';
 
-const Home = lazy(() => import('./pages/Home'));
+import Home from './pages/Home';
 const About = lazy(() => import('./pages/About'));
 const Products = lazy(() => import('./pages/Products'));
 const Gallery = lazy(() => import('./pages/Gallery'));
@@ -38,7 +38,7 @@ function ScrollToTop() {
 
 function PageLoader() {
   return (
-    <div className="min-h-[50vh] flex items-center justify-center">
+    <div className="min-h-[calc(100svh-4.5rem)] md:min-h-[calc(100svh-6rem)] flex items-center justify-center">
       <div className="flex flex-col items-center gap-3">
         <div className="w-8 h-8 border-2 border-primary border-t-accent rounded-full animate-spin"></div>
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Loading…</p>
