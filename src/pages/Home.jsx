@@ -11,7 +11,7 @@ import WeavesMarqueeRibbon from '../components/WeavesMarqueeRibbon';
 import RotatingHeritageSeal from '../components/RotatingHeritageSeal';
 import EditorialStatement from '../components/EditorialStatement';
 import { MotionFade, MotionBlurFade, MotionStagger, MotionItem } from '../components/MotionReveal';
-import { getThumbnailImageUrl, getResponsiveSrcSet } from '../lib/imageOptimization';
+import { getThumbnailImageUrl, getResponsiveSrcSet, getOptimizedImageUrl } from '../lib/imageOptimization';
 import SEO from '../components/SEO';
 
 function AnimatedCounter({ value, delay = 0 }) {
@@ -411,7 +411,7 @@ export default function Home() {
                 <img
                   src={
                     settings.shop.photo1Url
-                      ? settings.shop.photo1Url.replace('.png', '.jpg')
+                      ? getOptimizedImageUrl(settings.shop.photo1Url.replace('.png', '.jpg'), { width: 1000, quality: 78, format: 'webp' })
                       : '/assets/shop-exterior-1-Y8qJ9GsL.jpg'
                   }
                   alt={
@@ -445,7 +445,7 @@ export default function Home() {
                 <img
                   src={
                     settings.shop.photo2Url
-                      ? settings.shop.photo2Url.replace('.png', '.jpg')
+                      ? getOptimizedImageUrl(settings.shop.photo2Url.replace('.png', '.jpg'), { width: 1000, quality: 78, format: 'webp' })
                       : '/assets/shop-exterior-2-B3lADtzs.jpg'
                   }
                   alt={

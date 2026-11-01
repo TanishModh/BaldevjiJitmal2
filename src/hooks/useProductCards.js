@@ -128,7 +128,13 @@ export function useCategories() {
           select: 'id,name,slug,description,thumbnail_url,sort_order',
           order: 'sort_order.asc,name.asc',
         });
-        return data && data.length > 0 ? data : DEFAULT_CATEGORIES;
+        if (data && data.length > 0) {
+          return data.map((c) => ({
+            ...c,
+            thumbnail_url: getCategoryThumbnail(c.thumbnail_url),
+          }));
+        }
+        return DEFAULT_CATEGORIES;
       } catch (err) {
         console.warn('Error fetching categories:', err);
         return DEFAULT_CATEGORIES;
@@ -159,7 +165,7 @@ export function useProductCards() {
       id: `hl-${idx}`,
       name: h.title,
       description: h.desc ?? null,
-      imageUrl: h.imageUrl || null,
+      imageUrl: getCategoryThumbnail(h.imageUrl) || null,
       categoryParam: (h.categorySlug?.trim() || h.title || '').trim(),
       source: 'highlight',
     }))

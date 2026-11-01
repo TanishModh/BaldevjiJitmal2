@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useSiteSettings, defaultSettings } from '../context/SiteContext';
 import { MotionFade, MotionBlurFade } from './MotionReveal';
+import { getOptimizedImageUrl } from '../lib/imageOptimization';
 
 export default function EditorialStatement() {
   const settings = useSiteSettings();
@@ -54,7 +55,7 @@ export default function EditorialStatement() {
           <MotionFade delay={0.2} className="relative overflow-hidden rounded-sm shadow-lift group">
             <div className="aspect-[4/3] sm:aspect-[16/10] overflow-hidden relative bg-primary">
               <img
-                src={editorial.featureImageUrl || settings.hero.heroImageUrl || '/assets/hero-textiles-CKsuSuq6.jpg'}
+                src={getOptimizedImageUrl(editorial.featureImageUrl || settings.hero.heroImageUrl || '/assets/hero-textiles-CKsuSuq6.jpg', { width: 1200, quality: 78, format: 'webp' })}
                 alt="Traditional Indian textiles curated by Baldevji Jitmal"
                 loading="lazy"
                 decoding="async"
