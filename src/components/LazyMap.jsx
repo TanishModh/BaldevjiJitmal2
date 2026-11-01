@@ -30,7 +30,7 @@ export default function LazyMap({
   return (
     <div
       ref={containerRef}
-      className={`overflow-hidden border border-accent/30 shadow-lift rounded-sm bg-[#3a1412] relative flex items-center justify-center ${className}`}
+      className={`overflow-hidden border border-[#dfb76c]/30 shadow-lift rounded-sm bg-[#3a1412] relative flex items-center justify-center ${className}`}
       style={{ minHeight: `${height}px` }}
     >
       {inView ? (
@@ -46,13 +46,13 @@ export default function LazyMap({
           className="w-full"
         />
       ) : (
-        <div className="flex flex-col items-center gap-2 p-6 text-center text-primary-foreground/75">
-          <MapPin size={24} className="text-accent" />
-          <p className="font-display text-lg text-primary-foreground">221, M.T. Cloth Market, Indore</p>
+        <div className="flex flex-col items-center gap-2 p-6 text-center text-[#fcf9f2]">
+          <MapPin size={26} className="text-[#dfb76c]" />
+          <p className="font-display text-lg text-[#fcf9f2] font-medium tracking-tight">221, M.T. Cloth Market, Indore</p>
           <button
             type="button"
             onClick={() => setInView(true)}
-            className="mt-2 text-xs uppercase tracking-wider text-accent border border-accent/40 px-3 py-1.5 rounded hover:bg-accent hover:text-primary transition active:scale-95 cursor-pointer"
+            className="mt-2 text-xs uppercase tracking-wider bg-[#dfb76c] text-[#2b0c0a] font-semibold px-4 py-2 rounded-sm shadow-soft hover:bg-[#fcf9f2] hover:text-[#5a1f1c] transition-all active:scale-95 cursor-pointer"
           >
             Load Interactive Map
           </button>
