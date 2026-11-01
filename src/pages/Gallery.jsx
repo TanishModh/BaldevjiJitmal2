@@ -151,23 +151,12 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
   return (
     <figure
       onClick={onOpenLightbox}
-      className="group overflow-hidden border border-border/70 hover:border-accent/60 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift cursor-pointer relative rounded-sm flex flex-col h-full"
+      className="group overflow-hidden border border-border/70 hover:border-accent/60 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift cursor-pointer relative rounded-sm flex flex-col break-inside-avoid mb-3.5 sm:mb-6"
     >
-      <div className="overflow-hidden bg-[#faf6ee] relative aspect-[4/5] w-full shrink-0 flex items-center justify-center">
-        {/* Soft blurred ambient backdrop of the same media to fill negative space smoothly */}
-        {displayImg && item.media_type !== 'video' && (
-          <img
-            src={displayImg}
-            alt=""
-            aria-hidden="true"
-            tabIndex={-1}
-            className="absolute inset-0 w-full h-full object-cover blur-xl opacity-20 scale-110 pointer-events-none select-none"
-          />
-        )}
-
+      <div className="relative overflow-hidden w-full bg-secondary/15">
         {/* Luxurious textile specimen placeholder while image buffers */}
         {!imgLoaded && item.media_type !== 'video' && (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#f8f4ed] via-[#ede0cf] to-[#f4ebe0] flex flex-col items-center justify-center p-3 text-center pointer-events-none transition-opacity duration-300 z-10">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f8f4ed] via-[#ede0cf] to-[#f4ebe0] flex flex-col items-center justify-center p-3 text-center pointer-events-none transition-opacity duration-300 z-10 min-h-[220px]">
             <span className="text-[10px] uppercase tracking-[0.2em] font-display text-primary/75 font-semibold">
               {item.category || 'Traditional Textile'}
             </span>
@@ -177,32 +166,28 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
           </div>
         )}
 
-        <div className="w-full h-full flex items-center justify-center overflow-hidden relative z-10 p-2 sm:p-2.5">
-          {item.media_type === 'video' ? (
-            <video
-              src={item.media_url || item.imageUrl || item.url}
-              controls
-              className="max-w-full max-h-full w-auto h-auto object-contain rounded-sm"
-            />
-          ) : (
-            <img
-              src={displayImg}
-              srcSet={displayImg === optimizedImg ? responsiveSrcSet : undefined}
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              alt={`${item.title && item.title !== '.' && item.title.toLowerCase() !== 'untitled' ? `${item.title} — ` : ''}${item.category || 'Traditional Textile'} ${item.description ? `(${item.description})` : ''} — Baldevji Jitmal Indore`}
-              width="480"
-              height="600"
-              loading={index < 2 ? 'eager' : 'lazy'}
-              fetchPriority={index === 0 ? 'high' : 'auto'}
-              decoding="async"
-              onLoad={() => setImgLoaded(true)}
-              onError={handleImgError}
-              className={`max-w-full max-h-full w-auto h-auto object-contain rounded-sm drop-shadow-sm transition-all duration-300 ${
-                imgLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
-            />
-          )}
-        </div>
+        {item.media_type === 'video' ? (
+          <video
+            src={item.media_url || item.imageUrl || item.url}
+            controls
+            className="w-full h-auto block"
+          />
+        ) : (
+          <img
+            src={displayImg}
+            srcSet={displayImg === optimizedImg ? responsiveSrcSet : undefined}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            alt={`${item.title && item.title !== '.' && item.title.toLowerCase() !== 'untitled' ? `${item.title} — ` : ''}${item.category || 'Traditional Textile'} ${item.description ? `(${item.description})` : ''} — Baldevji Jitmal Indore`}
+            loading={index < 2 ? 'eager' : 'lazy'}
+            fetchPriority={index === 0 ? 'high' : 'auto'}
+            decoding="async"
+            onLoad={() => setImgLoaded(true)}
+            onError={handleImgError}
+            className={`w-full h-auto block transition-opacity duration-300 ${
+              imgLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
 
         {/* Hover Action Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3 pointer-events-none z-20">
@@ -215,7 +200,7 @@ function GalleryCard({ item, index = 0, isAdmin, onOpenLightbox }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] bg-[#25D366] text-white px-2.5 py-1.5 rounded-sm shadow hover:bg-[#20ba59] transition-transform hover:scale-105 active:scale-95 font-medium"
+            className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] bg-[#25D366] text-white px-2.5 py-1.5 rounded-sm shadow hover:bg-[#20ba59] active:scale-95 font-medium"
             title="Inquire on WhatsApp"
           >
             <MessageCircle size={13} className="fill-current" /> Inquire
@@ -717,11 +702,11 @@ export default function Gallery() {
         {/* Gallery Items Grid */}
         <h2 className="sr-only">Catalogue Items Collection</h2>
         {isLoading ? (
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6 items-start" aria-busy="true" aria-label="Loading catalogue items">
+          <div className="mt-10 columns-2 md:columns-3 gap-3.5 sm:gap-6" aria-busy="true" aria-label="Loading catalogue items">
             {Array.from({ length: 9 }).map((_, idx) => (
               <div
                 key={idx}
-                className="overflow-hidden border border-border/70 bg-card rounded-sm flex flex-col h-full animate-pulse"
+                className="overflow-hidden border border-border/70 bg-card rounded-sm flex flex-col break-inside-avoid mb-3.5 sm:mb-6 animate-pulse"
               >
                 <div className="aspect-[4/5] w-full bg-secondary/60" />
                 <div className="p-3.5 sm:p-4 space-y-2.5">
@@ -738,7 +723,7 @@ export default function Gallery() {
           </p>
         ) : (
           <>
-            <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6 items-start">
+            <div className="mt-10 columns-2 md:columns-3 gap-3.5 sm:gap-6">
               {displayedItems.map((item, idx) => (
                 <GalleryCard
                   key={item.id}
