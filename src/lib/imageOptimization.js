@@ -12,10 +12,11 @@
  * - "Reduce initial server response times and Largest Contentful Paint"
  */
 
-const SUPABASE_STORAGE_URL_PATTERN = /\.supabase\.co\/storage\/v1\/(object|render\/image)\/public\//;
+const SUPABASE_STORAGE_URL_PATTERN = /(\.supabase\.co\/storage\/v1|\/cdn-media)\/(object|render\/image)\/public\//;
 
 /**
  * Returns an optimized Supabase CDN URL with on-the-fly resizing, quality compression, and WebP format.
+ * Routes through same-origin reverse proxy (/cdn-media/) on Vercel to enforce a 1-year immutable cache lifetime.
  * If the image is not hosted on Supabase (e.g. local asset or video), returns the original URL.
  *
  * @param {string} url - Source image URL
@@ -45,10 +46,13 @@ export function getOptimizedImageUrl(url, options = {}) {
       resize = 'cover',
     } = options;
 
-    // Convert /object/public/ or /render/image/public/ to /render/image/public/
-    const baseUrl = url
-      .replace('/storage/v1/object/public/', '/storage/v1/render/image/public/')
-      .split('?')[0];
+    // Route through same-origin reverse-proxy (/cdn-media/) for 1-year immutable caching
+    // and convert /object/public/ or /render/image/public/ to /cdn-media/render/image/public/
+    const cleanUrl = url.split('?')[0];
+    const pathPart = cleanUrl.replace(/^https?:\/\/[^/]+(\/storage\/v1|\/cdn-media)\/(object|render\/image)\/public\//, '/cdn-media/render/image/public/');
+    const baseUrl = pathPart.startsWith('/cdn-media/')
+      ? pathPart
+      : cleanUrl.replace(/(\/storage\/v1|\/cdn-media)\/(object|render\/image)\/public\//, '/cdn-media/render/image/public/');
 
     const params = new URLSearchParams();
     if (width) params.set('width', String(width));
@@ -108,8 +112,9 @@ export function getLightboxImageUrl(url) {
  */
 export function getRawImageUrl(url) {
   if (!url || typeof url !== 'string') return url || '';
-  if (url.includes('/storage/v1/render/image/public/')) {
-    return url.replace('/storage/v1/render/image/public/', '/storage/v1/object/public/').split('?')[0];
+  const clean = url.split('?')[0];
+  if (clean.includes('/render/image/public/')) {
+    return clean.replace('/render/image/public/', '/object/public/');
   }
-  return url.split('?')[0];
+  return clean;
 }

@@ -27,5 +27,12 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    proxy: {
+      '/cdn-media': {
+        target: 'https://brlkrualghugxskjzydi.supabase.co/storage/v1',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/cdn-media/, ''),
+      },
+    },
   },
 });
