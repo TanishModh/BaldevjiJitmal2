@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
+import { Analytics } from '@vercel/analytics/react';
 
 import { SiteProvider } from './context/SiteContext';
 import Header from './components/Header';
@@ -74,6 +75,7 @@ export default function App() {
             <WhatsAppButton />
           </div>
           <Toaster position="top-right" richColors />
+          <Analytics />
         </BrowserRouter>
       </SiteProvider>
     </QueryClientProvider>
