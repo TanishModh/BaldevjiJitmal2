@@ -55,7 +55,7 @@ export default function Footer() {
           </div>
           <p className="mt-3 text-sm leading-relaxed text-primary-foreground/80 max-w-xs">
             {settings.footer.blurb ||
-              'A trusted name in traditional Indian textiles since 1937 — authentic dhotis, dupattas, shawls, bedsheets, and ceremonial fabrics from the heart of Indore.'}
+              'A trusted name in traditional Indian textiles — wholesale dhotis, dupattas, shawls, bedsheets and more from the heart of Indore.'}
           </p>
           <p className="mt-3 text-xs text-[#dfb76c] font-mono">
             Wholesale & Retail · Central India

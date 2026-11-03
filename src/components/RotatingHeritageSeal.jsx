@@ -12,7 +12,7 @@ export default function RotatingHeritageSeal({ to, size = 110, className = '' })
   const targetLink = to || seal?.link || '/gallery';
   const rawText =
     seal?.text ||
-    `· ESTD ${brand?.est || '1937'} · ${brand?.name?.toUpperCase() || 'BALDEVJI JITMAL'} · ${brand?.city?.toUpperCase() || 'INDORE'} · HERITAGE ·`;
+    '· SERVING GENERATIONS · BALDEVJI JITMAL';
 
   const cleanText = (rawText || '').trim();
   const charLen = Math.max(1, cleanText.length);

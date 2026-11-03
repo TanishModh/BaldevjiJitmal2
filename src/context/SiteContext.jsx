@@ -15,7 +15,7 @@ export const defaultSettings = {
   },
   announcementBar: {
     enabled: false,
-    text: '॥ श्री गणेशाय नमः ॥ · M.T. Cloth Market, Indore · Est. 1937 · Traditional Indian Textiles',
+    text: '॥ श्री गणेशाय नमः ॥ · M.T. Cloth Market, Indore · Traditional Indian Textiles',
     link: '',
   },
   nav: {
@@ -26,9 +26,9 @@ export const defaultSettings = {
     contact: 'Contact',
   },
   hero: {
-    badge: 'Traditional Textiles · Indore · Est. 1937',
+    badge: 'Traditional Textiles · Indore',
     heading: 'Baldevji Jitmal',
-    subheading: 'Traditional Indian textiles — From the heart of Indore, Since 1937.',
+    subheading: 'Traditional Indian textiles — From the heart of Indore.',
     intro:
       'A Trusted Wholesale House dealing in Dhotis, Dupattas, Dhoti-Dupatta Sets, Ladies & Gents Shawls, Bedsheets, Towels, Napkins, Bhagalpuri sets and Chadars, Silk sets, and Kurta-Pajama Cloth.',
     ctaPrimaryLabel: 'Explore Collections',
@@ -43,16 +43,18 @@ export const defaultSettings = {
   marqueeRibbon: {
     enabled: true,
     items: [
-      'Bhagalpuri Tussar Silks',
       'Traditional Dhotis & Sets',
       'Cashmere & Pashmina Shawls',
-      'Handloom Dupattas',
-      'Pure Cotton Bedsheets',
-      'Chanderi & Maheshwari Weaves',
       'Kurta-Pajama Fabrics',
-      'M.T. Cloth Market · Indore',
-      'Wedding & Ceremonial Attire',
-      'Heritage Textiles Since 1937',
+      'Bhagalpuri',
+      '221 M.T. Cloth Market · Indore',
+      'Ladies Shawls',
+      'Gents Shawls',
+      'Stoles',
+      'Dupattas',
+      'Cotton Bedsheets',
+      'Wedding & Ceremonial Collection',
+      'Heritage Textiles',
     ],
   },
   stats: {
@@ -63,7 +65,7 @@ export const defaultSettings = {
   },
   pillars: [
     {
-      title: 'Heritage Since 1937',
+      title: 'Heritage Textile',
       desc: 'Over 8 decades of textile mastery in the heart of M.T. Cloth Market, Indore.',
     },
     {
@@ -86,16 +88,16 @@ export const defaultSettings = {
     viewAllBtn: 'View all collections',
   },
   heritageSeal: {
-    text: '· ESTD 1937 · BALDEVJI JITMAL · INDORE · HERITAGE ·',
-    monogram: 'BJ',
-    year: '1937',
+    text: '· SERVING GENERATIONS · BALDEVJI JITMAL',
+    monogram: '',
+    year: '',
     link: '/gallery',
   },
   editorial: {
-    eyebrow: '· House of Traditional Textiles · Est. 1937 ·',
-    heading: 'The finest things are quiet.',
-    headingAccent: 'For those who understand true craft.',
-    body: 'At Baldevji Jitmal, every fold of cloth holds the legacy of Indore’s historic weaving corridors. We believe true luxury is not loud — it is the quiet touch of pure fibres, honest weave, and timeless ceremony.',
+    eyebrow: '· House of Traditional Textiles ',
+    heading: 'Generations of fabric, ',
+    headingAccent: 'hand-picked for you.',
+    body: 'From the busy lanes of M.T. Cloth Market, we have served retailers, families, and bulk buyers with honest pricing and a careful selection of traditional weaves. Visit our shop or browse our catalogue online.',
     featureImageUrl: '/assets/hero-textiles-800.webp',
     featureCaptionEyebrow: 'Atelier Curation',
     featureQuote: '“Traditional cloth, thoughtfully selected for wedding ceremonies & family heirlooms.”',
@@ -108,7 +110,7 @@ export const defaultSettings = {
       },
       {
         num: '02',
-        title: 'Quiet Heritage Since 1937',
+        title: 'Quiet Heritage',
         desc: 'No mass production or synthetic shortcuts. Over 8 decades of honest curation, family pricing, and trust passed down through three generations in Indore.',
       },
       {
@@ -162,7 +164,7 @@ export const defaultSettings = {
     eyebrow: 'Our Story',
     heading: 'About Baldevji Jitmal',
     paragraphs: [
-      "Baldevji Jitmal is a family-run heritage textile house based in the legendary M.T. Cloth Market of Indore — one of central India's oldest and most prestigious fabric hubs, serving generations since 1937.",
+      "Baldevji Jitmal is a family-run heritage textile house based in the legendary M.T. Cloth Market of Indore — one of central India's oldest and most prestigious fabric hubs, serving generations.",
       "For decades we have curated and supplied traditional Indian fabrics to wedding families, retailers, and discerning patrons across the country. Our specialities include authentic dhotis, dupattas and dhoti-dupatta sets, fine ladies and gents shawls, premium bedsheets, towels, napkins, Bhagalpuri silk sets, and pure kurta-pajama fabrics.",
       "We believe in honest pricing, careful craftsmanship, and treating every visitor — whether choosing wedding attire or sourcing for an institution — like family. Come visit our shop in the heart of Indore, or browse our latest catalogue online.",
     ],
@@ -220,7 +222,7 @@ export const defaultSettings = {
   },
   footer: {
     blurb:
-      'A trusted name in traditional Indian textiles since 1937 — wholesale dhotis, dupattas, shawls, bedsheets and more from the heart of Indore.',
+      'A trusted name in traditional Indian textiles— wholesale dhotis, dupattas, shawls, bedsheets and more from the heart of Indore.',
     copyrightNotice: 'Baldevji Jitmal. All rights reserved.',
     watermark: 'BJ',
   },
@@ -282,7 +284,8 @@ export const defaultSettings = {
   ],
 };
 
-const SETTINGS_CACHE_KEY = 'bj_site_settings_v6';
+export const SETTINGS_CACHE_KEY = 'bj_site_settings_v7';
+
 try {
   if (typeof window !== 'undefined') {
     [
@@ -293,9 +296,23 @@ try {
       'bj_site_settings_v3',
       'bj_site_settings_v4',
       'bj_site_settings_v5',
+      'bj_site_settings_v6',
     ].forEach((k) => window.localStorage.removeItem(k));
   }
 } catch (_) {}
+
+export function getCachedSettings() {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(SETTINGS_CACHE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed && typeof parsed === 'object') return parsed;
+      }
+    } catch (_) {}
+  }
+  return null;
+}
 
 const SiteContext = createContext({
   settings: defaultSettings,
@@ -344,21 +361,14 @@ export function SiteProvider({ children }) {
           return val;
         }
 
-        // Check local cache if empty
-        try {
-          const cached = localStorage.getItem(SETTINGS_CACHE_KEY);
-          if (cached) return JSON.parse(cached);
-        } catch (_) {}
-        return null;
+        return getCachedSettings();
       } catch (err) {
         console.warn('Site settings error:', err);
-        try {
-          const cached = localStorage.getItem(SETTINGS_CACHE_KEY);
-          if (cached) return JSON.parse(cached);
-        } catch (_) {}
-        return null;
+        return getCachedSettings();
       }
     },
+    initialData: getCachedSettings,
+    staleTime: 1000 * 60 * 5,
   });
 
   // Deep merge settings with comprehensive defaults so no component ever breaks

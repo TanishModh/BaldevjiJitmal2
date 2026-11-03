@@ -110,7 +110,7 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Baldevji Jitmal — Wholesale Traditional Indian Textiles, Indore (Est. 1937)"
+        title="Baldevji Jitmal — Wholesale Traditional Indian Textiles, Indore"
         description="A trusted wholesale textile house in 221, M.T. Cloth Market, Indore. Supplying authentic pure cotton dhotis, dupattas, Solapuri chaddars, Bhagalpuri silks, shawls, bedsheets & kurta fabrics across India."
         keywords="wholesale dhoti indore, M.T. cloth market wholesale textiles, baldevji jitmal, solapuri chadar wholesale indore, traditional indian fabrics MP, wedding dhoti dupatta sets, pooja vastra indore"
       />
@@ -173,7 +173,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-gold font-medium"
             >
-              {settings.hero.badge || 'Traditional Textiles · Indore · Est. 1937'}
+              {settings.hero.badge || 'Traditional Textiles · Indore'}
             </m.p>
 
             {/* H1 Heading - Agnes Toth signature de-blur reveal */}

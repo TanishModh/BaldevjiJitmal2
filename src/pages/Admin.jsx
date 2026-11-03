@@ -26,7 +26,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { defaultSettings, useSiteSettings } from '../context/SiteContext';
+import { defaultSettings, useSiteSettings, SETTINGS_CACHE_KEY } from '../context/SiteContext';
 import SEO from '../components/SEO';
 
 // Helper to upload media to Supabase storage bucket "catalogue" with instant resilient fallback
@@ -196,7 +196,7 @@ function ContentTab() {
       
       // Update local storage immediate cache
       try {
-        localStorage.setItem('bj_site_settings_cache', JSON.stringify(payload));
+        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(payload));
       } catch (cacheErr) {
         console.warn('Local storage cache update error:', cacheErr);
       }
@@ -1960,7 +1960,7 @@ function FaqsTab() {
       };
 
       try {
-        localStorage.setItem('bj_site_settings_cache', JSON.stringify(updatedSiteSettings));
+        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(updatedSiteSettings));
       } catch (cacheErr) {
         console.warn('Local storage cache update error:', cacheErr);
       }
@@ -2135,7 +2135,7 @@ function ThemeTab() {
       };
 
       try {
-        localStorage.setItem('bj_site_settings_cache', JSON.stringify(updatedSiteSettings));
+        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(updatedSiteSettings));
       } catch (cacheErr) {
         console.warn('Local storage cache update error:', cacheErr);
       }
@@ -3143,7 +3143,7 @@ function BackupTab() {
       }
 
       try {
-        localStorage.removeItem('bj_site_settings_cache');
+        localStorage.removeItem(SETTINGS_CACHE_KEY);
       } catch (e) {
         console.warn('Cache clear error:', e);
       }
