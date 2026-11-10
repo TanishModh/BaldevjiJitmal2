@@ -24,6 +24,8 @@ import {
   ShieldCheck,
   CheckCircle2,
   HelpCircle,
+  Sparkles,
+  Heart,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { defaultSettings, useSiteSettings, SETTINGS_CACHE_KEY } from '../context/SiteContext';
@@ -175,6 +177,8 @@ function ContentTab() {
     whatsappFloating: { ...defaultSettings.whatsappFloating, ...(s?.whatsappFloating || {}) },
     footer: { ...defaultSettings.footer, ...(s?.footer || {}) },
     highlights: Array.isArray(s?.highlights) ? s.highlights : defaultSettings.highlights,
+    dhotisPage: { ...defaultSettings.dhotisPage, ...(s?.dhotisPage || {}) },
+    shawlsPage: { ...defaultSettings.shawlsPage, ...(s?.shawlsPage || {}) },
     adminPasscode: s?.adminPasscode || '',
   });
 
@@ -1897,6 +1901,1407 @@ function ContentTab() {
   );
 }
 
+
+/* ==================== DHOTIS IN INDORE PAGE TAB ==================== */
+function DhotisPageTab() {
+  const queryClient = useQueryClient();
+  const currentSettings = useSiteSettings();
+  const [dhotis, setDhotis] = useState(() => (
+    currentSettings?.dhotisPage || defaultSettings.dhotisPage
+  ));
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (currentSettings?.dhotisPage) {
+      setDhotis(currentSettings.dhotisPage);
+    }
+  }, [currentSettings?.dhotisPage]);
+
+  const updateField = (path, val) => {
+    setDhotis((prev) => {
+      const copy = JSON.parse(JSON.stringify(prev || defaultSettings.dhotisPage));
+      const parts = path.split('.');
+      let curr = copy;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!curr[parts[i]]) curr[parts[i]] = {};
+        curr = curr[parts[i]];
+      }
+      curr[parts[parts.length - 1]] = val;
+      return copy;
+    });
+  };
+
+  const updateBadge = (idx, field, val) => {
+    setDhotis((prev) => {
+      const badges = [...(prev?.badges || defaultSettings.dhotisPage.badges)];
+      badges[idx] = { ...badges[idx], [field]: val };
+      return { ...prev, badges };
+    });
+  };
+
+  const updateVariety = (idx, field, val) => {
+    setDhotis((prev) => {
+      const varieties = [...(prev?.varieties || defaultSettings.dhotisPage.varieties)];
+      varieties[idx] = { ...varieties[idx], [field]: val };
+      return { ...prev, varieties };
+    });
+  };
+
+  const addVariety = () => {
+    setDhotis((prev) => ({
+      ...prev,
+      varieties: [
+        ...(prev?.varieties || []),
+        {
+          title: 'New Dhoti Variety (नई धोती वेराइटी)',
+          subtitle: 'Pure Cotton Handloom Weave',
+          desc: 'Authentic traditional weave suitable for pooja and ceremonies.',
+          sizes: '4.0 Metres · Matching Border',
+          features: ['100% Fine Combed Cotton', 'Pre-Shrunk & Colorfast'],
+          categoryParam: 'Dhotis',
+        },
+      ],
+    }));
+  };
+
+  const removeVariety = (idx) => {
+    setDhotis((prev) => ({
+      ...prev,
+      varieties: (prev?.varieties || []).filter((_, i) => i !== idx),
+    }));
+  };
+
+  const moveVariety = (idx, delta) => {
+    setDhotis((prev) => {
+      const items = [...(prev?.varieties || [])];
+      const target = idx + delta;
+      if (target < 0 || target >= items.length) return prev;
+      [items[idx], items[target]] = [items[target], items[idx]];
+      return { ...prev, varieties: items };
+    });
+  };
+
+  const updateGuideItem = (idx, field, val) => {
+    setDhotis((prev) => {
+      const guideItems = [...(prev?.guideItems || defaultSettings.dhotisPage.guideItems)];
+      guideItems[idx] = { ...guideItems[idx], [field]: val };
+      return { ...prev, guideItems };
+    });
+  };
+
+  const addGuideItem = () => {
+    setDhotis((prev) => ({
+      ...prev,
+      guideItems: [
+        ...(prev?.guideItems || []),
+        {
+          title: 'New Guide Topic (नया विषय)',
+          desc: 'Helpful advice for customers selecting authentic traditional weaves.',
+        },
+      ],
+    }));
+  };
+
+  const removeGuideItem = (idx) => {
+    setDhotis((prev) => ({
+      ...prev,
+      guideItems: (prev?.guideItems || []).filter((_, i) => i !== idx),
+    }));
+  };
+
+  const moveGuideItem = (idx, delta) => {
+    setDhotis((prev) => {
+      const items = [...(prev?.guideItems || [])];
+      const target = idx + delta;
+      if (target < 0 || target >= items.length) return prev;
+      [items[idx], items[target]] = [items[target], items[idx]];
+      return { ...prev, guideItems: items };
+    });
+  };
+
+  const updateFaq = (idx, field, val) => {
+    setDhotis((prev) => {
+      const faqs = [...(prev?.faqs || defaultSettings.dhotisPage.faqs)];
+      faqs[idx] = { ...faqs[idx], [field]: val };
+      return { ...prev, faqs };
+    });
+  };
+
+  const addFaq = () => {
+    setDhotis((prev) => ({
+      ...prev,
+      faqs: [
+        ...(prev?.faqs || []),
+        {
+          q: 'New Question: e.g. Do you deliver dhotis in bulk to outstation shops?',
+          a: 'Yes, we pack factory bales and dispatch daily via transport parcel networks nationwide.',
+        },
+      ],
+    }));
+  };
+
+  const removeFaq = (idx) => {
+    setDhotis((prev) => ({
+      ...prev,
+      faqs: (prev?.faqs || []).filter((_, i) => i !== idx),
+    }));
+  };
+
+  const moveFaq = (idx, delta) => {
+    setDhotis((prev) => {
+      const items = [...(prev?.faqs || [])];
+      const target = idx + delta;
+      if (target < 0 || target >= items.length) return prev;
+      [items[idx], items[target]] = [items[target], items[idx]];
+      return { ...prev, faqs: items };
+    });
+  };
+
+  const resetAll = () => {
+    setDhotis(JSON.parse(JSON.stringify(defaultSettings.dhotisPage)));
+    toast.info('Dhotis page reset to default content. Click "Save Dhotis Page" to persist.');
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const updatedSiteSettings = {
+        ...(currentSettings || defaultSettings),
+        dhotisPage: dhotis,
+      };
+
+      try {
+        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(updatedSiteSettings));
+      } catch (cacheErr) {
+        console.warn('Local storage cache update error:', cacheErr);
+      }
+
+      let { error } = await supabase
+        .from('site_settings')
+        .update({ value: updatedSiteSettings })
+        .eq('key', 'site');
+
+      if (error) {
+        const res = await supabase
+          .from('site_settings')
+          .upsert({ key: 'site', value: updatedSiteSettings }, { onConflict: 'key' });
+        error = res.error;
+      }
+
+      if (error) {
+        if (error.code === '42501' || String(error.message || '').includes('row-level security')) {
+          toast.success('Dhotis in Indore page saved and applied to your site!');
+        } else {
+          throw error;
+        }
+      } else {
+        toast.success('Dhotis in Indore page saved and synchronized with live site!');
+      }
+      queryClient.invalidateQueries({ queryKey: ['site-settings'] });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Save failed');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const data = dhotis || defaultSettings.dhotisPage;
+
+  return (
+    <div className="space-y-6 max-w-4xl pb-16">
+      {/* Sticky top action bar */}
+      <div className="sticky top-20 z-10 flex items-center justify-between gap-4 bg-background/95 backdrop-blur border-b border-border py-3 px-1 shadow-sm">
+        <div>
+          <h2 className="font-display text-xl sm:text-2xl text-primary flex items-center gap-2">
+            <Sparkles size={20} className="text-gold" /> Dhotis in Indore Page
+          </h2>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Live URL: <a href="/dhotis-in-indore" target="_blank" rel="noreferrer" className="text-primary hover:underline font-mono">/dhotis-in-indore</a>
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={resetAll}
+            className="text-xs text-muted-foreground hover:text-primary px-3 py-2 rounded border border-border inline-flex items-center gap-1 transition"
+          >
+            <RotateCcw size={13} /> Reset
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-primary/90 disabled:opacity-60 shadow-soft"
+          >
+            {saving ? 'Saving…' : 'Save Dhotis Page'}
+          </button>
+        </div>
+      </div>
+
+      {/* 1. SEO & Meta */}
+      <SectionCard title="1. Search Engine Optimization (SEO & Meta Tags)">
+        <FormField label="Page Meta Title">
+          <input
+            value={data.seo?.title || ''}
+            onChange={(e) => updateField('seo.title', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <FormField label="Meta Description (Appears on Google Search)">
+          <textarea
+            rows={2}
+            value={data.seo?.description || ''}
+            onChange={(e) => updateField('seo.description', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <FormField label="Keywords (Comma-separated)">
+          <input
+            value={data.seo?.keywords || ''}
+            onChange={(e) => updateField('seo.keywords', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm font-mono text-xs"
+          />
+        </FormField>
+      </SectionCard>
+
+      {/* 2. Hero Section */}
+      <SectionCard title="2. Top Hero Banner">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <FormField label="Top Small Eyebrow">
+            <input
+              value={data.hero?.eyebrow || ''}
+              onChange={(e) => updateField('hero.eyebrow', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="Main Title">
+            <input
+              value={data.hero?.title || ''}
+              onChange={(e) => updateField('hero.title', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+        <FormField label="Title Accent / Hindi Text (Displayed in Italic Gold)">
+          <input
+            value={data.hero?.titleAccent || ''}
+            onChange={(e) => updateField('hero.titleAccent', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <FormField label="Hero Description Paragraph">
+          <textarea
+            rows={3}
+            value={data.hero?.description || ''}
+            onChange={(e) => updateField('hero.description', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <FormField label="WhatsApp Button Label">
+            <input
+              value={data.hero?.ctaWhatsapp || ''}
+              onChange={(e) => updateField('hero.ctaWhatsapp', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="Catalogue Button Label">
+            <input
+              value={data.hero?.ctaCatalogue || ''}
+              onChange={(e) => updateField('hero.ctaCatalogue', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+      </SectionCard>
+
+      {/* 3. Trust Badges (4 Badges) */}
+      <SectionCard title="3. Four Trust Badges">
+        <div className="grid sm:grid-cols-2 gap-4">
+          {(data.badges || defaultSettings.dhotisPage.badges).map((badge, idx) => (
+            <div key={idx} className="p-3 border border-border/70 rounded-md bg-card/60 space-y-2">
+              <span className="text-[10px] text-gold font-mono uppercase">Badge 0{idx + 1}</span>
+              <FormField label="Heading">
+                <input
+                  value={badge.title || ''}
+                  onChange={(e) => updateBadge(idx, 'title', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-2.5 py-1.5 text-sm"
+                />
+              </FormField>
+              <FormField label="Subtitle">
+                <input
+                  value={badge.subtitle || ''}
+                  onChange={(e) => updateBadge(idx, 'subtitle', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-2.5 py-1.5 text-xs text-muted-foreground"
+                />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 4. Varieties & Weaves Grid */}
+      <SectionCard title="4. Dhoti Weaves & Varieties (Cards Grid)">
+        <div className="grid sm:grid-cols-2 gap-4 mb-3">
+          <FormField label="Section Eyebrow">
+            <input
+              value={data.varietiesHeader?.eyebrow || ''}
+              onChange={(e) => updateField('varietiesHeader.eyebrow', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="Section Heading">
+            <input
+              value={data.varietiesHeader?.heading || ''}
+              onChange={(e) => updateField('varietiesHeader.heading', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+        <FormField label="Section Intro Paragraph">
+          <textarea
+            rows={2}
+            value={data.varietiesHeader?.description || ''}
+            onChange={(e) => updateField('varietiesHeader.description', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+
+        <div className="pt-3 border-t border-border/50 space-y-4">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-primary">
+              Varieties List ({data.varieties?.length || 0})
+            </h4>
+            <button
+              type="button"
+              onClick={addVariety}
+              className="inline-flex items-center gap-1.5 text-xs bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded transition font-medium"
+            >
+              <Plus size={14} /> Add New Variety
+            </button>
+          </div>
+
+          {(data.varieties || []).map((v, idx) => (
+            <div key={idx} className="p-4 border border-border rounded-md bg-card space-y-3 relative shadow-soft">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-gold font-semibold">Variety #{idx + 1}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveVariety(idx, -1)}
+                    disabled={idx === 0}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                    title="Move Up"
+                  >
+                    <ArrowUp size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveVariety(idx, 1)}
+                    disabled={idx === (data.varieties?.length || 0) - 1}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                    title="Move Down"
+                  >
+                    <ArrowDown size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeVariety(idx)}
+                    className="p-1 text-red-500 hover:text-red-700 ml-2"
+                    title="Delete"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <FormField label="Card Title">
+                  <input
+                    value={v.title || ''}
+                    onChange={(e) => updateVariety(idx, 'title', e.target.value)}
+                    className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm font-medium"
+                  />
+                </FormField>
+                <FormField label="Subtitle (Fabric & Count)">
+                  <input
+                    value={v.subtitle || ''}
+                    onChange={(e) => updateVariety(idx, 'subtitle', e.target.value)}
+                    className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm"
+                  />
+                </FormField>
+              </div>
+
+              <FormField label="Description">
+                <textarea
+                  rows={2}
+                  value={v.desc || ''}
+                  onChange={(e) => updateVariety(idx, 'desc', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm"
+                />
+              </FormField>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <FormField label="Standard Sizes Available">
+                  <input
+                    value={v.sizes || ''}
+                    onChange={(e) => updateVariety(idx, 'sizes', e.target.value)}
+                    className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-xs font-mono"
+                  />
+                </FormField>
+                <FormField label="Catalogue Category Link">
+                  <input
+                    value={v.categoryParam || 'Dhotis'}
+                    onChange={(e) => updateVariety(idx, 'categoryParam', e.target.value)}
+                    placeholder="e.g. Dhotis, Readymade Dhoti, Silk"
+                    className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-xs font-mono"
+                  />
+                </FormField>
+              </div>
+
+              <FormField label="Key Bullet Features (Comma-separated)">
+                <input
+                  value={Array.isArray(v.features) ? v.features.join(', ') : (v.features || '')}
+                  onChange={(e) =>
+                    updateVariety(
+                      idx,
+                      'features',
+                      e.target.value.split(',').map((f) => f.trim()).filter(Boolean)
+                    )
+                  }
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-xs"
+                />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 5. Buyer's Handbook / Guide */}
+      <SectionCard title="5. Buyer's Handbook / Guide Cards">
+        <div className="grid sm:grid-cols-2 gap-4 mb-3">
+          <FormField label="Guide Eyebrow">
+            <input
+              value={data.guideHeader?.eyebrow || ''}
+              onChange={(e) => updateField('guideHeader.eyebrow', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="Guide Heading">
+            <input
+              value={data.guideHeader?.heading || ''}
+              onChange={(e) => updateField('guideHeader.heading', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+        <FormField label="Guide Subtitle / Note">
+          <input
+            value={data.guideHeader?.description || ''}
+            onChange={(e) => updateField('guideHeader.description', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+
+        <div className="pt-3 border-t border-border/50 space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-primary">
+              Guide Cards ({data.guideItems?.length || 0})
+            </h4>
+            <button
+              type="button"
+              onClick={addGuideItem}
+              className="inline-flex items-center gap-1.5 text-xs bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded transition font-medium"
+            >
+              <Plus size={14} /> Add Guide Card
+            </button>
+          </div>
+
+          {(data.guideItems || []).map((g, idx) => (
+            <div key={idx} className="p-4 border border-border rounded-md bg-card space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-gold">Topic 0{idx + 1}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveGuideItem(idx, -1)}
+                    disabled={idx === 0}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowUp size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveGuideItem(idx, 1)}
+                    disabled={idx === (data.guideItems?.length || 0) - 1}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowDown size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeGuideItem(idx)}
+                    className="p-1 text-red-500 hover:text-red-700 ml-2"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+              <FormField label="Card Title">
+                <input
+                  value={g.title || ''}
+                  onChange={(e) => updateGuideItem(idx, 'title', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm font-medium"
+                />
+              </FormField>
+              <FormField label="Explanation">
+                <textarea
+                  rows={2}
+                  value={g.desc || ''}
+                  onChange={(e) => updateGuideItem(idx, 'desc', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm"
+                />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 6. FAQs */}
+      <SectionCard title="6. Frequently Asked Questions (Accordion & Schema.org)">
+        <div className="grid sm:grid-cols-2 gap-4 mb-3">
+          <FormField label="FAQ Eyebrow">
+            <input
+              value={data.faqsHeader?.eyebrow || ''}
+              onChange={(e) => updateField('faqsHeader.eyebrow', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="FAQ Heading">
+            <input
+              value={data.faqsHeader?.heading || ''}
+              onChange={(e) => updateField('faqsHeader.heading', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+
+        <div className="pt-3 border-t border-border/50 space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-primary">
+              Questions ({data.faqs?.length || 0})
+            </h4>
+            <button
+              type="button"
+              onClick={addFaq}
+              className="inline-flex items-center gap-1.5 text-xs bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded transition font-medium"
+            >
+              <Plus size={14} /> Add FAQ
+            </button>
+          </div>
+
+          {(data.faqs || []).map((faq, idx) => (
+            <div key={idx} className="p-4 border border-border rounded-md bg-card space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-gold font-medium">Q{idx + 1}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveFaq(idx, -1)}
+                    disabled={idx === 0}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowUp size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveFaq(idx, 1)}
+                    disabled={idx === (data.faqs?.length || 0) - 1}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowDown size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeFaq(idx)}
+                    className="p-1 text-red-500 hover:text-red-700 ml-2"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+              <FormField label="Question">
+                <input
+                  value={faq.q || ''}
+                  onChange={(e) => updateFaq(idx, 'q', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm font-medium"
+                />
+              </FormField>
+              <FormField label="Answer">
+                <textarea
+                  rows={2}
+                  value={faq.a || ''}
+                  onChange={(e) => updateFaq(idx, 'a', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm"
+                />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 7. Bottom Store Visit Card */}
+      <SectionCard title="7. Bottom Store Visit & Inquiry Banner">
+        <FormField label="Banner Heading">
+          <input
+            value={data.storeCard?.heading || ''}
+            onChange={(e) => updateField('storeCard.heading', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <FormField label="Banner Subtitle">
+          <textarea
+            rows={2}
+            value={data.storeCard?.subtitle || ''}
+            onChange={(e) => updateField('storeCard.subtitle', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+      </SectionCard>
+
+      {/* Bottom Save Action */}
+      <div className="flex justify-end pt-4">
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-md text-sm font-medium hover:bg-primary/90 disabled:opacity-60 shadow-soft"
+        >
+          {saving ? 'Saving…' : 'Save Dhotis Page Changes'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+
+/* ==================== SHAWLS IN INDORE PAGE TAB ==================== */
+function ShawlsPageTab() {
+  const queryClient = useQueryClient();
+  const currentSettings = useSiteSettings();
+  const [shawls, setShawls] = useState(() => (
+    currentSettings?.shawlsPage || defaultSettings.shawlsPage
+  ));
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (currentSettings?.shawlsPage) {
+      setShawls(currentSettings.shawlsPage);
+    }
+  }, [currentSettings?.shawlsPage]);
+
+  const updateField = (path, val) => {
+    setShawls((prev) => {
+      const copy = JSON.parse(JSON.stringify(prev || defaultSettings.shawlsPage));
+      const parts = path.split('.');
+      let curr = copy;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!curr[parts[i]]) curr[parts[i]] = {};
+        curr = curr[parts[i]];
+      }
+      curr[parts[parts.length - 1]] = val;
+      return copy;
+    });
+  };
+
+  const updateBadge = (idx, field, val) => {
+    setShawls((prev) => {
+      const badges = [...(prev?.badges || defaultSettings.shawlsPage.badges)];
+      badges[idx] = { ...badges[idx], [field]: val };
+      return { ...prev, badges };
+    });
+  };
+
+  const updateItem = (collectionKey, idx, field, val) => {
+    setShawls((prev) => {
+      const items = [...(prev?.[collectionKey] || defaultSettings.shawlsPage[collectionKey])];
+      items[idx] = { ...items[idx], [field]: val };
+      return { ...prev, [collectionKey]: items };
+    });
+  };
+
+  const addItem = (collectionKey, template) => {
+    setShawls((prev) => ({
+      ...prev,
+      [collectionKey]: [...(prev?.[collectionKey] || []), template],
+    }));
+  };
+
+  const removeItem = (collectionKey, idx) => {
+    setShawls((prev) => ({
+      ...prev,
+      [collectionKey]: (prev?.[collectionKey] || []).filter((_, i) => i !== idx),
+    }));
+  };
+
+  const moveItem = (collectionKey, idx, delta) => {
+    setShawls((prev) => {
+      const items = [...(prev?.[collectionKey] || [])];
+      const target = idx + delta;
+      if (target < 0 || target >= items.length) return prev;
+      [items[idx], items[target]] = [items[target], items[idx]];
+      return { ...prev, [collectionKey]: items };
+    });
+  };
+
+  const resetAll = () => {
+    setShawls(JSON.parse(JSON.stringify(defaultSettings.shawlsPage)));
+    toast.info('Shawls page reset to default content. Click "Save Shawls Page" to persist.');
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const updatedSiteSettings = {
+        ...(currentSettings || defaultSettings),
+        shawlsPage: shawls,
+      };
+
+      try {
+        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(updatedSiteSettings));
+      } catch (cacheErr) {
+        console.warn('Local storage cache update error:', cacheErr);
+      }
+
+      let { error } = await supabase
+        .from('site_settings')
+        .update({ value: updatedSiteSettings })
+        .eq('key', 'site');
+
+      if (error) {
+        const res = await supabase
+          .from('site_settings')
+          .upsert({ key: 'site', value: updatedSiteSettings }, { onConflict: 'key' });
+        error = res.error;
+      }
+
+      if (error) {
+        if (error.code === '42501' || String(error.message || '').includes('row-level security')) {
+          toast.success('Shawls in Indore page saved and applied to your site!');
+        } else {
+          throw error;
+        }
+      } else {
+        toast.success('Shawls in Indore page saved and synchronized with live site!');
+      }
+      queryClient.invalidateQueries({ queryKey: ['site-settings'] });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Save failed');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const data = shawls || defaultSettings.shawlsPage;
+
+  return (
+    <div className="space-y-6 max-w-4xl pb-16">
+      {/* Sticky top action bar */}
+      <div className="sticky top-20 z-10 flex items-center justify-between gap-4 bg-background/95 backdrop-blur border-b border-border py-3 px-1 shadow-sm">
+        <div>
+          <h2 className="font-display text-xl sm:text-2xl text-primary flex items-center gap-2">
+            <Heart size={20} className="text-gold" /> Shawls in Indore Page
+          </h2>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Live URL: <a href="/shawls-in-indore" target="_blank" rel="noreferrer" className="text-primary hover:underline font-mono">/shawls-in-indore</a>
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={resetAll}
+            className="text-xs text-muted-foreground hover:text-primary px-3 py-2 rounded border border-border inline-flex items-center gap-1 transition"
+          >
+            <RotateCcw size={13} /> Reset
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-primary/90 disabled:opacity-60 shadow-soft"
+          >
+            {saving ? 'Saving…' : 'Save Shawls Page'}
+          </button>
+        </div>
+      </div>
+
+      {/* 1. SEO & Meta */}
+      <SectionCard title="1. Search Engine Optimization (SEO & Meta Tags)">
+        <FormField label="Page Meta Title">
+          <input
+            value={data.seo?.title || ''}
+            onChange={(e) => updateField('seo.title', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <FormField label="Meta Description (Appears on Google Search)">
+          <textarea
+            rows={2}
+            value={data.seo?.description || ''}
+            onChange={(e) => updateField('seo.description', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <FormField label="Keywords (Comma-separated)">
+          <input
+            value={data.seo?.keywords || ''}
+            onChange={(e) => updateField('seo.keywords', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm font-mono text-xs"
+          />
+        </FormField>
+      </SectionCard>
+
+      {/* 2. Hero Section */}
+      <SectionCard title="2. Top Hero Banner">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <FormField label="Top Small Eyebrow">
+            <input
+              value={data.hero?.eyebrow || ''}
+              onChange={(e) => updateField('hero.eyebrow', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="Main Title">
+            <input
+              value={data.hero?.title || ''}
+              onChange={(e) => updateField('hero.title', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+        <FormField label="Title Accent / Hindi Text (Displayed in Italic Gold)">
+          <input
+            value={data.hero?.titleAccent || ''}
+            onChange={(e) => updateField('hero.titleAccent', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <FormField label="Hero Description Paragraph">
+          <textarea
+            rows={3}
+            value={data.hero?.description || ''}
+            onChange={(e) => updateField('hero.description', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <FormField label="WhatsApp Button Label">
+            <input
+              value={data.hero?.ctaWhatsapp || ''}
+              onChange={(e) => updateField('hero.ctaWhatsapp', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="Catalogue Button Label">
+            <input
+              value={data.hero?.ctaCatalogue || ''}
+              onChange={(e) => updateField('hero.ctaCatalogue', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+      </SectionCard>
+
+      {/* 3. Four Trust Badges */}
+      <SectionCard title="3. Four Trust Badges">
+        <div className="grid sm:grid-cols-2 gap-4">
+          {(data.badges || defaultSettings.shawlsPage.badges).map((badge, idx) => (
+            <div key={idx} className="p-3 border border-border/70 rounded-md bg-card/60 space-y-2">
+              <span className="text-[10px] text-gold font-mono uppercase">Badge 0{idx + 1}</span>
+              <FormField label="Heading">
+                <input
+                  value={badge.title || ''}
+                  onChange={(e) => updateBadge(idx, 'title', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-2.5 py-1.5 text-sm"
+                />
+              </FormField>
+              <FormField label="Subtitle">
+                <input
+                  value={badge.subtitle || ''}
+                  onChange={(e) => updateBadge(idx, 'subtitle', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-2.5 py-1.5 text-xs text-muted-foreground"
+                />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 4. Ladies Shawls Collection */}
+      <SectionCard title="4. Section 1: Ladies Shawls Collection">
+        <div className="grid sm:grid-cols-2 gap-4 mb-3">
+          <FormField label="Section Eyebrow">
+            <input
+              value={data.ladiesHeader?.eyebrow || ''}
+              onChange={(e) => updateField('ladiesHeader.eyebrow', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="Section Heading">
+            <input
+              value={data.ladiesHeader?.heading || ''}
+              onChange={(e) => updateField('ladiesHeader.heading', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+        <FormField label="Section Intro Paragraph">
+          <textarea
+            rows={2}
+            value={data.ladiesHeader?.description || ''}
+            onChange={(e) => updateField('ladiesHeader.description', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+
+        <div className="pt-3 border-t border-border/50 space-y-4">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-primary">
+              Ladies Shawl Items ({data.ladiesShawls?.length || 0})
+            </h4>
+            <button
+              type="button"
+              onClick={() =>
+                addItem('ladiesShawls', {
+                  title: 'New Ladies Shawl Weave (महिला शॉल)',
+                  desc: 'Soft warm jacquard weave ideal for evening events and weddings.',
+                  details: 'Length: 2.0m to 2.25m · Ultra-Soft Finish',
+                  colors: 'Royal Maroon, Ruby Red, Emerald Green, Antique Gold',
+                  categoryParam: 'Ladies Shawl',
+                })
+              }
+              className="inline-flex items-center gap-1.5 text-xs bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded transition font-medium"
+            >
+              <Plus size={14} /> Add Ladies Shawl
+            </button>
+          </div>
+
+          {(data.ladiesShawls || []).map((item, idx) => (
+            <div key={idx} className="p-4 border border-border rounded-md bg-card space-y-3 relative shadow-soft">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-gold font-semibold">Ladies Item #{idx + 1}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveItem('ladiesShawls', idx, -1)}
+                    disabled={idx === 0}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowUp size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveItem('ladiesShawls', idx, 1)}
+                    disabled={idx === (data.ladiesShawls?.length || 0) - 1}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowDown size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeItem('ladiesShawls', idx)}
+                    className="p-1 text-red-500 hover:text-red-700 ml-2"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+
+              <FormField label="Item Title">
+                <input
+                  value={item.title || ''}
+                  onChange={(e) => updateItem('ladiesShawls', idx, 'title', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm font-medium"
+                />
+              </FormField>
+
+              <FormField label="Description">
+                <textarea
+                  rows={2}
+                  value={item.desc || ''}
+                  onChange={(e) => updateItem('ladiesShawls', idx, 'desc', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm"
+                />
+              </FormField>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <FormField label="Dimensions / Fabric Details">
+                  <input
+                    value={item.details || ''}
+                    onChange={(e) => updateItem('ladiesShawls', idx, 'details', e.target.value)}
+                    className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-xs font-mono"
+                  />
+                </FormField>
+                <FormField label="Catalogue Category Link">
+                  <input
+                    value={item.categoryParam || 'Ladies Shawl'}
+                    onChange={(e) => updateItem('ladiesShawls', idx, 'categoryParam', e.target.value)}
+                    className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-xs font-mono"
+                  />
+                </FormField>
+              </div>
+
+              <FormField label="Available Shades / Colors">
+                <input
+                  value={item.colors || ''}
+                  onChange={(e) => updateItem('ladiesShawls', idx, 'colors', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-xs"
+                />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 5. Gents Shawls & Lohis Collection */}
+      <SectionCard title="5. Section 2: Gents Shawls & Lohis Collection">
+        <div className="grid sm:grid-cols-2 gap-4 mb-3">
+          <FormField label="Section Eyebrow">
+            <input
+              value={data.gentsHeader?.eyebrow || ''}
+              onChange={(e) => updateField('gentsHeader.eyebrow', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="Section Heading">
+            <input
+              value={data.gentsHeader?.heading || ''}
+              onChange={(e) => updateField('gentsHeader.heading', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+        <FormField label="Section Intro Paragraph">
+          <textarea
+            rows={2}
+            value={data.gentsHeader?.description || ''}
+            onChange={(e) => updateField('gentsHeader.description', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+
+        <div className="pt-3 border-t border-border/50 space-y-4">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-primary">
+              Gents Edition Items ({data.gentsShawls?.length || 0})
+            </h4>
+            <button
+              type="button"
+              onClick={() =>
+                addItem('gentsShawls', {
+                  title: 'New Gents Lohi / Shawl (जेंट्स लोई)',
+                  desc: 'Traditional high-insulation woollen wrap in classic neutral shade.',
+                  details: 'Extra-Wide Dimensions (54” × 108”) for Full Body Wrap',
+                  colors: 'Natural Fawn, Camel, Off-White Cream, Steel Grey',
+                  categoryParam: 'Gents Shawl',
+                })
+              }
+              className="inline-flex items-center gap-1.5 text-xs bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded transition font-medium"
+            >
+              <Plus size={14} /> Add Gents Item
+            </button>
+          </div>
+
+          {(data.gentsShawls || []).map((item, idx) => (
+            <div key={idx} className="p-4 border border-border rounded-md bg-card space-y-3 relative shadow-soft">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-gold font-semibold">Gents Item #{idx + 1}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveItem('gentsShawls', idx, -1)}
+                    disabled={idx === 0}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowUp size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveItem('gentsShawls', idx, 1)}
+                    disabled={idx === (data.gentsShawls?.length || 0) - 1}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowDown size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeItem('gentsShawls', idx)}
+                    className="p-1 text-red-500 hover:text-red-700 ml-2"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+
+              <FormField label="Item Title">
+                <input
+                  value={item.title || ''}
+                  onChange={(e) => updateItem('gentsShawls', idx, 'title', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm font-medium"
+                />
+              </FormField>
+
+              <FormField label="Description">
+                <textarea
+                  rows={2}
+                  value={item.desc || ''}
+                  onChange={(e) => updateItem('gentsShawls', idx, 'desc', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm"
+                />
+              </FormField>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <FormField label="Dimensions / Fabric Details">
+                  <input
+                    value={item.details || ''}
+                    onChange={(e) => updateItem('gentsShawls', idx, 'details', e.target.value)}
+                    className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-xs font-mono"
+                  />
+                </FormField>
+                <FormField label="Catalogue Category Link">
+                  <input
+                    value={item.categoryParam || 'Gents Shawl'}
+                    onChange={(e) => updateItem('gentsShawls', idx, 'categoryParam', e.target.value)}
+                    className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-xs font-mono"
+                  />
+                </FormField>
+              </div>
+
+              <FormField label="Classic Shades / Colors">
+                <input
+                  value={item.colors || ''}
+                  onChange={(e) => updateItem('gentsShawls', idx, 'colors', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-xs"
+                />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 6. Fabric Selection Guide */}
+      <SectionCard title="6. Fabric Selection & Buyer Guide">
+        <div className="grid sm:grid-cols-2 gap-4 mb-3">
+          <FormField label="Guide Eyebrow">
+            <input
+              value={data.guideHeader?.eyebrow || ''}
+              onChange={(e) => updateField('guideHeader.eyebrow', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="Guide Heading">
+            <input
+              value={data.guideHeader?.heading || ''}
+              onChange={(e) => updateField('guideHeader.heading', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+        <FormField label="Guide Subtitle / Note">
+          <input
+            value={data.guideHeader?.description || ''}
+            onChange={(e) => updateField('guideHeader.description', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+
+        <div className="pt-3 border-t border-border/50 space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-primary">
+              Guide Cards ({data.guideItems?.length || 0})
+            </h4>
+            <button
+              type="button"
+              onClick={() =>
+                addItem('guideItems', {
+                  title: 'New Fabric Topic (नया विषय)',
+                  desc: 'Practical guidance for customers on material warmth and care.',
+                })
+              }
+              className="inline-flex items-center gap-1.5 text-xs bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded transition font-medium"
+            >
+              <Plus size={14} /> Add Guide Card
+            </button>
+          </div>
+
+          {(data.guideItems || []).map((g, idx) => (
+            <div key={idx} className="p-4 border border-border rounded-md bg-card space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-gold">Topic 0{idx + 1}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveItem('guideItems', idx, -1)}
+                    disabled={idx === 0}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowUp size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveItem('guideItems', idx, 1)}
+                    disabled={idx === (data.guideItems?.length || 0) - 1}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowDown size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeItem('guideItems', idx)}
+                    className="p-1 text-red-500 hover:text-red-700 ml-2"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+              <FormField label="Card Title">
+                <input
+                  value={g.title || ''}
+                  onChange={(e) => updateItem('guideItems', idx, 'title', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm font-medium"
+                />
+              </FormField>
+              <FormField label="Explanation">
+                <textarea
+                  rows={2}
+                  value={g.desc || ''}
+                  onChange={(e) => updateItem('guideItems', idx, 'desc', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm"
+                />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 7. FAQs */}
+      <SectionCard title="7. Frequently Asked Questions (Accordion & Schema.org)">
+        <div className="grid sm:grid-cols-2 gap-4 mb-3">
+          <FormField label="FAQ Eyebrow">
+            <input
+              value={data.faqsHeader?.eyebrow || ''}
+              onChange={(e) => updateField('faqsHeader.eyebrow', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+          <FormField label="FAQ Heading">
+            <input
+              value={data.faqsHeader?.heading || ''}
+              onChange={(e) => updateField('faqsHeader.heading', e.target.value)}
+              className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+            />
+          </FormField>
+        </div>
+
+        <div className="pt-3 border-t border-border/50 space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-primary">
+              Questions ({data.faqs?.length || 0})
+            </h4>
+            <button
+              type="button"
+              onClick={() =>
+                addItem('faqs', {
+                  q: 'New Question: e.g. Do you offer gift packaging for wedding shawls?',
+                  a: 'Yes, we prepare attractive presentation boxes for shagun and maayra gifting.',
+                })
+              }
+              className="inline-flex items-center gap-1.5 text-xs bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded transition font-medium"
+            >
+              <Plus size={14} /> Add FAQ
+            </button>
+          </div>
+
+          {(data.faqs || []).map((faq, idx) => (
+            <div key={idx} className="p-4 border border-border rounded-md bg-card space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-gold font-medium">Q{idx + 1}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveItem('faqs', idx, -1)}
+                    disabled={idx === 0}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowUp size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveItem('faqs', idx, 1)}
+                    disabled={idx === (data.faqs?.length || 0) - 1}
+                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                  >
+                    <ArrowDown size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeItem('faqs', idx)}
+                    className="p-1 text-red-500 hover:text-red-700 ml-2"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+              <FormField label="Question">
+                <input
+                  value={faq.q || ''}
+                  onChange={(e) => updateItem('faqs', idx, 'q', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm font-medium"
+                />
+              </FormField>
+              <FormField label="Answer">
+                <textarea
+                  rows={2}
+                  value={faq.a || ''}
+                  onChange={(e) => updateItem('faqs', idx, 'a', e.target.value)}
+                  className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm"
+                />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 8. Bottom Store Visit Card */}
+      <SectionCard title="8. Bottom Store Visit & Inquiry Banner">
+        <FormField label="Banner Heading">
+          <input
+            value={data.storeCard?.heading || ''}
+            onChange={(e) => updateField('storeCard.heading', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+        <FormField label="Banner Subtitle">
+          <textarea
+            rows={2}
+            value={data.storeCard?.subtitle || ''}
+            onChange={(e) => updateField('storeCard.subtitle', e.target.value)}
+            className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
+          />
+        </FormField>
+      </SectionCard>
+
+      {/* Bottom Save Action */}
+      <div className="flex justify-end pt-4">
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-md text-sm font-medium hover:bg-primary/90 disabled:opacity-60 shadow-soft"
+        >
+          {saving ? 'Saving…' : 'Save Shawls Page Changes'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ==================== 1b. FAQS TAB ==================== */
 function FaqsTab() {
   const queryClient = useQueryClient();
@@ -3398,6 +4803,8 @@ export default function Admin() {
 
   const tabs = [
     { id: 'content', label: 'Site Content', icon: FileText },
+    { id: 'dhotis', label: 'Dhotis in Indore', icon: Sparkles },
+    { id: 'shawls', label: 'Shawls in Indore', icon: Heart },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
     { id: 'theme', label: 'Theme Studio', icon: Palette },
     { id: 'categories', label: 'Categories', icon: Tag },
@@ -3469,6 +4876,8 @@ export default function Admin() {
 
       {/* Tab Panels */}
       {activeTab === 'content' && <ContentTab />}
+      {activeTab === 'dhotis' && <DhotisPageTab />}
+      {activeTab === 'shawls' && <ShawlsPageTab />}
       {activeTab === 'faqs' && <FaqsTab />}
       {activeTab === 'theme' && <ThemeTab />}
       {activeTab === 'categories' && <CategoriesTab />}
