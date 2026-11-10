@@ -483,7 +483,7 @@ function ContentTab() {
                 announcementBar: { ...s.announcementBar, text: e.target.value },
               }))
             }
-            placeholder="e.g. ॥ श्री गणेशाय नमः ॥ · M.T. Cloth Market, Indore · Est. 1937"
+            placeholder="e.g. ॥ श्री गणेशाय नमः ॥ · M.T. Cloth Market, Indore"
             className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
           />
         </FormField>
@@ -565,7 +565,7 @@ function ContentTab() {
             onChange={(e) =>
               setSettings((s) => ({ ...s, hero: { ...s.hero, badge: e.target.value } }))
             }
-            placeholder="Traditional Textiles · Indore · Est. 1937"
+            placeholder="Traditional Textiles · Indore"
             className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
           />
         </FormField>
@@ -898,7 +898,7 @@ function ContentTab() {
                   heritageSeal: { ...s.heritageSeal, text: e.target.value },
                 }))
               }
-              placeholder="· ESTD 1937 · BALDEVJI JITMAL · INDORE · HERITAGE ·"
+              placeholder="· SERVING GENERATIONS · BALDEVJI JITMAL"
               className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm"
             />
           </FormField>
@@ -1875,7 +1875,7 @@ function ContentTab() {
             type="text"
             value={settings.adminPasscode || ''}
             onChange={(e) => setSettings((s) => ({ ...s, adminPasscode: e.target.value }))}
-            placeholder="e.g. BaldevjiAdmin@1937"
+            placeholder="e.g. BaldevjiAdmin@2026"
             className="w-full bg-background border border-input rounded-md px-3 py-2 text-sm font-mono"
           />
         </FormField>
@@ -3417,7 +3417,7 @@ export default function Admin() {
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               Supabase Connected
             </span>
-            <span className="text-[11px] text-muted-foreground">Est. 1937 · Indore</span>
+            <span className="text-[11px] text-muted-foreground">M.T. Cloth Market · Indore</span>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl text-primary">Admin Panel</h1>
           <p className="text-muted-foreground text-xs sm:text-sm mt-0.5">

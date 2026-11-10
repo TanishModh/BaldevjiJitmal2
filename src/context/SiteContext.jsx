@@ -6,7 +6,7 @@ export const defaultSettings = {
   brand: {
     name: 'Baldevji Jitmal',
     tagline: 'Textiles • Indore',
-    est: '1937',
+    est: '',
     location: 'M.T. Cloth Market',
     city: 'Indore',
     wholesaleBadge: 'Traditional Indian Textiles · Wholesale & Retail',
@@ -284,7 +284,7 @@ export const defaultSettings = {
   ],
 };
 
-export const SETTINGS_CACHE_KEY = 'bj_site_settings_v7';
+export const SETTINGS_CACHE_KEY = 'bj_site_settings_v8';
 
 try {
   if (typeof window !== 'undefined') {
@@ -297,6 +297,7 @@ try {
       'bj_site_settings_v4',
       'bj_site_settings_v5',
       'bj_site_settings_v6',
+      'bj_site_settings_v7',
     ].forEach((k) => window.localStorage.removeItem(k));
   }
 } catch (_) {}
@@ -319,23 +320,30 @@ const SiteContext = createContext({
   isLoading: false,
 });
 
-function stripBlankets(val) {
+function sanitizeSettings(val) {
   if (typeof val === 'string') {
     return val
       .replace(/,\s*blankets?\b/gi, '')
       .replace(/\bblankets?,\s*/gi, '')
       .replace(/\bblankets?\b/gi, '')
+      .replace(/\b(?:estd?\.?|established)\s*1937\b/gi, '')
+      .replace(/\bsince\s*1937\b/gi, '')
+      .replace(/·\s*·+/g, '·')
       .replace(/\s{2,}/g, ' ')
       .trim();
   }
   if (Array.isArray(val)) {
-    return val.map(stripBlankets);
+    return val.map(sanitizeSettings);
   }
   if (val && typeof val === 'object') {
     const res = {};
     for (const [k, v] of Object.entries(val)) {
       if (k === 'adminPasscode') continue; // Never leak admin passcode to public site context
-      res[k] = stripBlankets(v);
+      if (k === 'est' && (v === '1937' || v === 1937)) {
+        res[k] = '';
+        continue;
+      }
+      res[k] = sanitizeSettings(v);
     }
     return res;
   }
@@ -486,7 +494,7 @@ export function SiteProvider({ children }) {
           : defaultSettings.highlights,
     };
 
-    return stripBlankets(raw);
+    return sanitizeSettings(raw);
   }, [dbSettings]);
 
   // Apply theme variables to CSS root

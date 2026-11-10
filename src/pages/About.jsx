@@ -14,9 +14,9 @@ export default function About() {
   return (
     <section className="overflow-hidden bg-background">
       <SEO
-        title="Our Heritage Since 1937 — Baldevji Jitmal, M.T. Cloth Market, Indore"
+        title="Our Heritage — Baldevji Jitmal, M.T. Cloth Market, Indore"
         description="Over 8 decades of textile mastery. Discover the story of Baldevji Jitmal, serving generations of families, wedding planners and retailers from Indore's historic M.T. Cloth Market."
-        keywords="about baldevji jitmal, heritage textile house indore, mt cloth market history, traditional cloth merchant indore est 1937"
+        keywords="about baldevji jitmal, heritage textile house indore, mt cloth market history, traditional cloth merchant indore"
         breadcrumbs={[
           { name: 'Home', url: '/' },
           { name: 'About Us', url: '/about' },

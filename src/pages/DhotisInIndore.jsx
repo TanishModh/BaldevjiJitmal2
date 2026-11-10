@@ -83,7 +83,7 @@ export default function DhotisInIndore() {
   const faqs = [
     {
       q: 'Where can I buy authentic traditional dhotis in Indore?',
-      a: 'Baldevji Jitmal, established in 1937 at 221, M.T. Cloth Market (Maharaja Tukojirao Cloth Market), Indore, is one of central India’s most trusted wholesale and retail suppliers for authentic pure cotton, temple border, and silk dhotis.',
+      a: 'Baldevji Jitmal, located at 221, M.T. Cloth Market (Maharaja Tukojirao Cloth Market), Indore, is one of central India’s most trusted wholesale and retail suppliers for authentic pure cotton, temple border, and silk dhotis.',
     },
     {
       q: 'Which is the best wholesale market for dhotis in Indore?',
@@ -111,7 +111,7 @@ export default function DhotisInIndore() {
     <>
       <SEO
         title="Dhotis in Indore — Pure Cotton, Temple Border & Wedding Dhotis Wholesale"
-        description="Looking for authentic dhotis in Indore? Baldevji Jitmal at 221, M.T. Cloth Market offers wholesale & retail pure cotton dhotis, Panchakacham, temple borders & silk dhoti-dupatta sets since 1937."
+        description="Looking for authentic dhotis in Indore? Baldevji Jitmal at 221, M.T. Cloth Market offers wholesale & retail pure cotton dhotis, Panchakacham, temple borders & silk dhoti-dupatta sets."
         keywords="dhotis in indore, wholesale dhoti indore, cotton dhoti indore, M.T. cloth market dhoti, wedding dhoti indore, readymade dhoti indore, panchakacham indore, baldevji jitmal dhoti, pooja dhoti indore, pure cotton dhoti mp"
         canonical="https://www.baldevjijitmal.in/dhotis-in-indore"
         breadcrumbs={[
@@ -127,14 +127,14 @@ export default function DhotisInIndore() {
           <MotionFade>
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-gold font-medium mb-3">
               <Store size={15} />
-              <span>Heritage Wholesale House · Est. 1937 · M.T. Cloth Market, Indore</span>
+              <span>Heritage Wholesale House · M.T. Cloth Market, Indore</span>
             </div>
             <h1 className="font-display text-4xl sm:text-5xl md:text-7xl leading-tight font-normal">
               Dhotis in Indore <span className="italic text-gold font-serif">। पारंपरिक धोती संग्रह</span>
             </h1>
             <div className="gold-divider my-4 sm:my-6 w-24"></div>
             <p className="max-w-3xl text-sm sm:text-base md:text-lg text-primary-foreground/90 leading-relaxed">
-              Baldevji Jitmal is Indore’s historic destination for authentic pure cotton dhotis, sacred temple-border sets, Panchakachams, readymade velcro dhotis, and Bhagalpuri silk wedding pairs. Serving generational families, priests, and textile retailers across India since 1937.
+              Baldevji Jitmal is Indore’s historic destination for authentic pure cotton dhotis, sacred temple-border sets, Panchakachams, readymade velcro dhotis, and Bhagalpuri silk wedding pairs. Serving generational families, priests, and textile retailers across India.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 sm:gap-4">
@@ -165,8 +165,8 @@ export default function DhotisInIndore() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
             <div className="flex flex-col items-center">
               <Award className="text-gold mb-1.5" size={24} />
-              <p className="font-display text-xl sm:text-2xl text-primary font-medium">Est. 1937</p>
-              <p className="text-[11px] text-muted-foreground uppercase tracking-wider">89+ Years Heritage</p>
+              <p className="font-display text-xl sm:text-2xl text-primary font-medium">Generations</p>
+              <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Of Textile Mastery</p>
             </div>
             <div className="flex flex-col items-center">
               <ShieldCheck className="text-gold mb-1.5" size={24} />

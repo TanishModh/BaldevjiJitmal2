@@ -38,7 +38,7 @@ export default function SEO({
 
     // 2. Meta description & keywords
     const defaultDesc =
-      'Baldevji Jitmal: trusted wholesale supplier of dhotis, dupattas, shawls, bedsheets, towels and Bhagalpuri silk sets from M.T. Cloth Market, Indore (Est. 1937).';
+      'Baldevji Jitmal: trusted wholesale supplier of dhotis, dupattas, shawls, bedsheets, towels and Bhagalpuri silk sets from M.T. Cloth Market, Indore.';
     setMeta('name', 'description', description || defaultDesc);
 
     if (keywords) {

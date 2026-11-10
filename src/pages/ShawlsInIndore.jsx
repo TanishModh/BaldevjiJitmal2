@@ -122,7 +122,7 @@ export default function ShawlsInIndore() {
     <>
       <SEO
         title="Shawls in Indore — Ladies Shawls, Gents Shawls & Lohis Wholesale"
-        description="Best collection of ladies shawls and gents shawls in Indore. Established 1937 at M.T. Cloth Market. Kashmiri embroidery, pashmina-touch, gents lohis & wedding gift sets at wholesale rates."
+        description="Best collection of ladies shawls and gents shawls in Indore at 221, M.T. Cloth Market. Kashmiri embroidery, pashmina-touch, gents lohis & wedding gift sets at wholesale rates."
         keywords="shawls in indore, ladies shawls in indore, gents shawls in indore, pashmina shawl indore, winter shawls indore, gents lohi indore, kashmiri shawls indore, wedding shawls indore, M.T. cloth market shawls, baldevji jitmal shawls"
         canonical="https://www.baldevjijitmal.in/shawls-in-indore"
         breadcrumbs={[
@@ -138,14 +138,14 @@ export default function ShawlsInIndore() {
           <MotionFade>
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-gold font-medium mb-3">
               <Store size={15} />
-              <span>Heritage Shawl House · Est. 1937 · M.T. Cloth Market, Indore</span>
+              <span>Heritage Shawl House · M.T. Cloth Market, Indore</span>
             </div>
             <h1 className="font-display text-4xl sm:text-5xl md:text-7xl leading-tight font-normal">
               Shawls in Indore <span className="italic text-gold font-serif">। महिला एवं जेंट्स शॉल</span>
             </h1>
             <div className="gold-divider my-4 sm:my-6 w-24"></div>
             <p className="max-w-3xl text-sm sm:text-base md:text-lg text-primary-foreground/90 leading-relaxed">
-              Discover Indore’s finest destination for ladies embroidered shawls, luxurious pashmina-touch wraps, masculine gents lohis, and ceremonial wedding doshalas. Carefully curated for warmth, grandeur, and generational durability since 1937.
+              Discover Indore’s finest destination for ladies embroidered shawls, luxurious pashmina-touch wraps, masculine gents lohis, and ceremonial wedding doshalas. Carefully curated for warmth, grandeur, and generational durability.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 sm:gap-4">

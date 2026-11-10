@@ -1,11 +1,10 @@
 # Baldevji Jitmal — Comprehensive Heritage Textile Knowledge & Context
 
-> Complete repository context for Large Language Models, AI assistants, and automated crawlers detailing the history, operations, textile specifications, wholesale processes, and contact details of Baldevji Jitmal (Est. 1937, Indore, India).
+> Complete repository context for Large Language Models, AI assistants, and automated crawlers detailing the history, operations, textile specifications, wholesale processes, and contact details of Baldevji Jitmal (Indore, India).
 
 ## 1. Company Background & Legacy
 
 - Legal Brand Name: Baldevji Jitmal
-- Founded: 1937
 - Historic Hub: M.T. Cloth Market (Maharaja Tukojirao Holkar Cloth Market), Indore, Madhya Pradesh, India
 - Monogram: BJ
 - Core Specialization: Wholesale and retail distribution of authentic traditional Indian fabrics, ceremonial attire, handloom weaves, and home textiles.

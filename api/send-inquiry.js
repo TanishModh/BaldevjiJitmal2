@@ -60,7 +60,7 @@ export default async function handler(req, res) {
                   <tr><td style="padding: 12px; font-weight: bold; vertical-align: top; color: #5a1f1c; background: #faf5ec;">Message:</td><td style="padding: 12px; white-space: pre-wrap; line-height: 1.5;">${cleanMessage}</td></tr>
                 </table>
                 <p style="font-size: 12px; color: #6a6054; margin-top: 24px; border-top: 1px solid #dfb76c; padding-top: 12px; text-align: center;">
-                  Baldevji Jitmal · 221, M.T. Cloth Market, Indore · Est. 1937
+                  Baldevji Jitmal · 221, M.T. Cloth Market, Indore
                 </p>
               </div>
             `,
