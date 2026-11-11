@@ -4992,6 +4992,23 @@ export default function Admin() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <button
+            type="button"
+            onClick={() => {
+              const raw = localStorage.getItem(SETTINGS_CACHE_KEY);
+              if (raw) {
+                navigator.clipboard.writeText(raw);
+                toast.success('Your saved edits copied to clipboard! Paste them in chat.');
+              } else {
+                toast.error('No saved settings found in local browser storage.');
+              }
+            }}
+            className="inline-flex items-center gap-1.5 border border-primary/40 bg-primary/10 text-primary px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm hover:bg-primary hover:text-primary-foreground transition shadow-soft font-medium"
+            title="Copy your local edits to paste into chat"
+          >
+            <Copy size={13} />
+            <span>Copy My Saved Edits</span>
+          </button>
           <a
             href="/"
             target="_blank"
