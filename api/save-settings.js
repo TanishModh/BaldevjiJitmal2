@@ -25,8 +25,61 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, message: 'Missing or invalid settings value' });
     }
 
+    const cleanPayload = { ...value };
+    delete cleanPayload.adminPasscode;
+
+    // Strategy 1: If GITHUB_TOKEN is configured in Vercel, commit directly to GitHub repository!
+    // This allows 100% database-free, permanently synchronized updates across all devices via Vercel CI/CD.
+    if (process.env.GITHUB_TOKEN) {
+      try {
+        const repo = process.env.GITHUB_REPO || 'TanishModh/BaldevjiJitmal2';
+        const filePath = 'src/data/defaultSettings.json';
+        const branch = 'main';
+
+        const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}?ref=${branch}`, {
+          headers: {
+            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+            Accept: 'application/vnd.github.v3+json',
+            'User-Agent': 'Baldevji-Admin',
+          },
+        });
+
+        let sha = undefined;
+        if (getRes.ok) {
+          const getJson = await getRes.json();
+          sha = getJson.sha;
+        }
+
+        const commitRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+            Accept: 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json',
+            'User-Agent': 'Baldevji-Admin',
+          },
+          body: JSON.stringify({
+            message: `chore(settings): update from admin portal [${new Date().toISOString()}]`,
+            content: Buffer.from(JSON.stringify(cleanPayload, null, 2)).toString('base64'),
+            sha,
+            branch,
+          }),
+        });
+
+        if (commitRes.ok) {
+          return res.status(200).json({
+            success: true,
+            method: 'github',
+            message: 'Changes permanently saved to GitHub! Vercel is auto-deploying to all devices.',
+          });
+        }
+      } catch (ghErr) {
+        console.warn('GitHub commit route failed, trying Supabase fallback:', ghErr);
+      }
+    }
+
+    // Strategy 2: Supabase with service role or anon key
     const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://brlkrualghugxskjzydi.supabase.co';
-    // Use SUPABASE_SERVICE_ROLE_KEY if configured in Vercel to bypass RLS completely; otherwise fallback to anon
     const supabaseKey =
       process.env.SUPABASE_SERVICE_ROLE_KEY ||
       process.env.VITE_SUPABASE_ANON_KEY ||
@@ -35,9 +88,6 @@ export default async function handler(req, res) {
     const supabase = createClient(supabaseUrl, supabaseKey, {
       auth: { persistSession: false },
     });
-
-    const cleanPayload = { ...value };
-    delete cleanPayload.adminPasscode;
 
     const { data, error } = await supabase
       .from('site_settings')
@@ -58,7 +108,7 @@ export default async function handler(req, res) {
     if (!data || data.length === 0) {
       return res.status(500).json({
         success: false,
-        error: 'Database returned 0 rows affected (Row-Level Security active)',
+        error: 'Database returned 0 rows affected (Supabase Row-Level Security active)',
         code: '42501',
       });
     }
