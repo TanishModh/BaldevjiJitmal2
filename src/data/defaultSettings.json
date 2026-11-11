@@ -1,0 +1,599 @@
+{
+  "version": 10,
+  "updatedAt": "2026-11-12T01:37:00.000Z",
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "contact": "Contact",
+    "gallery": "Catalogue",
+    "products": "Collections"
+  },
+  "faqs": [
+    {
+      "a": "You can visit our heritage shop at 221, M.T. Cloth Market, Indore, or connect with us directly on WhatsApp (+91 7869849449 / 0731 245 9280). We gladly share live photographs, shade cards, and product details. Once you select your items, we safely pack and dispatch them to your destination.",
+      "q": "How can outstation customers and retailers place orders?"
+    },
+    {
+      "a": "Yes. Being located in central India at Indore’s historic textile hub, we have reliable daily transport and parcel tie-ups delivering across Madhya Pradesh, Rajasthan, Maharashtra, Gujarat, Uttar Pradesh, Chhattisgarh, and all states nationwide.",
+      "q": "Do you deliver across India?"
+    },
+    {
+      "a": "Absolutely. We specialize in coordinated Dhoti + Dupatta sets, 3-piece Dhoti-Dupatta-Kurta cloth combinations, and gift shawls for weddings, spiritual functions, and temple trusts, complete with matching presentation packaging.",
+      "q": "Can we order for weddings, temple ceremonies, and family functions?"
+    },
+    {
+      "a": "Yes. We welcome retail shopkeepers purchasing full bales and thans, as well as families and wedding planners looking for curated traditional sets. Every customer is treated with the same warmth and dedication.",
+      "q": "Do you cater to both bulk buyers and personal/family requirements?"
+    },
+    {
+      "a": "We accept UPI, NEFT, RTGS, IMPS, and standard bank transfers. All dispatches are properly billed and accompanied by dispatch tracking / transport bilti receipts.",
+      "q": "What payment modes are accepted for deliveries?"
+    }
+  ],
+  "hero": {
+    "badge": "Traditional Textiles · Indore",
+    "intro": "A Trusted Wholesale House dealing in Dhotis, Dupattas, Dhoti-Dupatta Sets, Ladies & Gents Shawls, Bedsheets, Towels, Napkins, Bhagalpuri sets and Chadars, Silk sets, and Kurta-Pajama Cloth.",
+    "bgImage": "/assets/hero-textiles-1200.webp",
+    "heading": "Baldevji Jitmal",
+    "subheading": "Traditional Indian textiles — From the heart of Indore.",
+    "heroImageUrl": "/assets/hero-textiles-1200.webp",
+    "whatsappLabel": "Contact on WhatsApp",
+    "ctaPrimaryLabel": "Explore Collections",
+    "whatsappMessage": "Namaste Baldevji Jitmal, I would like to inquire about your traditional textile collection. Please share current designs.",
+    "whatsappCtaLabel": "Contact on WhatsApp",
+    "ctaSecondaryLabel": "Plan a Visit"
+  },
+  "shop": {
+    "body": "Tucked into the heritage textile lanes of Indore, our storefront — marked by its signature maroon signboard — has welcomed retailers and families for decades.",
+    "eyebrow": "Visit our shop",
+    "heading": "Step into our store at M.T. Cloth Market",
+    "photo1Sub": "The storefront",
+    "photo1Url": "/assets/shop-exterior-1-Y8qJ9GsL.jpg",
+    "photo2Sub": "Bedsheets, dhotis & daily traditional wear",
+    "photo2Url": "/assets/shop-exterior-2-B3lADtzs.jpg",
+    "contactBtn": "Contact the shop",
+    "directionsBtn": "Get directions",
+    "photo1Caption": "Baldevji Jitmal · Jitmal & Sons",
+    "photo2Caption": "A glimpse of the collection"
+  },
+  "about": {
+    "eyebrow": "Our Story",
+    "heading": "About Baldevji Jitmal",
+    "ctaLabel": "Plan a Visit",
+    "paragraphs": [
+      "Baldevji Jitmal is a family-run heritage textile house based in the legendary M.T. Cloth Market of Indore — one of central India's oldest and most prestigious fabric hubs, serving generations.",
+      "For decades we have curated and supplied traditional Indian fabrics to wedding families, retailers, and discerning patrons across the country. Our specialities include authentic dhotis, dupattas and dhoti-dupatta sets, fine ladies and gents shawls, premium bedsheets, towels, napkins, Bhagalpuri silk sets, and pure kurta-pajama fabrics.",
+      "We believe in honest pricing, careful craftsmanship, and treating every visitor — whether choosing wedding attire or sourcing for an institution — like family. Come visit our shop in the heart of Indore, or browse our latest catalogue online."
+    ],
+    "featureImageUrl": "/assets/hero-textiles-800.webp",
+    "featureImageCaption": "Traditional cloth, thoughtfully selected."
+  },
+  "brand": {
+    "est": "",
+    "city": "Indore",
+    "name": "Baldevji Jitmal",
+    "tagline": "Textiles • Indore",
+    "initials": "BJ",
+    "location": "M.T. Cloth Market",
+    "monogramUrl": "/logo-baldevji-mark-refined.webp",
+    "wholesaleBadge": "Traditional Indian Textiles · Wholesale & Retail"
+  },
+  "stats": {
+    "stat1Label": "Product ranges",
+    "stat1Value": "12+",
+    "stat2Label": "Years of trust",
+    "stat2Value": "90+"
+  },
+  "theme": {
+    "card": "#faf5ec",
+    "gold": "#dfb76c",
+    "accent": "#7d5218",
+    "border": "rgba(125, 82, 24, 0.22)",
+    "primary": "#5a1f1c",
+    "sand200": "#ebe1d0",
+    "background": "#f4efe5",
+    "foreground": "#221d19",
+    "mutedForeground": "#6a6054",
+    "primaryForeground": "#fcf9f2"
+  },
+  "footer": {
+    "blurb": "A trusted name in traditional Indian textiles— wholesale dhotis, dupattas, shawls, bedsheets and more from the heart of Indore.",
+    "watermark": "BJ",
+    "copyrightNotice": "Baldevji Jitmal. All rights reserved."
+  },
+  "contact": {
+    "email": "info@baldevjijitmal.com",
+    "hours": "Mon – Sat · 12:00 PM – 8:00 PM",
+    "phone1": "0731 245 9280",
+    "phone2": "+91 7869849449",
+    "address": "221, M.T. Cloth Market, Indore, MP",
+    "eyebrow": "Get in Touch",
+    "heading": "Visit, Call or Write to Us",
+    "formHeading": "Send an Inquiry",
+    "mapEmbedUrl": "https://www.google.com/maps?q=Baldevji+Jitmal+Jitmal+%26+Sons+221+M.T.+Cloth+Market+Indore&output=embed",
+    "addressShort": "221, M.T. Cloth Market, Indore",
+    "formSubtitle": "Tell us what you're looking for and we'll get back to you promptly.",
+    "instagramUrl": "https://instagram.com/baldevji.jitmal",
+    "instagramHandle": "@baldevji.jitmal",
+    "mapDirectionsUrl": "https://maps.app.goo.gl/Rv2U7Fw3jMkcTBAx5"
+  },
+  "pillars": [
+    {
+      "desc": "Over 8 decades of textile mastery in the heart of M.T. Cloth Market, Indore.",
+      "title": "Heritage Textile"
+    },
+    {
+      "desc": "Carefully sourced dhotis, silks, pashminas, and traditional fabrics.",
+      "title": "Hand-Curated Weaves"
+    },
+    {
+      "desc": "Prompt, secure dispatches for retail stores, wedding ceremonies, and families.",
+      "title": "Pan-India Delivery"
+    },
+    {
+      "desc": "Fair pricing, honest fabric quality, and personalized family-style care.",
+      "title": "Generations of Trust"
+    }
+  ],
+  "heritage": {
+    "body": "From the busy lanes of M.T. Cloth Market, we have served retailers, families and bulk buyers with honest pricing and a careful selection of traditional weaves. Visit our shop or browse our catalogue online.",
+    "eyebrow": "Wholesale · Indore",
+    "heading": "Generations of fabric, hand-picked for you"
+  },
+  "editorial": {
+    "body": "From the busy lanes of M.T. Cloth Market, we have served retailers, families, and bulk buyers with honest pricing and a careful selection of traditional weaves. Visit our shop or browse our catalogue online.",
+    "eyebrow": "· House of Traditional Textiles",
+    "heading": "Generations of fabric,",
+    "chapters": [
+      {
+        "num": "01",
+        "desc": "Selected thread-by-thread. Authentic Bhagalpuri silks, hand-twisted dhotis, and cashmere-soft shawls sourced directly from generational weaver families.",
+        "title": "Pure Material Integrity"
+      },
+      {
+        "num": "02",
+        "desc": "No mass production or synthetic shortcuts. Over 8 decades of honest curation, family pricing, and trust passed down through three generations in Indore.",
+        "title": "Quiet Heritage"
+      },
+      {
+        "num": "03",
+        "desc": "Firmly anchored at shop 221 in central India’s historic fabric hub, dispatching curated ceremonial and retail textiles nationwide.",
+        "title": "M.T. Cloth Market Legacy"
+      }
+    ],
+    "ctaLabel": "Discover our story",
+    "featureQuote": "“Traditional cloth, thoughtfully selected for wedding ceremonies & family heirlooms.”",
+    "headingAccent": "hand-picked for you.",
+    "featureImageUrl": "/assets/hero-textiles-800.webp",
+    "featureCaptionEyebrow": "Atelier Curation"
+  },
+  "dhotisPage": {
+    "seo": {
+      "title": "Dhotis in Indore — Pure Cotton, Temple Border & Wedding Dhotis Wholesale",
+      "keywords": "dhotis in indore, wholesale dhoti indore, cotton dhoti indore, M.T. cloth market dhoti, wedding dhoti indore, readymade dhoti indore, panchakacham indore, baldevji jitmal dhoti, pooja dhoti indore, pure cotton dhoti mp",
+      "description": "Looking for authentic dhotis in Indore? Baldevji Jitmal at 221, M.T. Cloth Market offers wholesale & retail south cotton, polyester mix, artificial silk, pure cotton dhotis, Panchakacham, temple borders & silk dhoti-dupatta sets."
+    },
+    "faqs": [
+      {
+        "a": "Baldevji Jitmal, located at 221, M.T. Cloth Market (Maharaja Tukojirao Cloth Market), Indore, is one of central India’s most trusted wholesale and retail suppliers for authentic pure cotton, temple border, and silk dhotis.",
+        "q": "Where can I buy authentic traditional dhotis in Indore?"
+      },
+      {
+        "a": "M.T. Cloth Market (Maharaja Tukojirao Holkar Cloth Market) near Rajwada is the historic and largest textile wholesale market in Indore. Baldevji Jitmal is situated on the main market corridor at Shop 221, supplying retailers across MP, Rajasthan, Maharashtra, and UP.",
+        "q": "Which is the best wholesale market for dhotis in Indore?"
+      },
+      {
+        "a": "We offer South Cotton, Artifical Silk, Bhagalpuri, Matka, Linen, Pure Cotton daily and pooja dhotis, South Indian temple border dhotis, Panchakacham (8-yard and 9×5 double dhotis), pre-stitched readymade dhotis with pockets, and Bhagalpuri silk dhoti-dupatta sets.",
+        "q": "What types of dhotis are available at Baldevji Jitmal Indore?"
+      },
+      {
+        "a": "Yes. We cater to individual families purchasing traditional wedding attire and festival sets as well as outstation retail shopkeepers and temple trusts buying full bales at direct wholesale rates.",
+        "q": "Do you sell dhotis in retail as well as wholesale bulk quantities?"
+      },
+      {
+        "a": "Yes. Simply message us on WhatsApp at +91 78698 49449 or +91 78280 72394. We share real-time photographs, fabric counts, and wholesale pricing. Once you select, we dispatch safely via daily transport parcel networks nationwide.",
+        "q": "Can outstation customers order dhotis from Indore via WhatsApp?"
+      },
+      {
+        "a": "We are open Monday through Saturday from 12:00 PM to 8:30 PM at 221, M.T. Cloth Market, Indore, MP 452002. Phone: 0731-2459280.",
+        "q": "What are the shop timings and location in Indore?"
+      }
+    ],
+    "hero": {
+      "title": "Dhotis in Indore",
+      "eyebrow": "Heritage Wholesale House · M.T. Cloth Market, Indore",
+      "ctaWhatsapp": "Inquire on WhatsApp",
+      "description": "Baldevji Jitmal is Indore’s historic destination for authentic dhotis, sacred temple-border sets, Panchakachams, ready-made Velcro lungis, and Bhagalpuri silk sets. Serving generational families, priests, and textile retailers across India.",
+      "titleAccent": "। पारंपरिक धोती संग्रह",
+      "ctaCatalogue": "View Live Catalogue"
+    },
+    "badges": [
+      {
+        "title": "Generations",
+        "subtitle": "Of Textile Mastery"
+      },
+      {
+        "title": "100% Pure Cotton",
+        "subtitle": "Combed High-Count Weaves"
+      },
+      {
+        "title": "221, M.T. Cloth Market",
+        "subtitle": "Heart of Indore Wholesale"
+      },
+      {
+        "title": "Pan-India Dispatch",
+        "subtitle": "Bale & Parcel Delivery"
+      }
+    ],
+    "storeCard": {
+      "heading": "Visit Baldevji Jitmal at M.T. Cloth Market, Indore",
+      "subtitle": "Step inside our heritage store to experience hundreds of authentic dhoti weaves in person, or connect instantly with our wholesale counter on WhatsApp."
+    },
+    "varieties": [
+      {
+        "desc": "Woven from premium combed cotton yarns for all-day comfort during long rituals, temple ceremonies, and daily spiritual wear. Softens with every wash, skin-friendly, and highly absorbent in central India’s climate.",
+        "sizes": "4.0 Metres · 4.5 Metres",
+        "title": "Pure Cotton Dhotis (शुद्ध सूती धोती)",
+        "features": [
+          "100% Breathable Fine Combed Cotton",
+          "Auspicious Off-White / Natural Cream Shade",
+          "Pre-Shrunk & Colorfast Border Options"
+        ],
+        "subtitle": "High-Count Breathable Cotton",
+        "categoryParam": "Dhotis"
+      },
+      {
+        "desc": "Heritage temple borders crafted with gold zari and dual-tone threads. Widely chosen for weddings, Griha Pravesh, Upanayanam (Janeu sanskar), and festive functions across Madhya Pradesh and Maharashtra.",
+        "sizes": "4.5 Metres · 6.5-7.0 Metres (Double Dhoti / Panchakacham)",
+        "title": "Temple & Zari Border Dhotis (मंदिर बॉर्डर धोती)",
+        "features": [
+          "Woven Zari & Thread Borders",
+          "Matching and Contrast Angavastram / Dupatta Available",
+          "Auspicious Red",
+          "Maroon",
+          "Green & Gold Borders"
+        ],
+        "subtitle": "Ganga-Jamuna, Mayilpeel & Traditional Kasavu Patterns",
+        "categoryParam": "Dhotis"
+      },
+      {
+        "desc": "Full-length traditional double dhotis woven specifically for South Indian and Maharashtrian style Panchakacham tying. Accompanied by coordinated broad-border shawls/dupattas.",
+        "sizes": "6.5 - 7.0 Metres (Double) · 9×5 Sets with Uthareeyam",
+        "title": "Panchakacham & Double Dhotis (पंचकच्छम / 9×5 धोती)",
+        "features": [
+          "Extra Width & Length for Traditional Draping",
+          "Jain devotees",
+          "Non-Slip Heavy Handloom Finish",
+          "Groom & Temple Priest Preferred"
+        ],
+        "subtitle": "Traditional 8 & 9-Yard Dhotis for Vedic Rituals & Weddings",
+        "categoryParam": "Dhotis"
+      },
+      {
+        "desc": "Expertly pre-stitched traditional dhotis with adjustable elastic and and a concealed utility pocket. Gives the authentic, regal traditional look within 30 seconds without draping complexity.",
+        "sizes": "Universal Adjustable Waist (28” to 44”)",
+        "title": "Readymade Dhotis (रेडीमेड धोती)",
+        "features": [
+          "Concealed Pocket for Phone & Wallet",
+          "Strong Double-Stitched Grip",
+          "100% Traditional Cotton & Silk Look"
+        ],
+        "subtitle": "Pre-Pleated Universal Free-Size Festive Wear",
+        "categoryParam": "Readymade Dhoti"
+      },
+      {
+        "desc": "Pure Bhagalpuri and fine artificial silk dhoti-dupatta pairs, known for natural sheen and ceremonial stature. Available in rich sandalwood, golden cream, and auspicious turmeric shades.",
+        "sizes": "4 Metre Dhoti + 2.25 Metre Matching Stole/Dupatta",
+        "title": "Bhagalpuri Silk & Art Silk Dhoti Sets (सिल्क धोती सेट)",
+        "features": [
+          "Rich Natural Lustre",
+          "Complete Wedding Presentation Gift Box",
+          "Custom Kurta-Fabric Coordination"
+        ],
+        "subtitle": "",
+        "categoryParam": "Silk"
+      },
+      {
+        "desc": "Dedicated ceremonial sets supplying temples, spiritual institutions, and family havan ceremonies. Wholesale bale packing with certified fabric purity.",
+        "sizes": "Bales and pieces for retail and bulk orders",
+        "title": "Pooja Vastra & Temple Cloth Sets (पूजा वस्त्र एवं गमछा)",
+        "features": [
+          "Certified Pure Vegetable Dye Options",
+          "Auspicious Vedic Weaves",
+          "Direct Mill Wholesale Pricing"
+        ],
+        "subtitle": "Dhoti, Angavastram & Gamcha for Religious Trusts & Priests",
+        "categoryParam": "Dhotis"
+      }
+    ],
+    "faqsHeader": {
+      "eyebrow": "Got Questions?",
+      "heading": "Frequently Asked Questions About Dhotis in Indore"
+    },
+    "guideItems": [
+      {
+        "desc": "For daily wear and priests, Cotton provides the ideal balance of softness and long-lasting durability. For weddings and special temple ceremonies, Superfine cotton gives an elegant drape and feather-light feel.",
+        "title": "Cotton Yarn Count (सूती धागे की बारीक बुनाई)"
+      },
+      {
+        "desc": "A single dhoti (4 to 4.5 metres) is typically draped around the waist for regular daily pooja or simple gatherings. A double dhoti (8 metres or 9×5 yards) is folded in half or draped in the sacred Panchakacham style for Vedic marriages, havan rituals, and formal ceremonies.",
+        "title": "Single Dhoti vs. Double Dhoti (सिंगल बनाम डबल धोती)"
+      },
+      {
+        "desc": "If you are a retail shop owner all over India, we supply store-sealed bales, complete with transport bilti and tax invoice.",
+        "title": "Wholesale Bale Packing for Retailers (थोक व्यापारियों हेतु पार्सल)"
+      }
+    ],
+    "guideHeader": {
+      "eyebrow": "Buyer's Handbook",
+      "heading": "Guide to Buying Traditional Dhotis in Indore",
+      "description": "Everything outstation retailers, wedding shoppers, and temple trusts should know before ordering."
+    },
+    "varietiesHeader": {
+      "eyebrow": "Authentic Varieties",
+      "heading": "Dhoti Weaves & Varieties Available in Indore",
+      "description": "From everyday pooja cotton to silk sets, each weave in our shop reflects traditional Indian textile heritage."
+    }
+  },
+  "faqSection": {
+    "intro": "Helpful details on visiting our M.T. Cloth Market store, catalogue selections, and delivery across India.",
+    "eyebrow": "Store & Ordering Guide",
+    "heading": "Frequently Asked Questions"
+  },
+  "highlights": [
+    {
+      "desc": "Cotton Dhoti and Dupatta sets, Single Dhotis and Dupattas.",
+      "title": "Dhoti & Dupatta",
+      "imageUrl": "/assets/cat-dhoti-GEuIIywH.webp",
+      "categorySlug": "Dhotis"
+    },
+    {
+      "desc": "Premium Artificial silk dhotis and sets — heritage weaves.",
+      "title": "Artificial Silk Sets",
+      "imageUrl": "/assets/cat-silk-DHRRFLzi.webp",
+      "categorySlug": "Silk"
+    },
+    {
+      "desc": "Soft pashmina and wool shawls in classic paisley and modern weaves.",
+      "title": "Shawls — Ladies",
+      "imageUrl": "/assets/cat-shawl-D5bqtbMz.webp",
+      "categorySlug": "Ladies Shawl"
+    },
+    {
+      "desc": "Soft, pashmina and wool shawls in classic paisley and modern weaves.",
+      "title": "Shawls — Gents",
+      "imageUrl": "/assets/cat-shawl-D5bqtbMz.webp",
+      "categorySlug": "Gents Shawl"
+    },
+    {
+      "desc": "Bedsheets, towels and napkins for homes and bulk buyers.",
+      "title": "Home Textiles",
+      "imageUrl": "/assets/cat-home-BiWUfBZT.webp",
+      "categorySlug": "Home"
+    },
+    {
+      "desc": "Bhagalpuri Dhoti Dupatta sets and chaddars- your all-weather companion.",
+      "title": "Bhagalpuri",
+      "imageUrl": "/assets/cat-dhoti-GEuIIywH.webp",
+      "categorySlug": "Bhagalpuri"
+    },
+    {
+      "desc": "Full Kurta Cloth- Mix, Cotton, Linen",
+      "title": "Kurta Cloth",
+      "imageUrl": "/assets/cat-silk-DHRRFLzi.webp",
+      "categorySlug": "Kurta Cloth"
+    }
+  ],
+  "shawlsPage": {
+    "seo": {
+      "title": "Shawls in Indore — Ladies Shawls, Gents Shawls & Lohis Wholesale",
+      "keywords": "shawls in indore, ladies shawls in indore, gents shawls in indore, pashmina shawl indore, winter shawls indore, gents lohi indore, kashmiri shawls indore, wedding shawls indore, M.T. cloth market shawls, baldevji jitmal shawls",
+      "description": "Best collection of ladies shawls and gents shawls in Indore at 221, M.T. Cloth Market. Kashmiri embroidery, pashmina-touch, gents lohis & wedding gift sets at wholesale rates."
+    },
+    "faqs": [
+      {
+        "a": "Baldevji Jitmal at 221, M.T. Cloth Market, Indore, is renowned for its handpicked collection of ladies shawls, including Kashmiri Aari embroidery, pashmina-touch jacquards, winter wool stoles, and wedding shagun gifting shawls.",
+        "q": "Where can I find the best collection of ladies shawls in Indore?"
+      },
+      {
+        "a": "We offer one of Indore’s most comprehensive selections of gents lohis, masculine woollen wraps, ceremonial doshalas for grooms, and Bhagalpuri all-weather chaddars in classic shades like camel, fawn, cream, and charcoal.",
+        "q": "Where can I buy authentic gents shawls and lohis in Indore?"
+      },
+      {
+        "a": "Yes, absolutely. We specialize in wedding party gift bundles (for Maayra, Samdhan, and Shagun) in lots of 10, 25, 50, and 100+ pieces at wholesale rates, complete with matching gift presentation boxes.",
+        "q": "Can we buy bulk shawls for wedding gift distribution in Indore?"
+      },
+      {
+        "a": "We cater to both wholesale and retail buyers. Our range starts from budget-friendly daily winter shawls and gift packs up to premium pure-wool and heavy embroidered heirloom shawls. Direct wholesale rates are available for shopkeepers and bulk family orders.",
+        "q": "What is the price range for shawls at Baldevji Jitmal Indore?"
+      },
+      {
+        "a": "Yes. We provide safe, insured parcel dispatch via daily transport services across MP (Bhopal, Ujjain, Gwalior, Jabalpur, Sagar, Ratlam), Maharashtra, Rajasthan, and nationwide. Orders can be finalized directly over WhatsApp.",
+        "q": "Do you deliver shawls outside Indore across Madhya Pradesh and India?"
+      },
+      {
+        "a": "We are located at 221, M.T. Cloth Market (Maharaja Tukojirao Cloth Market), Indore - 452002, near Sheetal Kulfi. Our store is open Monday through Saturday from 11:00 AM to 8:30 PM. Call us at 0731-2459280.",
+        "q": "How do I visit the shop in M.T. Cloth Market, Indore?"
+      }
+    ],
+    "hero": {
+      "title": "Shawls in Indore",
+      "eyebrow": "Heritage Shawl House · M.T. Cloth Market, Indore",
+      "ctaWhatsapp": "Inquire on WhatsApp",
+      "description": "Discover Indore’s finest destination for ladies embroidered shawls, luxurious pashmina-touch wraps, masculine gents lohis, and ceremonial wedding doshalas. Carefully curated for warmth, grandeur, and generational durability.",
+      "titleAccent": "। महिला एवं जेंट्स शॉल",
+      "ctaCatalogue": "Browse Shawl Catalogue"
+    },
+    "badges": [
+      {
+        "title": "Ladies & Gents",
+        "subtitle": "Dedicated Collections"
+      },
+      {
+        "title": "Fine Wool Weaves",
+        "subtitle": "High Thermal Warmth"
+      },
+      {
+        "title": "Wedding Gifting",
+        "subtitle": ""
+      },
+      {
+        "title": "Wholesale Pricing",
+        "subtitle": "Direct Dispatch Across India"
+      }
+    ],
+    "storeCard": {
+      "heading": "Visit Baldevji Jitmal at M.T. Cloth Market, Indore",
+      "subtitle": "Experience hundreds of shawls, lohis, and ceremonial wraps in person at our Indore store, or connect with our wholesale counter on WhatsApp."
+    },
+    "faqsHeader": {
+      "eyebrow": "Got Questions?",
+      "heading": "Frequently Asked Questions About Shawls in Indore"
+    },
+    "guideItems": [
+      {
+        "desc": "Acro-wool and pure wool blends offer high thermal resilience for cold central Indian mornings and outdoor weddings. Cashmere-feel jacquards offer fluid drape and featherlight softness.",
+        "title": "Acro-Wool vs. Cashmere-Feel Blends (धागे का प्रकार एवं स्पर्श)"
+      },
+      {
+        "desc": "Ladies stoles measure 28” × 80” (easy shoulder wrap), full ladies shawls measure 40” × 80” (complete torso drape), and gents lohis measure 54” × 108” (full body traditional wrap).",
+        "title": "Sizing: Stoles vs. Full Shawls vs. Lohis (आकार एवं नाप)"
+      },
+      {
+        "desc": "For Maayra and wedding gifting, we prepare gift-boxed sets in matching cellophane and hardboard presentations ready to hand over to respected guests.",
+        "title": "Wedding Shagun Packaging (विवाह शगुन पैकिंग)"
+      }
+    ],
+    "gentsHeader": {
+      "eyebrow": "Traditional Masculine Wraps",
+      "heading": "Gents Shawls & Lohis in Indore (जेंट्स शॉल एवं लोई)",
+      "description": "Understated warmth, broad selvedges, and dignified textures crafted for daily winter elegance and formal ceremonial milestones."
+    },
+    "gentsShawls": [
+      {
+        "desc": "Understated, masculine woollen wraps crafted in timeless solid shades. Woven with broad selvedges and high thermal insulation, trusted by generations of men in central India.",
+        "title": "Traditional Gents Lohis (जेंट्स लोई / गरम चादर)",
+        "colors": "Natural Fawn, Camel, Off-White Cream, Steel Grey, Jet Black",
+        "details": "Extra-Wide Dimensions (54” × 108”) for Full Body Wrap",
+        "categoryParam": "Gents Shawl"
+      },
+      {
+        "desc": "Regal shoulder wraps for wedding grooms, fathers of the bride/groom, and ceremonial dignitaries. Features subtle self-embossed borders and rich woven motifs that pair with Sherwanis and Kurta-Pajamas.",
+        "title": "Ceremonial & Wedding Shawls for Men (दोशाला / दूल्हा शॉल)",
+        "colors": "Sandalwood Cream, Golden Fawn, Maroon & Deep Navy",
+        "details": "Groom Special Doshala with Delicate Border Accents",
+        "categoryParam": "Gents Shawl"
+      },
+      {
+        "desc": "Authentic 100% spun cotton/tussar all-weather wraps. Soft, breathable, and comfortable across all four seasons. A quintessential wardrobe staple for men in MP and Rajasthan.",
+        "title": "Bhagalpuri All-Weather Gents Chaddars (भागलपुरी चादर)",
+        "colors": "Classic Dull Gold, Natural Beige & Cream Check Borders",
+        "details": "Pure Handloom Bhagalpuri Weave · Pre-Washed & Softened",
+        "categoryParam": "Bhagalpuri"
+      },
+      {
+        "desc": "Dignified woollen shawls supplied in bulk to religious trusts, samajik sabhas, and institutions for felicitation ceremonies, temple priests, and senior community members.",
+        "title": "Temple Trust & Elder Honorific Shawls (सम्मान शॉल / पूजा लोई)",
+        "colors": "Traditional Saffron, Golden Cream, Maroon & Camel",
+        "details": "Consistent Quality & Certified Warmth for Institutional Orders",
+        "categoryParam": "Gents Shawl"
+      }
+    ],
+    "guideHeader": {
+      "eyebrow": "Winter Fabric Guide",
+      "heading": "Guide to Selecting Shawls & Lohis in Indore",
+      "description": "Practical considerations for fabric thickness, weave density, and ceremonial gifting."
+    },
+    "ladiesHeader": {
+      "eyebrow": "Dedicated Collection",
+      "heading": "Ladies Shawls in Indore (महिला शॉल संग्रह)",
+      "description": "Explore exquisite embroidered Kashmiri stoles, feather-light pashmina touch jacquards, and auspicious bridal shawls for winter weddings and ceremonial occasions."
+    },
+    "ladiesShawls": [
+      {
+        "desc": "Intricate traditional floral jaal and needlework on fine wool. A premium choice for wedding brides, reception evenings, and festive celebrations across Indore.",
+        "title": "Kashmiri Aari Shawls (कश्मीरी कढ़ाई शॉल)",
+        "colors": "Royal Maroon, Ruby Red, Emerald Green, Antique Gold, Navy Blue, Lavender, All Pastel and Glitter colors",
+        "details": "Length: 2.0m to 2.25m · Soft Acro-Wool & Blended Cashmere Base",
+        "categoryParam": "Ladies Shawl"
+      },
+      {
+        "desc": "Feather-light with high thermal warmth. Features reversible double-face jacquard weaving, suitable for formal evening dinners, winter marriages, and elite gifting.",
+        "title": "Pashmina-Touch Jacquard Woven Shawls (पश्मीना टच शॉल)",
+        "colors": "Pearl Cream, Dusty Rose, Champagne, Wine & Charcoal, etc",
+        "details": "Reversible Woven Patterns · Ultra-Soft Cashmere-Feel Hand",
+        "categoryParam": "Ladies Shawl"
+      },
+      {
+        "desc": "Durable, warm, and easy to maintain. Designed for daily morning walks, winter office wear, and family gifting. Resists pilling and retains cozy softness throughout winter.",
+        "title": "Daily Winter Woollen Shawls & Stoles (दैनिक वॉर्म शॉल)",
+        "colors": "Earth Tones, Camel, Coffee, Maroon & Multicolour Borders",
+        "details": "Full Comfort Wrap Dimensions · Wash-Friendly Blends",
+        "categoryParam": "Ladies Shawl"
+      },
+      {
+        "desc": "Curated articles tailored for wedding bhath, maayra, and samdhan shagun distribution. Sourced directly from premier loom centers with elegant presentation packaging.",
+        "title": "Wedding Gifting & Shagun Shawls (विवाह शगुन शॉल)",
+        "colors": "Auspicious Red, Festive Yellow, Rani Pink & Rich Maroon",
+        "details": "Assorted Shawls with Festive touch",
+        "categoryParam": "Ladies Shawl"
+      }
+    ]
+  },
+  "heritageSeal": {
+    "link": "/gallery",
+    "text": "· SERVING GENERATIONS · BALDEVJI JITMAL",
+    "year": "",
+    "monogram": ""
+  },
+  "productsPage": {
+    "intro": "A complete selection of traditional Indian fabrics and finished pieces — thoughtfully curated for weddings, families, and boutique retailers. Click any category to view its full catalogue.",
+    "eyebrow": "Curated Collections",
+    "heading": "Traditional Indian Textiles",
+    "calloutBody": "Visit our landmark store in M.T. Cloth Market or connect on WhatsApp for personalized photos, rates, and selections.",
+    "calloutHeading": "Looking for something specific?",
+    "calloutPrimaryBtn": "View Full Catalogue",
+    "calloutSecondaryBtn": "Contact Us"
+  },
+  "cataloguePage": {
+    "intro": "A growing collection of our latest traditional textiles.",
+    "eyebrow": "Photo & Video",
+    "heading": "Our Catalogue",
+    "noteText": "This catalogue shows a curated selection of our stock. To explore our complete range of fabrics, please visit us at the shop in person or connect with us on WhatsApp.",
+    "noteTitle": "Please note:",
+    "searchPlaceholder": "Search by code, weave..."
+  },
+  "marqueeRibbon": {
+    "items": [
+      "Traditional Dhotis & Sets",
+      "Cashmere & Pashmina Shawls",
+      "Kurta-Pajama Fabrics",
+      "Bhagalpuri",
+      "221 M.T. Cloth Market · Indore",
+      "Ladies Shawls",
+      "Gents Shawls",
+      "Stoles",
+      "Dupattas",
+      "Cotton Bedsheets",
+      "Wedding & Ceremonial Collection",
+      "Heritage Textiles"
+    ],
+    "enabled": true
+  },
+  "announcementBar": {
+    "link": "",
+    "text": "॥ श्री गणेशाय नमः ॥ · M.T. Cloth Market, Indore · Traditional Indian Textiles",
+    "enabled": false
+  },
+  "homeCollections": {
+    "eyebrow": "Curated Collections",
+    "heading": "A world of traditional Indian weaves",
+    "viewAllBtn": "View all collections",
+    "description": "Explore by collection. Every piece reflects generations of authentic textile craftsmanship."
+  },
+  "whatsappFloating": {
+    "label": "Inquire on WhatsApp",
+    "enabled": true,
+    "message": "Namaste Baldevji Jitmal, I would like to inquire about your traditional textile collection. Please share designs and details."
+  }
+}
