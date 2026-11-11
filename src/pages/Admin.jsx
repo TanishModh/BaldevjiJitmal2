@@ -26,10 +26,195 @@ import {
   HelpCircle,
   Sparkles,
   Heart,
+  AlertTriangle,
+  Copy,
+  Check,
+  RefreshCw,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { defaultSettings, useSiteSettings, SETTINGS_CACHE_KEY } from '../context/SiteContext';
 import SEO from '../components/SEO';
+
+export const SUPABASE_RLS_FIX_SQL = `-- Run this in your Supabase SQL Editor (10-second fix):
+ALTER TABLE site_settings DISABLE ROW LEVEL SECURITY;
+ALTER TABLE categories DISABLE ROW LEVEL SECURITY;
+ALTER TABLE gallery_items DISABLE ROW LEVEL SECURITY;
+ALTER TABLE inquiries DISABLE ROW LEVEL SECURITY;`;
+
+/**
+ * Robust database saving helper for site_settings:
+ * 1. Strips sensitive keys like adminPasscode
+ * 2. Attempts direct Supabase update with .select() to verify rows actually modified
+ * 3. Falls back to upsert if key missing
+ * 4. Falls back to /api/save-settings serverless route if direct write fails
+ * 5. Updates localStorage cache only upon verified persistence
+ */
+export async function saveSiteSettingsToDatabase(payload, queryClient) {
+  const cleanPayload = JSON.parse(JSON.stringify(payload));
+  delete cleanPayload.adminPasscode; // Security: Never leak owner master passcode to public site_settings table
+
+  let data = null;
+  let error = null;
+
+  try {
+    // 1. Direct Supabase update with .select() so we know how many rows were updated
+    const updateRes = await supabase
+      .from('site_settings')
+      .update({ value: cleanPayload, updated_at: new Date().toISOString() })
+      .eq('key', 'site')
+      .select();
+
+    data = updateRes.data;
+    error = updateRes.error;
+
+    // 2. If update returned 0 rows (e.g. key doesn't exist yet) and no hard error, try upsert
+    if (!error && (!data || data.length === 0)) {
+      const upsertRes = await supabase
+        .from('site_settings')
+        .upsert(
+          { key: 'site', value: cleanPayload, updated_at: new Date().toISOString() },
+          { onConflict: 'key' }
+        )
+        .select();
+      data = upsertRes.data;
+      error = upsertRes.error;
+    }
+  } catch (clientErr) {
+    error = clientErr;
+  }
+
+  // 3. Fallback: If direct client update was blocked or failed, attempt serverless endpoint /api/save-settings
+  const directSucceeded = !error && Array.isArray(data) && data.length > 0;
+  if (!directSucceeded) {
+    try {
+      const storedPasscode = sessionStorage.getItem('bj_admin_passcode') || '';
+      const apiRes = await fetch('/api/save-settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-passcode': storedPasscode,
+        },
+        body: JSON.stringify({ key: 'site', value: cleanPayload }),
+      });
+      if (apiRes.ok) {
+        const json = await apiRes.json();
+        if (json.success && json.data) {
+          data = json.data;
+          error = null;
+        }
+      }
+    } catch (_) {}
+  }
+
+  const finalSuccess = !error && Array.isArray(data) && data.length > 0;
+
+  if (finalSuccess) {
+    // Persist to local browser cache only after confirmed database persistence
+    try {
+      localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(cleanPayload));
+    } catch (_) {}
+
+    if (queryClient) {
+      queryClient.invalidateQueries({ queryKey: ['site-settings'] });
+    }
+
+    return { success: true };
+  }
+
+  const isRls =
+    error?.code === '42501' ||
+    String(error?.message || '').toLowerCase().includes('row-level security') ||
+    (!data || data.length === 0);
+
+  return {
+    success: false,
+    isRls,
+    error: isRls
+      ? 'Database update was blocked by Supabase Row-Level Security (RLS). Please run the SQL fix in your Supabase dashboard so changes reflect on mobile phones.'
+      : (error?.message || 'Failed to update database'),
+  };
+}
+
+function RlsNoticeBanner({ rlsStatus, onRecheck }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(SUPABASE_RLS_FIX_SQL);
+    setCopied(true);
+    toast.success('SQL commands copied to clipboard!');
+    setTimeout(() => setCopied(false), 2500);
+  };
+
+  if (rlsStatus === 'ok') {
+    return (
+      <div className="mb-6 rounded-md border border-emerald-500/30 bg-emerald-500/10 p-3 sm:p-4 text-emerald-900 dark:text-emerald-200 flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-2.5 text-xs sm:text-sm">
+          <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <span>
+            <strong>Supabase Live Sync Active:</strong> Changes saved here will instantly sync to all mobile phones and live visitors.
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={onRecheck}
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300 hover:underline"
+        >
+          <RefreshCw className="h-3 w-3" /> Re-check
+        </button>
+      </div>
+    );
+  }
+
+  if (rlsStatus === 'blocked') {
+    return (
+      <div className="mb-6 rounded-md border-2 border-amber-500/40 bg-amber-500/10 p-4 sm:p-5 text-amber-950 dark:text-amber-100 shadow-sm">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+          <div className="space-y-2 flex-1">
+            <h3 className="font-semibold text-sm sm:text-base text-amber-900 dark:text-amber-200">
+              Why your changes don&apos;t appear on your phone yet: Supabase RLS is Blocking Writes
+            </h3>
+            <p className="text-xs sm:text-sm text-amber-900/90 dark:text-amber-200/90 leading-relaxed">
+              When you edit here on desktop, your edits are temporarily stored in your desktop browser&apos;s local cache, so you can see them on this PC.
+              However, <strong>Supabase Row-Level Security (RLS) is currently preventing changes from saving to the live database</strong>, so your mobile phone and public visitors cannot see them.
+            </p>
+            <div className="mt-3 bg-neutral-900 text-neutral-100 p-3 rounded-md text-xs font-mono relative overflow-x-auto">
+              <pre>{SUPABASE_RLS_FIX_SQL}</pre>
+            </div>
+            <div className="flex items-center gap-3 pt-2 flex-wrap">
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="inline-flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded text-xs font-medium transition"
+              >
+                {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                {copied ? 'Copied!' : 'Copy SQL Fix'}
+              </button>
+              <a
+                href="https://supabase.com/dashboard/project/brlkrualghugxskjzydi/sql/new"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 bg-card border border-border text-foreground hover:border-primary px-3 py-1.5 rounded text-xs font-medium transition"
+              >
+                <span>Open Supabase SQL Editor</span>
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+              <button
+                type="button"
+                onClick={onRecheck}
+                className="inline-flex items-center gap-1.5 text-xs text-amber-800 dark:text-amber-300 underline font-medium hover:text-amber-950 ml-auto"
+              >
+                <RefreshCw className="h-3.5 w-3.5" /> Re-check Connection
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
 
 // Helper to upload media to Supabase storage bucket "catalogue" with instant resilient fallback
 async function uploadMedia(file, folder) {
@@ -196,37 +381,18 @@ function ContentTab() {
     setSaving(true);
     try {
       const payload = JSON.parse(JSON.stringify(settings));
-      delete payload.adminPasscode; // Security: Never leak owner master passcode to public site_settings table
-      
-      // Update local storage immediate cache
-      try {
-        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(payload));
-      } catch (cacheErr) {
-        console.warn('Local storage cache update error:', cacheErr);
-      }
+      const res = await saveSiteSettingsToDatabase(payload, queryClient);
 
-      let { error } = await supabase
-        .from('site_settings')
-        .update({ value: payload })
-        .eq('key', 'site');
-
-      if (error) {
-        const res = await supabase
-          .from('site_settings')
-          .upsert({ key: 'site', value: payload }, { onConflict: 'key' });
-        error = res.error;
-      }
-
-      if (error) {
-        if (error.code === '42501' || String(error.message || '').includes('row-level security')) {
-          toast.success('All website content saved and applied to your site!');
-        } else {
-          throw error;
-        }
+      if (res.success) {
+        toast.success('All website content saved and synchronized live across all devices!');
       } else {
-        toast.success('All website content saved and synchronized with live site!');
+        toast.error(
+          res.isRls
+            ? 'Supabase Row-Level Security (RLS) is blocking edits. Please run the SQL fix in the banner above.'
+            : (res.error || 'Save failed'),
+          { duration: 8000 }
+        );
       }
-      queryClient.invalidateQueries({ queryKey: ['site-settings'] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Save failed');
     } finally {
@@ -2070,34 +2236,18 @@ function DhotisPageTab() {
         dhotisPage: dhotis,
       };
 
-      try {
-        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(updatedSiteSettings));
-      } catch (cacheErr) {
-        console.warn('Local storage cache update error:', cacheErr);
-      }
+      const res = await saveSiteSettingsToDatabase(updatedSiteSettings, queryClient);
 
-      let { error } = await supabase
-        .from('site_settings')
-        .update({ value: updatedSiteSettings })
-        .eq('key', 'site');
-
-      if (error) {
-        const res = await supabase
-          .from('site_settings')
-          .upsert({ key: 'site', value: updatedSiteSettings }, { onConflict: 'key' });
-        error = res.error;
-      }
-
-      if (error) {
-        if (error.code === '42501' || String(error.message || '').includes('row-level security')) {
-          toast.success('Dhotis in Indore page saved and applied to your site!');
-        } else {
-          throw error;
-        }
+      if (res.success) {
+        toast.success('Dhotis in Indore page saved and synchronized live across all devices!');
       } else {
-        toast.success('Dhotis in Indore page saved and synchronized with live site!');
+        toast.error(
+          res.isRls
+            ? 'Supabase Row-Level Security (RLS) is blocking edits. Please run the SQL fix in the banner above.'
+            : (res.error || 'Save failed'),
+          { duration: 8000 }
+        );
       }
-      queryClient.invalidateQueries({ queryKey: ['site-settings'] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Save failed');
     } finally {
@@ -2665,34 +2815,18 @@ function ShawlsPageTab() {
         shawlsPage: shawls,
       };
 
-      try {
-        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(updatedSiteSettings));
-      } catch (cacheErr) {
-        console.warn('Local storage cache update error:', cacheErr);
-      }
+      const res = await saveSiteSettingsToDatabase(updatedSiteSettings, queryClient);
 
-      let { error } = await supabase
-        .from('site_settings')
-        .update({ value: updatedSiteSettings })
-        .eq('key', 'site');
-
-      if (error) {
-        const res = await supabase
-          .from('site_settings')
-          .upsert({ key: 'site', value: updatedSiteSettings }, { onConflict: 'key' });
-        error = res.error;
-      }
-
-      if (error) {
-        if (error.code === '42501' || String(error.message || '').includes('row-level security')) {
-          toast.success('Shawls in Indore page saved and applied to your site!');
-        } else {
-          throw error;
-        }
+      if (res.success) {
+        toast.success('Shawls in Indore page saved and synchronized live across all devices!');
       } else {
-        toast.success('Shawls in Indore page saved and synchronized with live site!');
+        toast.error(
+          res.isRls
+            ? 'Supabase Row-Level Security (RLS) is blocking edits. Please run the SQL fix in the banner above.'
+            : (res.error || 'Save failed'),
+          { duration: 8000 }
+        );
       }
-      queryClient.invalidateQueries({ queryKey: ['site-settings'] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Save failed');
     } finally {
@@ -3364,34 +3498,18 @@ function FaqsTab() {
         faqs,
       };
 
-      try {
-        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(updatedSiteSettings));
-      } catch (cacheErr) {
-        console.warn('Local storage cache update error:', cacheErr);
-      }
+      const res = await saveSiteSettingsToDatabase(updatedSiteSettings, queryClient);
 
-      let { error } = await supabase
-        .from('site_settings')
-        .update({ value: updatedSiteSettings })
-        .eq('key', 'site');
-
-      if (error) {
-        const res = await supabase
-          .from('site_settings')
-          .upsert({ key: 'site', value: updatedSiteSettings }, { onConflict: 'key' });
-        error = res.error;
-      }
-
-      if (error) {
-        if (error.code === '42501' || String(error.message || '').includes('row-level security')) {
-          toast.success('FAQs updated and applied to your site!');
-        } else {
-          throw error;
-        }
+      if (res.success) {
+        toast.success('FAQs updated and synchronized live across all devices!');
       } else {
-        toast.success('FAQs updated and synchronized with live site!');
+        toast.error(
+          res.isRls
+            ? 'Supabase Row-Level Security (RLS) is blocking edits. Please run the SQL fix in the banner above.'
+            : (res.error || 'Save failed'),
+          { duration: 8000 }
+        );
       }
-      queryClient.invalidateQueries({ queryKey: ['site-settings'] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Save failed');
     } finally {
@@ -3539,34 +3657,18 @@ function ThemeTab() {
         theme,
       };
 
-      try {
-        localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(updatedSiteSettings));
-      } catch (cacheErr) {
-        console.warn('Local storage cache update error:', cacheErr);
-      }
+      const res = await saveSiteSettingsToDatabase(updatedSiteSettings, queryClient);
 
-      let { error } = await supabase
-        .from('site_settings')
-        .update({ value: updatedSiteSettings })
-        .eq('key', 'site');
-
-      if (error) {
-        const res = await supabase
-          .from('site_settings')
-          .upsert({ key: 'site', value: updatedSiteSettings }, { onConflict: 'key' });
-        error = res.error;
-      }
-
-      if (error) {
-        if (error.code === '42501' || String(error.message || '').includes('row-level security')) {
-          toast.success('Theme saved and applied to your site!');
-        } else {
-          throw error;
-        }
+      if (res.success) {
+        toast.success('Theme saved and applied live across all devices!');
       } else {
-        toast.success('Theme saved and applied to live site!');
+        toast.error(
+          res.isRls
+            ? 'Supabase Row-Level Security (RLS) is blocking edits. Please run the SQL fix in the banner above.'
+            : (res.error || 'Save failed'),
+          { duration: 8000 }
+        );
       }
-      queryClient.invalidateQueries({ queryKey: ['site-settings'] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Save failed');
     } finally {
@@ -3693,7 +3795,7 @@ function CategoriesTab() {
       }
 
       if (editingCategory) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('categories')
           .update({
             name,
@@ -3702,21 +3804,28 @@ function CategoriesTab() {
             thumbnail_url: thumbnailUrl,
             thumbnail_path: thumbnailPath,
           })
-          .eq('id', editingCategory.id);
+          .eq('id', editingCategory.id)
+          .select();
 
         if (error) throw error;
+        if (!data || data.length === 0) {
+          throw new Error('Supabase RLS is blocking category edits. Please run the SQL fix in the banner above.');
+        }
         toast.success('Category updated');
       } else {
-        const { error } = await supabase.from('categories').insert({
+        const { data, error } = await supabase.from('categories').insert({
           name,
           slug: slugify(name),
           description: description || null,
           sort_order: sortOrder,
           thumbnail_url: thumbnailUrl,
           thumbnail_path: thumbnailPath,
-        });
+        }).select();
 
         if (error) throw error;
+        if (!data || data.length === 0) {
+          throw new Error('Supabase RLS is blocking category creation. Please run the SQL fix in the banner above.');
+        }
         toast.success('Category added');
       }
 
@@ -3738,8 +3847,11 @@ function CategoriesTab() {
       if (cat.thumbnail_path) {
         await supabase.storage.from('catalogue').remove([cat.thumbnail_path]);
       }
-      const { error } = await supabase.from('categories').delete().eq('id', cat.id);
+      const { data, error } = await supabase.from('categories').delete().eq('id', cat.id).select();
       if (error) throw error;
+      if (!data || data.length === 0) {
+        throw new Error('Supabase RLS is blocking category deletion. Please run the SQL fix in the banner above.');
+      }
       toast.success('Category deleted');
       queryClient.invalidateQueries({ queryKey: ['admin-categories'] });
       queryClient.invalidateQueries({ queryKey: ['categories'] });
@@ -3914,16 +4026,20 @@ function CatalogueItemCard({ item, categories, onDelete }) {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('gallery_items')
         .update({
           description: description.trim() || null,
           category: category.trim() || 'all',
           sort_order: sortOrder,
         })
-        .eq('id', item.id);
+        .eq('id', item.id)
+        .select();
 
       if (error) throw error;
+      if (!data || data.length === 0) {
+        throw new Error('Supabase RLS is blocking item update. Please run the SQL fix in the banner above.');
+      }
       toast.success('Item updated');
       setIsEditing(false);
       queryClient.invalidateQueries({ queryKey: ['admin-gallery'] });
@@ -3941,16 +4057,20 @@ function CatalogueItemCard({ item, categories, onDelete }) {
       const res = await uploadMedia(file, 'gallery');
       const mediaType = file.type.startsWith('video') ? 'video' : 'image';
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('gallery_items')
         .update({
           media_url: res.publicUrl,
           storage_path: res.path,
           media_type: mediaType,
         })
-        .eq('id', item.id);
+        .eq('id', item.id)
+        .select();
 
       if (error) throw error;
+      if (!data || data.length === 0) {
+        throw new Error('Supabase RLS is blocking media replacement. Please run the SQL fix in the banner above.');
+      }
       if (item.storage_path) {
         await supabase.storage.from('catalogue').remove([item.storage_path]);
       }
@@ -4117,16 +4237,19 @@ function CatalogueTab() {
           const res = await uploadMedia(file, 'gallery');
           const mediaType = file.type.startsWith('video') ? 'video' : 'image';
 
-          const { error } = await supabase.from('gallery_items').insert({
+          const { data, error } = await supabase.from('gallery_items').insert({
             title: '',
             description: description || null,
             category: category,
             media_type: mediaType,
             media_url: res.publicUrl,
             storage_path: res.path,
-          });
+          }).select();
 
           if (error) throw error;
+          if (!data || data.length === 0) {
+            throw new Error('Supabase RLS is blocking item upload.');
+          }
           count++;
         } catch (err) {
           console.error(err);
@@ -4151,8 +4274,11 @@ function CatalogueTab() {
       if (item.storage_path) {
         await supabase.storage.from('catalogue').remove([item.storage_path]);
       }
-      const { error } = await supabase.from('gallery_items').delete().eq('id', item.id);
+      const { data, error } = await supabase.from('gallery_items').delete().eq('id', item.id).select();
       if (error) throw error;
+      if (!data || data.length === 0) {
+        throw new Error('Supabase RLS is blocking item deletion.');
+      }
       toast.success('Deleted');
       queryClient.invalidateQueries({ queryKey: ['admin-gallery'] });
       queryClient.invalidateQueries({ queryKey: ['gallery'] });
@@ -4472,16 +4598,8 @@ function BackupTab() {
       // 1. Site Settings
       setStatus({ label: 'Restoring site settings…', done: 0, total: 1 });
       for (const s of data.site_settings ?? []) {
-        let { error } = await supabase
-          .from('site_settings')
-          .update({ value: s.value })
-          .eq('key', s.key);
-        if (error) {
-          const res = await supabase
-            .from('site_settings')
-            .upsert({ key: s.key, value: s.value }, { onConflict: 'key' });
-          if (res.error) throw res.error;
-        }
+        const res = await saveSiteSettingsToDatabase(s.value, queryClient);
+        if (!res.success) throw new Error(res.error || 'Failed to restore site settings');
       }
 
       // 2. Upload Files
@@ -4706,6 +4824,33 @@ export default function Admin() {
     };
   }, [navigate]);
 
+  const [rlsStatus, setRlsStatus] = useState('checking'); // 'checking' | 'blocked' | 'ok'
+
+  const checkRlsStatus = React.useCallback(async () => {
+    try {
+      setRlsStatus('checking');
+      const { data, error } = await supabase
+        .from('site_settings')
+        .update({ updated_at: new Date().toISOString() })
+        .eq('key', 'site')
+        .select();
+
+      if (!error && Array.isArray(data) && data.length > 0) {
+        setRlsStatus('ok');
+      } else {
+        setRlsStatus('blocked');
+      }
+    } catch (_) {
+      setRlsStatus('blocked');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAdmin) {
+      checkRlsStatus();
+    }
+  }, [isAdmin, checkRlsStatus]);
+
   const handleUnlockWithPasscode = (e) => {
     e.preventDefault();
     setUnlocking(true);
@@ -4713,6 +4858,7 @@ export default function Admin() {
 
     if (VALID_PASSCODES.includes(clean)) {
       sessionStorage.setItem('bj_admin_session', 'true');
+      sessionStorage.setItem('bj_admin_passcode', clean);
       localStorage.setItem('bj_admin_session', 'true');
       setIsAdmin(true);
       toast.success('Admin privileges unlocked!');
@@ -4727,6 +4873,7 @@ export default function Admin() {
       await supabase.auth.signOut();
     } catch (_) {}
     sessionStorage.removeItem('bj_admin_session');
+    sessionStorage.removeItem('bj_admin_passcode');
     localStorage.removeItem('bj_admin_session');
     navigate('/login', { replace: true });
   };
@@ -4819,11 +4966,23 @@ export default function Admin() {
       {/* Top Header */}
       <div className="flex items-center justify-between flex-wrap gap-4 pb-4">
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/20">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              Supabase Connected
-            </span>
+          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+            {rlsStatus === 'ok' ? (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/20">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Supabase Sync: Live
+              </span>
+            ) : rlsStatus === 'blocked' ? (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-amber-500/15 text-amber-900 dark:text-amber-200 border border-amber-500/40">
+                <AlertTriangle className="h-3 w-3 text-amber-600 dark:text-amber-400" />
+                Supabase RLS Active (Edits Blocked)
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-muted text-muted-foreground border border-border">
+                <RefreshCw className="h-3 w-3 animate-spin" />
+                Checking Supabase Connection…
+              </span>
+            )}
             <span className="text-[11px] text-muted-foreground">M.T. Cloth Market · Indore</span>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl text-primary">Admin Panel</h1>
@@ -4852,6 +5011,9 @@ export default function Admin() {
       </div>
 
       <div className="gold-divider my-4 sm:my-6 w-28 sm:w-32"></div>
+
+      {/* RLS Status Notification Banner */}
+      <RlsNoticeBanner rlsStatus={rlsStatus} onRecheck={checkRlsStatus} />
 
       {/* Tabs Bar */}
       <div className="flex gap-2 mb-8 border-b border-border overflow-x-auto pb-px">
