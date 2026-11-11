@@ -2,6 +2,7 @@
 
 A high-performance modern web application for **Baldevji Jitmal**, a premier wholesale textile house based in the heritage M.T. Cloth Market in Indore.
 
+
 Rebuilt with clean, maintainable architecture in Vite + React, Tailwind CSS, TanStack Query, and Supabase.
 
 ---
