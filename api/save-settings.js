@@ -14,6 +14,16 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  // Quick status probe to check if GitHub auto-sync is configured
+  if (req.method === 'GET') {
+    return res.status(200).json({
+      success: true,
+      githubConfigured: Boolean(process.env.GITHUB_TOKEN),
+      repo: process.env.GITHUB_REPO || 'TanishModh/BaldevjiJitmal2',
+      branch: 'main',
+    });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, message: 'Method Not Allowed' });
   }
@@ -27,6 +37,7 @@ export default async function handler(req, res) {
 
     const cleanPayload = { ...value };
     delete cleanPayload.adminPasscode;
+    cleanPayload.updatedAt = new Date().toISOString();
 
     // Strategy 1: If GITHUB_TOKEN is configured in Vercel, commit directly to GitHub repository!
     // This allows 100% database-free, permanently synchronized updates across all devices via Vercel CI/CD.
@@ -36,9 +47,12 @@ export default async function handler(req, res) {
         const filePath = 'src/data/defaultSettings.json';
         const branch = 'main';
 
+        const rawToken = process.env.GITHUB_TOKEN.trim();
+        const authHeader = rawToken.startsWith('Bearer ') ? rawToken : `Bearer ${rawToken}`;
+
         const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}?ref=${branch}`, {
           headers: {
-            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+            Authorization: authHeader,
             Accept: 'application/vnd.github.v3+json',
             'User-Agent': 'Baldevji-Admin',
           },
@@ -53,25 +67,31 @@ export default async function handler(req, res) {
         const commitRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
           method: 'PUT',
           headers: {
-            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+            Authorization: authHeader,
             Accept: 'application/vnd.github.v3+json',
             'Content-Type': 'application/json',
             'User-Agent': 'Baldevji-Admin',
           },
           body: JSON.stringify({
             message: `chore(settings): update from admin portal [${new Date().toISOString()}]`,
-            content: Buffer.from(JSON.stringify(cleanPayload, null, 2)).toString('base64'),
+            content: Buffer.from(JSON.stringify(cleanPayload, null, 2), 'utf-8').toString('base64'),
             sha,
             branch,
           }),
         });
 
         if (commitRes.ok) {
+          const commitData = await commitRes.json().catch(() => ({}));
           return res.status(200).json({
             success: true,
             method: 'github',
-            message: 'Changes permanently saved to GitHub! Vercel is auto-deploying to all devices.',
+            commitSha: commitData?.commit?.sha,
+            data: [{ key, value: cleanPayload }],
+            message: 'Changes permanently saved to GitHub! Vercel is auto-deploying worldwide.',
           });
+        } else {
+          const errText = await commitRes.text();
+          console.warn('GitHub commit failed with status:', commitRes.status, errText);
         }
       } catch (ghErr) {
         console.warn('GitHub commit route failed, trying Supabase fallback:', ghErr);

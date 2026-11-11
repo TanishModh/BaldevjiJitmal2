@@ -42,22 +42,58 @@ ALTER TABLE gallery_items DISABLE ROW LEVEL SECURITY;
 ALTER TABLE inquiries DISABLE ROW LEVEL SECURITY;`;
 
 /**
- * Robust database saving helper for site_settings:
+ * Robust saving helper for site_settings:
  * 1. Strips sensitive keys like adminPasscode
- * 2. Attempts direct Supabase update with .select() to verify rows actually modified
- * 3. Falls back to upsert if key missing
- * 4. Falls back to /api/save-settings serverless route if direct write fails
- * 5. Updates localStorage cache only upon verified persistence
+ * 2. Attempts serverless endpoint /api/save-settings FIRST (handles direct GitHub commit & Vercel deployment if GITHUB_TOKEN configured)
+ * 3. Falls back to direct Supabase update/upsert with .select() verification
+ * 4. Updates localStorage cache upon verified persistence
  */
 export async function saveSiteSettingsToDatabase(payload, queryClient) {
   const cleanPayload = JSON.parse(JSON.stringify(payload));
   delete cleanPayload.adminPasscode; // Security: Never leak owner master passcode to public site_settings table
+  cleanPayload.updatedAt = new Date().toISOString();
 
+  // 1. Primary Strategy: Serverless /api/save-settings route
+  // If GITHUB_TOKEN is configured in Vercel, this commits directly to GitHub repo
+  // and triggers an automated zero-database global deployment worldwide.
+  try {
+    const storedPasscode = sessionStorage.getItem('bj_admin_passcode') || '';
+    const apiRes = await fetch('/api/save-settings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-passcode': storedPasscode,
+      },
+      body: JSON.stringify({ key: 'site', value: cleanPayload }),
+    });
+
+    if (apiRes.ok) {
+      const json = await apiRes.json();
+      if (json.success) {
+        try {
+          localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(cleanPayload));
+        } catch (_) {}
+
+        if (queryClient) {
+          queryClient.invalidateQueries({ queryKey: ['site-settings'] });
+        }
+
+        return {
+          success: true,
+          method: json.method || 'api',
+          message: json.message || 'Changes saved and deploying live across all devices!',
+        };
+      }
+    }
+  } catch (apiErr) {
+    console.warn('API save-settings note:', apiErr);
+  }
+
+  // 2. Secondary Strategy: Direct Supabase client update with .select()
   let data = null;
   let error = null;
 
   try {
-    // 1. Direct Supabase update with .select() so we know how many rows were updated
     const updateRes = await supabase
       .from('site_settings')
       .update({ value: cleanPayload, updated_at: new Date().toISOString() })
@@ -67,7 +103,6 @@ export async function saveSiteSettingsToDatabase(payload, queryClient) {
     data = updateRes.data;
     error = updateRes.error;
 
-    // 2. If update returned 0 rows (e.g. key doesn't exist yet) and no hard error, try upsert
     if (!error && (!data || data.length === 0)) {
       const upsertRes = await supabase
         .from('site_settings')
@@ -83,33 +118,8 @@ export async function saveSiteSettingsToDatabase(payload, queryClient) {
     error = clientErr;
   }
 
-  // 3. Fallback: If direct client update was blocked or failed, attempt serverless endpoint /api/save-settings
   const directSucceeded = !error && Array.isArray(data) && data.length > 0;
-  if (!directSucceeded) {
-    try {
-      const storedPasscode = sessionStorage.getItem('bj_admin_passcode') || '';
-      const apiRes = await fetch('/api/save-settings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-passcode': storedPasscode,
-        },
-        body: JSON.stringify({ key: 'site', value: cleanPayload }),
-      });
-      if (apiRes.ok) {
-        const json = await apiRes.json();
-        if (json.success && json.data) {
-          data = json.data;
-          error = null;
-        }
-      }
-    } catch (_) {}
-  }
-
-  const finalSuccess = !error && Array.isArray(data) && data.length > 0;
-
-  if (finalSuccess) {
-    // Persist to local browser cache only after confirmed database persistence
+  if (directSucceeded) {
     try {
       localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(cleanPayload));
     } catch (_) {}
@@ -118,7 +128,7 @@ export async function saveSiteSettingsToDatabase(payload, queryClient) {
       queryClient.invalidateQueries({ queryKey: ['site-settings'] });
     }
 
-    return { success: true };
+    return { success: true, method: 'database' };
   }
 
   const isRls =
@@ -130,20 +140,31 @@ export async function saveSiteSettingsToDatabase(payload, queryClient) {
     success: false,
     isRls,
     error: isRls
-      ? 'Database update was blocked by Supabase Row-Level Security (RLS). Please run the SQL fix in your Supabase dashboard so changes reflect on mobile phones.'
+      ? 'Database update was blocked by Supabase Row-Level Security (RLS). Please configure GITHUB_TOKEN on Vercel for permanent auto-sync.'
       : (error?.message || 'Failed to update database'),
   };
 }
 
-function RlsNoticeBanner({ rlsStatus, onRecheck }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(SUPABASE_RLS_FIX_SQL);
-    setCopied(true);
-    toast.success('SQL commands copied to clipboard!');
-    setTimeout(() => setCopied(false), 2500);
-  };
+function SyncNoticeBanner({ rlsStatus, githubStatus, onRecheck }) {
+  if (githubStatus === 'active') {
+    return (
+      <div className="mb-6 rounded-md border border-emerald-500/30 bg-emerald-500/10 p-3 sm:p-4 text-emerald-900 dark:text-emerald-200 flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-2.5 text-xs sm:text-sm">
+          <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <span>
+            <strong>GitHub Permanent Sync Active:</strong> Every change you save here is automatically committed to your GitHub repository and deployed globally via Vercel to all phones, desktops, and visitors.
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={onRecheck}
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300 hover:underline"
+        >
+          <RefreshCw className="h-3 w-3" /> Re-check
+        </button>
+      </div>
+    );
+  }
 
   if (rlsStatus === 'ok') {
     return (
@@ -172,39 +193,24 @@ function RlsNoticeBanner({ rlsStatus, onRecheck }) {
           <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
           <div className="space-y-2 flex-1">
             <h3 className="font-semibold text-sm sm:text-base text-amber-900 dark:text-amber-200">
-              Why your changes don&apos;t appear on your phone yet: Supabase RLS is Blocking Writes
+              Permanent Sync Setup: Connect Your GitHub Token in Vercel
             </h3>
             <p className="text-xs sm:text-sm text-amber-900/90 dark:text-amber-200/90 leading-relaxed">
-              When you edit here on desktop, your edits are temporarily stored in your desktop browser&apos;s local cache, so you can see them on this PC.
-              However, <strong>Supabase Row-Level Security (RLS) is currently preventing changes from saving to the live database</strong>, so your mobile phone and public visitors cannot see them.
+              To permanently synchronize edits across all mobile phones and desktop computers without database limitations:
+              <br />
+              1. Open your project in <strong>Vercel</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Environment Variables</strong>.
+              <br />
+              2. Add Key: <code className="bg-amber-200/60 dark:bg-amber-900/60 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">GITHUB_TOKEN</code> with your GitHub repo personal access token.
+              <br />
+              3. Click <strong>Save</strong> and Redeploy. Every edit will automatically commit to GitHub and publish live worldwide in ~30 seconds!
             </p>
-            <div className="mt-3 bg-neutral-900 text-neutral-100 p-3 rounded-md text-xs font-mono relative overflow-x-auto">
-              <pre>{SUPABASE_RLS_FIX_SQL}</pre>
-            </div>
             <div className="flex items-center gap-3 pt-2 flex-wrap">
               <button
                 type="button"
-                onClick={handleCopy}
+                onClick={onRecheck}
                 className="inline-flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded text-xs font-medium transition"
               >
-                {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-                {copied ? 'Copied!' : 'Copy SQL Fix'}
-              </button>
-              <a
-                href="https://supabase.com/dashboard/project/brlkrualghugxskjzydi/sql/new"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 bg-card border border-border text-foreground hover:border-primary px-3 py-1.5 rounded text-xs font-medium transition"
-              >
-                <span>Open Supabase SQL Editor</span>
-                <ExternalLink className="h-3.5 w-3.5" />
-              </a>
-              <button
-                type="button"
-                onClick={onRecheck}
-                className="inline-flex items-center gap-1.5 text-xs text-amber-800 dark:text-amber-300 underline font-medium hover:text-amber-950 ml-auto"
-              >
-                <RefreshCw className="h-3.5 w-3.5" /> Re-check Connection
+                <RefreshCw className="h-3.5 w-3.5" /> Re-check Sync Status
               </button>
             </div>
           </div>
@@ -4825,8 +4831,24 @@ export default function Admin() {
   }, [navigate]);
 
   const [rlsStatus, setRlsStatus] = useState('checking'); // 'checking' | 'blocked' | 'ok'
+  const [githubStatus, setGithubStatus] = useState('checking'); // 'checking' | 'active' | 'not_configured'
 
-  const checkRlsStatus = React.useCallback(async () => {
+  const checkSyncStatus = React.useCallback(async () => {
+    // 1. Check if GitHub auto-sync route is configured on Vercel
+    try {
+      setGithubStatus('checking');
+      const apiRes = await fetch('/api/save-settings');
+      if (apiRes.ok) {
+        const json = await apiRes.json();
+        setGithubStatus(json.githubConfigured ? 'active' : 'not_configured');
+      } else {
+        setGithubStatus('not_configured');
+      }
+    } catch (_) {
+      setGithubStatus('not_configured');
+    }
+
+    // 2. Check Supabase RLS write permissions
     try {
       setRlsStatus('checking');
       const { data, error } = await supabase
@@ -4847,9 +4869,9 @@ export default function Admin() {
 
   useEffect(() => {
     if (isAdmin) {
-      checkRlsStatus();
+      checkSyncStatus();
     }
-  }, [isAdmin, checkRlsStatus]);
+  }, [isAdmin, checkSyncStatus]);
 
   const handleUnlockWithPasscode = (e) => {
     e.preventDefault();
@@ -4967,20 +4989,25 @@ export default function Admin() {
       <div className="flex items-center justify-between flex-wrap gap-4 pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-            {rlsStatus === 'ok' ? (
+            {githubStatus === 'active' ? (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/20">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                GitHub Auto-Sync: Active (Permanent Deploy)
+              </span>
+            ) : rlsStatus === 'ok' ? (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/20">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 Supabase Sync: Live
               </span>
-            ) : rlsStatus === 'blocked' ? (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-amber-500/15 text-amber-900 dark:text-amber-200 border border-amber-500/40">
-                <AlertTriangle className="h-3 w-3 text-amber-600 dark:text-amber-400" />
-                Supabase RLS Active (Edits Blocked)
-              </span>
-            ) : (
+            ) : githubStatus === 'checking' || rlsStatus === 'checking' ? (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-muted text-muted-foreground border border-border">
                 <RefreshCw className="h-3 w-3 animate-spin" />
-                Checking Supabase Connection…
+                Checking Sync Connection…
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-amber-500/15 text-amber-900 dark:text-amber-200 border border-amber-500/40">
+                <AlertTriangle className="h-3 w-3 text-amber-600 dark:text-amber-400" />
+                GitHub Auto-Sync Setup Needed
               </span>
             )}
             <span className="text-[11px] text-muted-foreground">M.T. Cloth Market · Indore</span>
@@ -5035,8 +5062,8 @@ export default function Admin() {
 
       <div className="gold-divider my-4 sm:my-6 w-28 sm:w-32"></div>
 
-      {/* RLS Status Notification Banner */}
-      <RlsNoticeBanner rlsStatus={rlsStatus} onRecheck={checkRlsStatus} />
+      {/* Sync Status Notification Banner */}
+      <SyncNoticeBanner rlsStatus={rlsStatus} githubStatus={githubStatus} onRecheck={checkSyncStatus} />
 
       {/* Tabs Bar */}
       <div className="flex gap-2 mb-8 border-b border-border overflow-x-auto pb-px">
